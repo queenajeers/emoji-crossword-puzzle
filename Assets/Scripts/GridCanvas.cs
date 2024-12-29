@@ -7,6 +7,7 @@ using UnityEngine.UI;
 [RequireComponent(typeof(GridLayoutGroup))]
 public class GridCanvas : MonoBehaviour
 {
+    public static GridCanvas Instance { get; private set; }
     [SerializeField] private GameObject GridBlockPrefab;
     RectTransform[,] gridBlockRects;
 
@@ -16,7 +17,10 @@ public class GridCanvas : MonoBehaviour
 
     float canvasWidth;
 
-
+    void Awake()
+    {
+        Instance = this;
+    }
 
     public void Start()
     {
