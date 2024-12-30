@@ -5,9 +5,9 @@ using UnityEngine;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(GridLayoutGroup))]
-public class GridCanvas : MonoBehaviour
+public class GridLayer : MonoBehaviour
 {
-    public static GridCanvas Instance { get; private set; }
+    public static GridLayer Instance { get; private set; }
     [SerializeField] private GameObject GridBlockPrefab;
     RectTransform[,] gridBlockRects;
 
@@ -16,40 +16,50 @@ public class GridCanvas : MonoBehaviour
 
 
     float canvasWidth;
+    float cellSize;
 
-    void Awake()
+    public void Awake()
     {
         Instance = this;
-    }
-
-    public void Start()
-    {
         gridLayoutGroup = GetComponent<GridLayoutGroup>();
         canvasWidth = FindAnyObjectByType<Canvas>().gameObject.GetComponent<RectTransform>().sizeDelta.x;
-
-        CreateBaseGrid(5, 5);
     }
-
 
     public void CreateBaseGrid(int rows, int cols)
     {
         StartCoroutine(CreateBaseGridCor(rows, cols));
     }
 
+    public float GetCellSize()
+    {
+        return cellSize;
+    }
+
+    public float GetCellBorderSize()
+    {
+        return gridBlockBorderSize;
+    }
+
+
     IEnumerator CreateBaseGridCor(int rows, int cols)
     {
+        float extraSpace = 30;
         gridLayoutGroup.constraintCount = cols;
         gridLayoutGroup.spacing = Vector2.one * gridBlockBorderSize;
-        var screenWidth = canvasWidth;
-        var cellSize = screenWidth / (float)cols;
-        var extraSpace = 4f * (cols - 1);
-        cellSize = (screenWidth - ((cellSize * 2f) + extraSpace)) / (float)cols;
-        gridLayoutGroup.cellSize = Vector2.one * cellSize;
-        int padding = Mathf.CeilToInt(cellSize * 1.2f);
 
+        // Total spacing, borders, and extra space to account for in the width
+        float totalSpacingAndBorders = (cols - 1) * gridBlockBorderSize + 2 * gridBlockBorderSize + 2 * extraSpace;
+
+        // Calculate the cell size
+        cellSize = (canvasWidth - totalSpacingAndBorders) / cols;
+
+        gridLayoutGroup.cellSize = Vector2.one * cellSize;
+
+        // Adjust padding to include extra space
+        int padding = Mathf.CeilToInt(gridBlockBorderSize + extraSpace);
         gridLayoutGroup.padding = new RectOffset(padding, padding, padding, padding);
 
-        Debug.Log($"Screen with is {screenWidth} and cell size is {cellSize}");
+        Debug.Log($"Screen width is {canvasWidth}, cell size is {cellSize}, total spacing+borders+extraSpace is {totalSpacingAndBorders}");
 
         gridBlockRects = new RectTransform[rows, cols];
         for (int row = 0; row < rows; row++)
@@ -63,8 +73,8 @@ public class GridCanvas : MonoBehaviour
         }
 
         yield return null;
-
     }
+
 
     public Vector2 GetPositionOfAGridBlock(int row, int col, Transform relativeTransform)
     {

@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 4980536804177373835}
   - component: {fileID: 3144602251571264147}
   m_Layer: 5
-  m_Name: GridCanvas
+  m_Name: GridLayer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
