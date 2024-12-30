@@ -1,10 +1,16 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 public enum PuzzleCreatorBrush
 {
     None,
+    BoxCreation,
+    AddLetter,
+    MaskLetter,
+    AddImage,
+    Clear
 
 }
 
@@ -14,10 +20,35 @@ public class PuzzleCreator : MonoBehaviour
 
     public EmojiCrossWord emojiCrossWord;
     public string levelName;
+    public List<ToolBarButton> toolBarButtons;
+    public PuzzleCreatorBrush currentSelectedBrush;
+    public TouchBlock currentSelectedTouchBlock;
 
     private void Start()
     {
         StartCoroutine(CreateTouchBase());
+        SelectBrush(PuzzleCreatorBrush.None);
+
+
+        ToolBarButton.OnBrushSelected += SelectBrush;
+        TouchBlock.OnTouchBlockClicked += TouchBlockClicked;
+    }
+
+
+    public void SelectBrush(PuzzleCreatorBrush brushType)
+    {
+        currentSelectedBrush = brushType;
+        foreach (var button in toolBarButtons)
+        {
+            if (button.brushType == brushType)
+            {
+                button.SelectButton();
+            }
+            else
+            {
+                button.DeSelectButton();
+            }
+        }
     }
 
     IEnumerator CreateTouchBase()
@@ -27,7 +58,7 @@ public class PuzzleCreator : MonoBehaviour
             var gridSize = emojiCrossWord.gridSize;
 
             GridLayer.Instance.CreateBaseGrid(gridSize.x, gridSize.y);
-            yield return new WaitForSeconds(.1f);
+            yield return new WaitForSeconds(.4f);
 
             GetComponent<RectTransform>().sizeDelta = GridLayer.Instance.GetComponent<RectTransform>().sizeDelta;
             GetComponent<RectTransform>().offsetMax = GridLayer.Instance.GetComponent<RectTransform>().offsetMax;
@@ -47,6 +78,16 @@ public class PuzzleCreator : MonoBehaviour
 
         }
 
+    }
+
+    public void TouchBlockClicked(TouchBlock touchedBlock)
+    {
+        if (currentSelectedTouchBlock != null)
+        {
+            currentSelectedTouchBlock.DeSelectBlock();
+        }
+        touchedBlock.SelectBlock();
+        currentSelectedTouchBlock = touchedBlock;
     }
 
     public void SavePuzzle()

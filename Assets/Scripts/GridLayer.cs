@@ -22,7 +22,6 @@ public class GridLayer : MonoBehaviour
     {
         Instance = this;
         gridLayoutGroup = GetComponent<GridLayoutGroup>();
-        canvasWidth = FindAnyObjectByType<Canvas>().gameObject.GetComponent<RectTransform>().sizeDelta.x;
     }
 
     public void CreateBaseGrid(int rows, int cols)
@@ -43,6 +42,10 @@ public class GridLayer : MonoBehaviour
 
     IEnumerator CreateBaseGridCor(int rows, int cols)
     {
+        yield return null;
+        canvasWidth = FindFirstObjectByType<Canvas>().gameObject.GetComponent<RectTransform>().sizeDelta.x;
+
+
         float extraSpace = 30;
         gridLayoutGroup.constraintCount = cols;
         gridLayoutGroup.spacing = Vector2.one * gridBlockBorderSize;
