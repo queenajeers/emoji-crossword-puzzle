@@ -25,14 +25,14 @@ public enum PuzzleDifficulty
 
 public class PuzzleCreator : MonoBehaviour
 {
-    public Vector2Int gridSize;
+    public Vector2Int defaultGridSize;
     public string puzzleName;
     public PuzzleDifficulty puzzleDifficulty;
 
     [Space(20)]
     public GameObject puzzleCreateTouchBlock;
 
-    private EmojiCrossWord emojiCrossWord = new EmojiCrossWord();
+    public EmojiCrossWord emojiCrossWord = new EmojiCrossWord();
 
     public List<ToolBarButton> toolBarButtons;
     public PuzzleCreatorBrush currentSelectedBrush;
@@ -47,11 +47,11 @@ public class PuzzleCreator : MonoBehaviour
         if (emojiCrossWord == null)
         {
             emojiCrossWord = new EmojiCrossWord();
-            emojiCrossWord.gridSize = gridSize;
+            emojiCrossWord.gridSize = defaultGridSize;
         }
         else
         {
-            gridSize = emojiCrossWord.gridSize;
+            defaultGridSize = emojiCrossWord.gridSize;
         }
 
         StartCoroutine(CreateTouchBase());
@@ -61,6 +61,7 @@ public class PuzzleCreator : MonoBehaviour
 
         ToolBarButton.OnBrushSelected += SelectBrush;
         TouchBlock.OnTouchBlockClicked += TouchBlockClicked;
+        HintSelector.OnHintSelected += OnHintSelected;
     }
 
 
@@ -85,16 +86,16 @@ public class PuzzleCreator : MonoBehaviour
         if (GridLayer.Instance != null)
         {
 
-            GridLayer.Instance.CreateBaseGrid(gridSize.x, gridSize.y);
+            GridLayer.Instance.CreateBaseGrid(defaultGridSize.x, defaultGridSize.y);
             yield return new WaitForSeconds(.4f);
 
 
             GetComponent<RectTransform>().sizeDelta = GridLayer.Instance.GetComponent<RectTransform>().sizeDelta;
             GetComponent<RectTransform>().offsetMax = GridLayer.Instance.GetComponent<RectTransform>().offsetMax;
 
-            for (int row = 0; row < gridSize.x; row++)
+            for (int row = 0; row < defaultGridSize.x; row++)
             {
-                for (int col = 0; col < gridSize.y; col++)
+                for (int col = 0; col < defaultGridSize.y; col++)
                 {
                     var gridTouchBlock = Instantiate(puzzleCreateTouchBlock, touchBlocksParent);
                     var gridTouchRect = gridTouchBlock.GetComponent<RectTransform>();
@@ -166,9 +167,17 @@ public class PuzzleCreator : MonoBehaviour
                 }
 
                 break;
+
+            case PuzzleCreatorBrush.AddImage:
+
+                HintsLoader.Instance.OpenHintsLoader();
+
+                break;
         }
 
     }
+
+
 
     void CharacterClicked(char c)
     {
@@ -191,14 +200,49 @@ public class PuzzleCreator : MonoBehaviour
                 }
                 else
                 {
-                    currentSelectedTouchBlock.UpdateLetter(c);
-
-                    var letterBox = (LetterBox)dataBlock;
-                    letterBox.UpdateLeter(c);
+                    currentSelectedTouchBlock.SetLetter(c);
+                    emojiCrossWord.dataBlocks.Remove(dataBlock);
+                    var letterBox = new LetterBox(c)
+                    {
+                        blockLocation = currentSelectedTouchBlock.blockLocation
+                    };
+                    emojiCrossWord.dataBlocks.Add(letterBox);
                 }
 
             }
 
+        }
+    }
+
+    public void OnHintSelected(string imageLocalPath)
+    {
+        if (currentSelectedTouchBlock != null)
+        {
+            currentSelectedTouchBlock.SetImage(imageLocalPath);
+
+            var dataBlock = emojiCrossWord.dataBlocks.Find(db => db.blockLocation == currentSelectedTouchBlock.blockLocation);
+            if (dataBlock == null)
+            {
+                var hint = new Hint()
+                {
+                    blockLocation = currentSelectedTouchBlock.blockLocation,
+                    localPath = imageLocalPath
+                };
+                hint.localPath = imageLocalPath;
+                emojiCrossWord.dataBlocks.Add(hint);
+            }
+            else
+            {
+                emojiCrossWord.dataBlocks.Remove(dataBlock);
+                var hint = new Hint()
+                {
+                    blockLocation = currentSelectedTouchBlock.blockLocation,
+                    localPath = imageLocalPath
+                };
+                emojiCrossWord.dataBlocks.Add(hint);
+            }
+
+            HintsLoader.Instance.CloseHintsLoader();
         }
     }
 
@@ -217,7 +261,6 @@ public class PuzzleCreator : MonoBehaviour
             if (block is LetterBox letterBox)
             {
                 var blockLocation = letterBox.blockLocation;
-                Debug.Log(blockLocation);
                 touchBlocks[blockLocation].SetLetter(letterBox.letter);
                 if (letterBox.isClue)
                 {
@@ -227,6 +270,11 @@ public class PuzzleCreator : MonoBehaviour
                 {
                     touchBlocks[blockLocation].MakeAsNormalLetter();
                 }
+            }
+            else if (block is Hint hintBox)
+            {
+                var blockLocation = hintBox.blockLocation;
+                touchBlocks[blockLocation].SetImage(hintBox.localPath);
             }
         }
     }

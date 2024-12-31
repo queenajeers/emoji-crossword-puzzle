@@ -3,7 +3,8 @@ using UnityEngine;
 public class HintsLoader : MonoBehaviour
 {
     public static HintsLoader Instance { get; private set; }
-    public GameObject hintSelector;
+    public GameObject hintsSelectorPage;
+    public GameObject hintSelectorPrefab;
     public Transform hintsParent;
 
     void Awake()
@@ -19,7 +20,7 @@ public class HintsLoader : MonoBehaviour
     {
         foreach (var sprite in Resources.LoadAll<Sprite>("Emojis"))
         {
-            var hintSelectorComp = Instantiate(hintSelector, hintsParent).GetComponent<HintSelector>();
+            var hintSelectorComp = Instantiate(hintSelectorPrefab, hintsParent).GetComponent<HintSelector>();
             string spritePath = $"Emojis/{sprite.name}";
             hintSelectorComp.LoadImage(spritePath);
         }
@@ -27,6 +28,10 @@ public class HintsLoader : MonoBehaviour
 
     public void OpenHintsLoader()
     {
-
+        hintsSelectorPage.SetActive(true);
+    }
+    public void CloseHintsLoader()
+    {
+        hintsSelectorPage.SetActive(false);
     }
 }

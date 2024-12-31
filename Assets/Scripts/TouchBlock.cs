@@ -8,6 +8,7 @@ public class TouchBlock : MonoBehaviour
     public Vector2Int blockLocation;
 
     public TextMeshProUGUI attatchedLetter;
+    public Image hintImage;
 
     public static Action<TouchBlock> OnTouchBlockClicked;
 
@@ -35,12 +36,17 @@ public class TouchBlock : MonoBehaviour
 
     public void SetLetter(char letter)
     {
+        ClearBox();
         attatchedLetter.text = letter.ToString();
         MakeABox(GridLayer.Instance.GetCellBorderSize());
     }
-    public void UpdateLetter(char letter)
+
+    public void SetImage(string imageLocalPath)
     {
-        attatchedLetter.text = letter.ToString();
+        ClearBox();
+        ActivateImage();
+        Sprite sprite = Resources.Load<Sprite>(imageLocalPath);
+        hintImage.sprite = sprite;
     }
 
     public void BlockClicked()
@@ -60,7 +66,7 @@ public class TouchBlock : MonoBehaviour
     public void MakeAsClueLetter()
     {
         var c = attatchedLetter.color;
-        c.a = .4f;
+        c.a = .2f;
         attatchedLetter.color = c;
     }
 
@@ -81,7 +87,14 @@ public class TouchBlock : MonoBehaviour
         outline.effectDistance = new Vector2(0, 0);
         outline.effectColor = outlineDefault;
         attatchedLetter.text = ' '.ToString();
+        hintImage.gameObject.SetActive(false);
         MakeAsNormalLetter();
+    }
+
+    private void ActivateImage()
+    {
+        hintImage.gameObject.SetActive(true);
+
     }
 
 }
