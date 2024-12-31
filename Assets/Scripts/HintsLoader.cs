@@ -2,9 +2,14 @@ using UnityEngine;
 
 public class HintsLoader : MonoBehaviour
 {
+    public static HintsLoader Instance { get; private set; }
     public GameObject hintSelector;
     public Transform hintsParent;
 
+    void Awake()
+    {
+        Instance = this;
+    }
     private void Start()
     {
         LoadHintImages();
@@ -18,5 +23,10 @@ public class HintsLoader : MonoBehaviour
             string spritePath = $"Emojis/{sprite.name}";
             hintSelectorComp.LoadImage(spritePath);
         }
+    }
+
+    public void OpenHintsLoader()
+    {
+
     }
 }
