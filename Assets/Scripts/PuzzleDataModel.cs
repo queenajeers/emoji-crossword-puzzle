@@ -1,18 +1,28 @@
 using System.Collections.Generic;
 using UnityEngine;
+using System.IO;
 
 [System.Serializable]
 public class EmojiCrossWord
 {
+    public string puzzleName;
     public Vector2Int gridSize;
     public List<DataBlock> dataBlocks;
     public List<CrossWord> crossWords;
+
+    public void SaveCrossWordPuzzle(string path)
+    {
+        var jsonText = JsonUtility.ToJson(this);
+        File.WriteAllText(path, jsonText);
+    }
+
 }
 
 
 [System.Serializable]
 public class CrossWord
 {
+
     public string word; // HELLO
     public string maskedWord;// __LL_
     public Vector2Int startingPosition;

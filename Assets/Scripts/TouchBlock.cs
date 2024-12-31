@@ -55,7 +55,7 @@ public class TouchBlock : MonoBehaviour
     public void MakeABox(float borderWidth)
     {
         outline.effectDistance = new Vector2(borderWidth, -borderWidth);
-        outline.effectColor = Color.black;
+        outline.effectColor = Color.gray;
     }
     public void ClearBox()
     {

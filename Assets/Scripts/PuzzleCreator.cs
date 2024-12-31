@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,12 +15,20 @@ public enum PuzzleCreatorBrush
 
 }
 
+public enum PuzzleDifficulty
+{
+    Easy,
+    Hard,
+    Expert
+}
+
 public class PuzzleCreator : MonoBehaviour
 {
     public GameObject puzzleCreateTouchBlock;
 
     public EmojiCrossWord emojiCrossWord;
     public string levelName;
+    public PuzzleDifficulty puzzleDifficulty;
     public List<ToolBarButton> toolBarButtons;
     public PuzzleCreatorBrush currentSelectedBrush;
     public TouchBlock currentSelectedTouchBlock;
@@ -27,7 +36,7 @@ public class PuzzleCreator : MonoBehaviour
     private void Start()
     {
         StartCoroutine(CreateTouchBase());
-        SelectBrush(PuzzleCreatorBrush.None);
+        SelectBrush(PuzzleCreatorBrush.AddLetter);
 
 
         ToolBarButton.OnBrushSelected += SelectBrush;
@@ -137,7 +146,24 @@ public class PuzzleCreator : MonoBehaviour
 
     public void SavePuzzle()
     {
-        Debug.Log("SAVE PUZZLE");
+        string difficultyFolder = "";
+        switch (puzzleDifficulty)
+        {
+            case PuzzleDifficulty.Easy:
+                difficultyFolder = "Easy";
+                break;
+            case PuzzleDifficulty.Hard:
+                difficultyFolder = "Hard";
+                break;
+            case PuzzleDifficulty.Expert:
+                difficultyFolder = "Expert";
+                break;
+        }
+
+        string savePath = Path.Combine(Application.dataPath, "Resources", "Levels", difficultyFolder);
+        Debug.Log($"Saving to path {savePath}");
+        emojiCrossWord.SaveCrossWordPuzzle(savePath);
+
     }
 
 }
