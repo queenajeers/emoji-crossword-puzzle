@@ -12,18 +12,25 @@ public class TouchBlock : MonoBehaviour
     public static Action<TouchBlock> OnTouchBlockClicked;
 
     Image BG;
+    Outline outline;
     [SerializeField] Color selectColor;
     Color bgDefaultColor;
+    Color outlineDefault;
 
     void Awake()
     {
         BG = GetComponent<Image>();
+        outline = GetComponent<Outline>();
+        outlineDefault = outline.effectColor;
         bgDefaultColor = BG.color;
     }
-    public void LoadData(Vector2Int blockLocation, char attatchedLetter)
+    private void Start()
+    {
+        ClearBox();
+    }
+    public void SetLocation(Vector2Int blockLocation)
     {
         this.blockLocation = blockLocation;
-        this.attatchedLetter.text = attatchedLetter.ToString();
     }
 
     public void SetLetter(char letter)
@@ -43,6 +50,18 @@ public class TouchBlock : MonoBehaviour
     public void DeSelectBlock()
     {
         BG.color = bgDefaultColor;
+    }
+
+    public void MakeABox(float borderWidth)
+    {
+        outline.effectDistance = new Vector2(borderWidth, -borderWidth);
+        outline.effectColor = Color.black;
+    }
+    public void ClearBox()
+    {
+        outline.effectDistance = new Vector2(0, 0);
+        outline.effectColor = outlineDefault;
+        attatchedLetter.text = ' '.ToString();
     }
 
 }

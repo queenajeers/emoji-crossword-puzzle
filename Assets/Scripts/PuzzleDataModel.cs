@@ -36,10 +36,27 @@ public class DataBlock
 }
 
 [System.Serializable]
-public class Box : DataBlock
+public class LetterBox : DataBlock
 {
     public char letter;
     public bool isClue;
+
+    public LetterBox(char letter)
+    {
+        this.letter = letter;
+    }
+    public void UpdateLeter(char letter)
+    {
+        this.letter = letter;
+    }
+    public void SetAsClueLetter()
+    {
+        isClue = true;
+    }
+    public void SetAsNormalLetter()
+    {
+        isClue = false;
+    }
 }
 
 [System.Serializable]

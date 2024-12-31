@@ -587,17 +587,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df6e7537b27ad49659baecff37616637, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &1844022370 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 9092231573891413288, guid: a3d280f84f8f14c61bbcec901b0e9cf7, type: 3}
-  m_PrefabInstance: {fileID: 1584784214876110527}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: df6e7537b27ad49659baecff37616637, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &1584784214876110527
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -629,6 +618,18 @@ PrefabInstance:
     - target: {fileID: 1014529835706198292, guid: a3d280f84f8f14c61bbcec901b0e9cf7, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2392218482067537354, guid: a3d280f84f8f14c61bbcec901b0e9cf7, type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2392218482067537354, guid: a3d280f84f8f14c61bbcec901b0e9cf7, type: 3}
+      propertyPath: m_Color.g
+      value: 0.89488924
+      objectReference: {fileID: 0}
+    - target: {fileID: 2392218482067537354, guid: a3d280f84f8f14c61bbcec901b0e9cf7, type: 3}
+      propertyPath: m_Color.r
+      value: 0.8254717
       objectReference: {fileID: 0}
     - target: {fileID: 2507852436020060064, guid: a3d280f84f8f14c61bbcec901b0e9cf7, type: 3}
       propertyPath: m_Pivot.x
@@ -752,7 +753,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4640415162642794730, guid: a3d280f84f8f14c61bbcec901b0e9cf7, type: 3}
       propertyPath: toolBarButtons.Array.size
-      value: 6
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 4640415162642794730, guid: a3d280f84f8f14c61bbcec901b0e9cf7, type: 3}
       propertyPath: 'toolBarButtons.Array.data[0]'
@@ -761,23 +762,23 @@ PrefabInstance:
     - target: {fileID: 4640415162642794730, guid: a3d280f84f8f14c61bbcec901b0e9cf7, type: 3}
       propertyPath: 'toolBarButtons.Array.data[1]'
       value: 
-      objectReference: {fileID: 1844022370}
+      objectReference: {fileID: 1588138807}
     - target: {fileID: 4640415162642794730, guid: a3d280f84f8f14c61bbcec901b0e9cf7, type: 3}
       propertyPath: 'toolBarButtons.Array.data[2]'
       value: 
-      objectReference: {fileID: 1588138807}
+      objectReference: {fileID: 487590032}
     - target: {fileID: 4640415162642794730, guid: a3d280f84f8f14c61bbcec901b0e9cf7, type: 3}
       propertyPath: 'toolBarButtons.Array.data[3]'
       value: 
-      objectReference: {fileID: 487590032}
+      objectReference: {fileID: 1362213773}
     - target: {fileID: 4640415162642794730, guid: a3d280f84f8f14c61bbcec901b0e9cf7, type: 3}
       propertyPath: 'toolBarButtons.Array.data[4]'
       value: 
-      objectReference: {fileID: 1362213773}
+      objectReference: {fileID: 1140202662}
     - target: {fileID: 4640415162642794730, guid: a3d280f84f8f14c61bbcec901b0e9cf7, type: 3}
       propertyPath: 'toolBarButtons.Array.data[5]'
       value: 
-      objectReference: {fileID: 1140202662}
+      objectReference: {fileID: 0}
     - target: {fileID: 4862063686116717907, guid: a3d280f84f8f14c61bbcec901b0e9cf7, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -847,7 +848,8 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 6567070861682110294, guid: a3d280f84f8f14c61bbcec901b0e9cf7, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a3d280f84f8f14c61bbcec901b0e9cf7, type: 3}

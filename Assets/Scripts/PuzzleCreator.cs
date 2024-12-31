@@ -69,8 +69,7 @@ public class PuzzleCreator : MonoBehaviour
                 {
                     var gridTouchBlock = Instantiate(puzzleCreateTouchBlock, transform);
                     var gridTouchRect = gridTouchBlock.GetComponent<RectTransform>();
-                    var cellBorderSize = GridLayer.Instance.GetCellBorderSize();
-                    gridTouchBlock.GetComponent<Outline>().effectDistance = new Vector2(cellBorderSize, -cellBorderSize);
+                    gridTouchBlock.GetComponent<TouchBlock>().SetLocation(new Vector2Int(row, col));
                     gridTouchRect.localPosition = GridLayer.Instance.GetPositionOfAGridBlock(row, col, transform);
                     gridTouchRect.sizeDelta = Vector2.one * GridLayer.Instance.GetCellSize();
                 }
@@ -80,6 +79,21 @@ public class PuzzleCreator : MonoBehaviour
 
     }
 
+
+    void Update()
+    {
+        foreach (char c in Input.inputString)
+        {
+            char upperC = char.ToUpper(c); // Convert the character to uppercase
+            if (upperC >= 'A' && upperC <= 'Z') // Check if it's a capital letter
+            {
+                Debug.Log($"Character clicked {upperC}");
+                CharacterClicked(upperC);
+            }
+        }
+    }
+
+
     public void TouchBlockClicked(TouchBlock touchedBlock)
     {
         if (currentSelectedTouchBlock != null)
@@ -88,6 +102,37 @@ public class PuzzleCreator : MonoBehaviour
         }
         touchedBlock.SelectBlock();
         currentSelectedTouchBlock = touchedBlock;
+    }
+
+    void CharacterClicked(char c)
+    {
+        if (currentSelectedBrush == PuzzleCreatorBrush.AddLetter)
+        {
+            if (currentSelectedTouchBlock != null)
+            {
+                currentSelectedTouchBlock.MakeABox(GridLayer.Instance.GetCellBorderSize());
+                currentSelectedTouchBlock.SetLetter(c);
+
+
+                var dataBlock = emojiCrossWord.dataBlocks.Find(db => db.blockLocation == currentSelectedTouchBlock.blockLocation);
+
+                if (dataBlock == null)
+                {
+                    dataBlock = new LetterBox(c)
+                    {
+                        blockLocation = currentSelectedTouchBlock.blockLocation
+                    };
+                    emojiCrossWord.dataBlocks.Add(dataBlock);
+                }
+                else
+                {
+                    var letterBox = (LetterBox)dataBlock;
+                    letterBox.UpdateLeter(c);
+                }
+
+            }
+
+        }
     }
 
     public void SavePuzzle()
