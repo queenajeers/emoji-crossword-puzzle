@@ -2,18 +2,30 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 
+
+
 [System.Serializable]
 public class EmojiCrossWord
 {
     public string puzzleName;
     public Vector2Int gridSize;
-    public List<DataBlock> dataBlocks;
-    public List<CrossWord> crossWords;
+    [SerializeReference] public List<DataBlock> dataBlocks = new List<DataBlock>();
+    public List<CrossWord> crossWords = new List<CrossWord>();
 
     public void SaveCrossWordPuzzle(string path)
     {
         var jsonText = JsonUtility.ToJson(this);
+        Debug.Log($"SAVING TO PATH {path}");
         File.WriteAllText(path, jsonText);
+    }
+    public EmojiCrossWord LoadFromSavedPath(string path)
+    {
+        if (File.Exists(path))
+        {
+            return JsonUtility.FromJson<EmojiCrossWord>(File.ReadAllText(path));
+        }
+
+        return null;
     }
 
 }
@@ -58,14 +70,6 @@ public class LetterBox : DataBlock
     public void UpdateLeter(char letter)
     {
         this.letter = letter;
-    }
-    public void SetAsClueLetter()
-    {
-        isClue = true;
-    }
-    public void SetAsNormalLetter()
-    {
-        isClue = false;
     }
 }
 

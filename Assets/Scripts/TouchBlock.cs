@@ -36,6 +36,11 @@ public class TouchBlock : MonoBehaviour
     public void SetLetter(char letter)
     {
         attatchedLetter.text = letter.ToString();
+        MakeABox(GridLayer.Instance.GetCellBorderSize());
+    }
+    public void UpdateLetter(char letter)
+    {
+        attatchedLetter.text = letter.ToString();
     }
 
     public void BlockClicked()
@@ -52,7 +57,21 @@ public class TouchBlock : MonoBehaviour
         BG.color = bgDefaultColor;
     }
 
-    public void MakeABox(float borderWidth)
+    public void MakeAsClueLetter()
+    {
+        var c = attatchedLetter.color;
+        c.a = .4f;
+        attatchedLetter.color = c;
+    }
+
+    public void MakeAsNormalLetter()
+    {
+        var c = attatchedLetter.color;
+        c.a = 1f;
+        attatchedLetter.color = c;
+    }
+
+    private void MakeABox(float borderWidth)
     {
         outline.effectDistance = new Vector2(borderWidth, -borderWidth);
         outline.effectColor = Color.gray;
@@ -62,6 +81,7 @@ public class TouchBlock : MonoBehaviour
         outline.effectDistance = new Vector2(0, 0);
         outline.effectColor = outlineDefault;
         attatchedLetter.text = ' '.ToString();
+        MakeAsNormalLetter();
     }
 
 }

@@ -58,7 +58,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 2
+  spriteMode: 1
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -238,7 +238,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 5e97eb03825dee720800000000000000
     internalID: 0
     vertices: []
     indices: 
@@ -247,7 +247,12 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      confetti-ball_1f38a_0: -1576242081431286185
+      confetti-ball_1f38a_1: -6035785299027458593
+      confetti-ball_1f38a_2: 5646615293419046012
+      confetti-ball_1f38a_3: 7079737314706435913
+      confetti-ball_1f38a_4: 6840566727083399965
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
