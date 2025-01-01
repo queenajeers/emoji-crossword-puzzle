@@ -32,7 +32,7 @@ public class PuzzleCreator : MonoBehaviour
     [Space(20)]
     public GameObject puzzleCreateTouchBlock;
 
-    public EmojiCrossWord emojiCrossWord = new EmojiCrossWord();
+    private EmojiCrossWord emojiCrossWord = new EmojiCrossWord();
 
     public List<ToolBarButton> toolBarButtons;
     public PuzzleCreatorBrush currentSelectedBrush;
@@ -53,6 +53,8 @@ public class PuzzleCreator : MonoBehaviour
         {
             defaultGridSize = emojiCrossWord.gridSize;
         }
+
+        EmojiCrossWordUtility.CenterDataBlocks(emojiCrossWord);
 
         StartCoroutine(CreateTouchBase());
         SelectBrush(PuzzleCreatorBrush.AddLetter);
@@ -296,6 +298,19 @@ public class PuzzleCreator : MonoBehaviour
         }
         string savePath = Path.Combine(Application.dataPath, "Resources", "Levels", difficultyFolder, $"{puzzleName}.json");
         return savePath;
+    }
+
+    public void CenterGrid()
+    {
+        EmojiCrossWordUtility.CenterDataBlocks(emojiCrossWord);
+        foreach (var block in touchBlocks.Values)
+        {
+            block.ClearBox();
+        }
+
+        SavePuzzle();
+        LoadPreSavedBlocksData();
+
     }
 
 

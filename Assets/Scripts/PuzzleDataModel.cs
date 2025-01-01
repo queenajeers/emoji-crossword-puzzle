@@ -92,3 +92,39 @@ public enum HintDirection
 }
 
 
+public class EmojiCrossWordUtility
+{
+    public static void CenterDataBlocks(EmojiCrossWord emojiCrossWord)
+    {
+        if (emojiCrossWord == null || emojiCrossWord.dataBlocks.Count == 0)
+            return;
+
+        // Calculate bounds of existing DataBlocks
+        int minX = int.MaxValue, maxX = int.MinValue;
+        int minY = int.MaxValue, maxY = int.MinValue;
+
+        foreach (var dataBlock in emojiCrossWord.dataBlocks)
+        {
+            minX = Mathf.Min(minX, dataBlock.blockLocation.x);
+            maxX = Mathf.Max(maxX, dataBlock.blockLocation.x);
+            minY = Mathf.Min(minY, dataBlock.blockLocation.y);
+            maxY = Mathf.Max(maxY, dataBlock.blockLocation.y);
+        }
+
+        // Calculate the offset to center the blocks
+        int width = maxX - minX + 1;
+        int height = maxY - minY + 1;
+
+        Vector2Int centerOffset = new Vector2Int(
+            (emojiCrossWord.gridSize.x - width) / 2 - minX,
+            (emojiCrossWord.gridSize.y - height) / 2 - minY
+        );
+
+        // Update DataBlock positions
+        foreach (var dataBlock in emojiCrossWord.dataBlocks)
+        {
+            dataBlock.blockLocation += centerOffset;
+        }
+    }
+}
+

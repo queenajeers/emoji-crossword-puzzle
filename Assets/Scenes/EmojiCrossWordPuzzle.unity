@@ -544,6 +544,10 @@ PrefabInstance:
       propertyPath: m_SizeDelta.x
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1383289545095884668, guid: a3d280f84f8f14c61bbcec901b0e9cf7, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2507852436020060064, guid: a3d280f84f8f14c61bbcec901b0e9cf7, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -660,10 +664,6 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4558742578245780319, guid: a3d280f84f8f14c61bbcec901b0e9cf7, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 4862063686116717907, guid: a3d280f84f8f14c61bbcec901b0e9cf7, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -680,21 +680,9 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5176036341770232328, guid: a3d280f84f8f14c61bbcec901b0e9cf7, type: 3}
-      propertyPath: m_SizeDelta.x
-      value: -184
-      objectReference: {fileID: 0}
-    - target: {fileID: 5176036341770232328, guid: a3d280f84f8f14c61bbcec901b0e9cf7, type: 3}
-      propertyPath: m_SizeDelta.y
-      value: 40
-      objectReference: {fileID: 0}
     - target: {fileID: 7652387277340055138, guid: a3d280f84f8f14c61bbcec901b0e9cf7, type: 3}
       propertyPath: m_Name
       value: PuzzleCreator
-      objectReference: {fileID: 0}
-    - target: {fileID: 8332252383546531059, guid: a3d280f84f8f14c61bbcec901b0e9cf7, type: 3}
-      propertyPath: m_SizeDelta.x
-      value: 315.97
       objectReference: {fileID: 0}
     - target: {fileID: 8734208032897188570, guid: a3d280f84f8f14c61bbcec901b0e9cf7, type: 3}
       propertyPath: m_AnchorMax.y
