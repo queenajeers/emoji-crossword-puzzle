@@ -55,6 +55,8 @@ public enum CrossWordDirection
 public class DataBlock
 {
     public Vector2Int blockLocation;
+    public ArrowIndication arrowIndication;
+
 }
 
 [System.Serializable]
@@ -89,6 +91,15 @@ public enum HintDirection
     Right,
     Up,
     Down
+}
+
+public enum ArrowIndication
+{
+    None,
+    FromTop,
+    FromRight,
+    FromBottom,
+    FromLeft
 }
 
 

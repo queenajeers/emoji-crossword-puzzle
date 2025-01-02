@@ -18,6 +18,12 @@ public class TouchBlock : MonoBehaviour
     Color bgDefaultColor;
     Color outlineDefault;
 
+    public GameObject FromTop;
+    public GameObject FromBottom;
+    public GameObject FromRight;
+    public GameObject FromLeft;
+
+
     void Awake()
     {
         BG = GetComponent<Image>();
