@@ -1,9 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using NUnit.Framework.Constraints;
 using UnityEngine;
-using UnityEngine.UI;
+
 
 public enum PuzzleCreatorBrush
 {
@@ -32,7 +31,7 @@ public class PuzzleCreator : MonoBehaviour
     [Space(20)]
     public GameObject puzzleCreateTouchBlock;
 
-    private EmojiCrossWord emojiCrossWord = new EmojiCrossWord();
+    public EmojiCrossWord emojiCrossWord = new EmojiCrossWord();
 
     public List<ToolBarButton> toolBarButtons;
     public PuzzleCreatorBrush currentSelectedBrush;
@@ -124,6 +123,66 @@ public class PuzzleCreator : MonoBehaviour
             {
                 Debug.Log($"Character clicked {upperC}");
                 CharacterClicked(upperC);
+            }
+        }
+
+        if (currentSelectedBrush == PuzzleCreatorBrush.AddImage)
+        {
+            if (Input.GetKeyDown(KeyCode.LeftArrow))
+            {
+                Vector2Int currentSelectedBox = currentSelectedTouchBlock.blockLocation;
+                Vector2Int leftBoxLocation = currentSelectedBox - new Vector2Int(0, 1);
+                if (touchBlocks.ContainsKey(leftBoxLocation))
+                {
+                    var db = emojiCrossWord.dataBlocks.Find(db => db.blockLocation == leftBoxLocation);
+                    if (db != null)
+                    {
+                        db.arrowIndication = ArrowIndication.FromRight;
+                        touchBlocks[leftBoxLocation].SetHintArrowIndication(ArrowIndication.FromRight);
+                    }
+                }
+            }
+            else if (Input.GetKeyDown(KeyCode.RightArrow))
+            {
+                Vector2Int currentSelectedBox = currentSelectedTouchBlock.blockLocation;
+                Vector2Int rightBoxLocation = currentSelectedBox + new Vector2Int(0, 1);
+                if (touchBlocks.ContainsKey(rightBoxLocation))
+                {
+                    var db = emojiCrossWord.dataBlocks.Find(db => db.blockLocation == rightBoxLocation);
+                    if (db != null)
+                    {
+                        db.arrowIndication = ArrowIndication.FromLeft;
+                        touchBlocks[rightBoxLocation].SetHintArrowIndication(ArrowIndication.FromLeft);
+                    }
+                }
+            }
+            else if (Input.GetKeyDown(KeyCode.UpArrow))
+            {
+                Vector2Int currentSelectedBox = currentSelectedTouchBlock.blockLocation;
+                Vector2Int topBoxLocation = currentSelectedBox - new Vector2Int(1, 0);
+                if (touchBlocks.ContainsKey(topBoxLocation))
+                {
+                    var db = emojiCrossWord.dataBlocks.Find(db => db.blockLocation == topBoxLocation);
+                    if (db != null)
+                    {
+                        db.arrowIndication = ArrowIndication.FromBottom;
+                        touchBlocks[topBoxLocation].SetHintArrowIndication(ArrowIndication.FromBottom);
+                    }
+                }
+            }
+            else if (Input.GetKeyDown(KeyCode.DownArrow))
+            {
+                Vector2Int currentSelectedBox = currentSelectedTouchBlock.blockLocation;
+                Vector2Int bottomBoxLocation = currentSelectedBox + new Vector2Int(1, 0);
+                if (touchBlocks.ContainsKey(bottomBoxLocation))
+                {
+                    var db = emojiCrossWord.dataBlocks.Find(db => db.blockLocation == bottomBoxLocation);
+                    if (db != null)
+                    {
+                        db.arrowIndication = ArrowIndication.FromTop;
+                        touchBlocks[bottomBoxLocation].SetHintArrowIndication(ArrowIndication.FromTop);
+                    }
+                }
             }
         }
     }
@@ -250,7 +309,6 @@ public class PuzzleCreator : MonoBehaviour
 
     public void SavePuzzle()
     {
-
         string savePath = GetSavePath();
         emojiCrossWord.puzzleName = puzzleName;
         emojiCrossWord.SaveCrossWordPuzzle(savePath);
@@ -260,6 +318,7 @@ public class PuzzleCreator : MonoBehaviour
     {
         foreach (var block in emojiCrossWord.dataBlocks)
         {
+            touchBlocks[block.blockLocation].SetHintArrowIndication(block.arrowIndication);
             if (block is LetterBox letterBox)
             {
                 var blockLocation = letterBox.blockLocation;

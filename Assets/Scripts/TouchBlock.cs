@@ -95,12 +95,36 @@ public class TouchBlock : MonoBehaviour
         attatchedLetter.text = ' '.ToString();
         hintImage.gameObject.SetActive(false);
         MakeAsNormalLetter();
+        SetHintArrowIndication(ArrowIndication.None);
     }
 
     private void ActivateImage()
     {
         hintImage.gameObject.SetActive(true);
+    }
 
+    public void SetHintArrowIndication(ArrowIndication arrowIndication)
+    {
+        FromTop.SetActive(false);
+        FromBottom.SetActive(false);
+        FromLeft.SetActive(false);
+        FromRight.SetActive(false);
+
+        switch (arrowIndication)
+        {
+            case ArrowIndication.FromTop:
+                FromTop.SetActive(true);
+                break;
+            case ArrowIndication.FromBottom:
+                FromBottom.SetActive(true);
+                break;
+            case ArrowIndication.FromLeft:
+                FromBottom.SetActive(true);
+                break;
+            case ArrowIndication.FromRight:
+                FromBottom.SetActive(true);
+                break;
+        }
     }
 
 }
