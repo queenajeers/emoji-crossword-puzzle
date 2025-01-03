@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: f5344ff1a6b0a4631bb5dbeb4ea10383
+guid: c550e1e90fc06424eb09320c136e0139
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -7059004701266085812
-    second: opacity_24dp_FFFFFF_FILL0_wght400_GRAD0_opsz24_0
+      213: 1323053393346916588
+    second: Triangle 1_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -49,8 +49,8 @@ TextureImporter:
   spriteMode: 1
   spriteExtrude: 1
   spriteMeshType: 1
-  alignment: 0
-  spritePivot: {x: 0.5, y: 0.5}
+  alignment: 9
+  spritePivot: {x: 0.5, y: 0}
   spritePixelsToUnits: 100
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
@@ -113,23 +113,23 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: opacity_24dp_FFFFFF_FILL0_wght400_GRAD0_opsz24_0
+      name: Triangle 1_0
       rect:
         serializedVersion: 2
-        x: 15
-        y: 11
-        width: 66
-        height: 78
+        x: 0
+        y: 0
+        width: 364
+        height: 301
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: c48f839df90690e90800000000000000
-      internalID: -7059004701266085812
+      spriteID: ce071592d0e6c5210800000000000000
+      internalID: 1323053393346916588
       vertices: []
       indices: 
       edges: []
@@ -139,7 +139,7 @@ TextureImporter:
     physicsShape: []
     bones: []
     spriteID: 5e97eb03825dee720800000000000000
-    internalID: 0
+    internalID: 1537655665
     vertices: []
     indices: 
     edges: []
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      opacity_24dp_FFFFFF_FILL0_wght400_GRAD0_opsz24_0: -7059004701266085812
+      Triangle 1_0: 1323053393346916588
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

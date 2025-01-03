@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 2269248893537626193}
   - component: {fileID: 4980536804177373835}
   - component: {fileID: 3144602251571264147}
+  - component: {fileID: 520015612270236093}
   m_Layer: 5
   m_Name: GridLayer
   m_TagString: Untagged
@@ -77,7 +78,7 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1.13
+  m_PixelsPerUnitMultiplier: 3
 --- !u!114 &2269248893537626193
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -130,3 +131,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   GridBlockPrefab: {fileID: 1781791610517184905, guid: 530edbf6581d9468bb1de38b5fc3ee86, type: 3}
   gridBlockBorderSize: 2
+--- !u!225 &520015612270236093
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5684887284088774112}
+  m_Enabled: 1
+  m_Alpha: 0
+  m_Interactable: 0
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0

@@ -55,7 +55,15 @@ public enum CrossWordDirection
 public class DataBlock
 {
     public Vector2Int blockLocation;
-    public ArrowIndication arrowIndication;
+    public List<ArrowIndication> arrowIndications;
+
+    public void AddDirection(ArrowIndication arrowIndication)
+    {
+        if (!arrowIndications.Contains(arrowIndication))
+        {
+            arrowIndications.Add(arrowIndication);
+        }
+    }
 
 }
 

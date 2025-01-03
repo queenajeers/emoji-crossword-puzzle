@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -95,7 +96,7 @@ public class TouchBlock : MonoBehaviour
         attatchedLetter.text = ' '.ToString();
         hintImage.gameObject.SetActive(false);
         MakeAsNormalLetter();
-        SetHintArrowIndication(ArrowIndication.None);
+        SetHintArrowIndication(null);
     }
 
     private void ActivateImage()
@@ -103,27 +104,35 @@ public class TouchBlock : MonoBehaviour
         hintImage.gameObject.SetActive(true);
     }
 
-    public void SetHintArrowIndication(ArrowIndication arrowIndication)
+    public void SetHintArrowIndication(List<ArrowIndication> arrowIndications)
     {
+
         FromTop.SetActive(false);
         FromBottom.SetActive(false);
         FromLeft.SetActive(false);
         FromRight.SetActive(false);
-
-        switch (arrowIndication)
+        if (arrowIndications == null) return;
+        foreach (ArrowIndication arrowIndication in arrowIndications)
         {
-            case ArrowIndication.FromTop:
-                FromTop.SetActive(true);
-                break;
-            case ArrowIndication.FromBottom:
-                FromBottom.SetActive(true);
-                break;
-            case ArrowIndication.FromLeft:
-                FromBottom.SetActive(true);
-                break;
-            case ArrowIndication.FromRight:
-                FromBottom.SetActive(true);
-                break;
+            switch (arrowIndication)
+            {
+                case ArrowIndication.FromTop:
+
+                    FromTop.SetActive(true);
+                    break;
+                case ArrowIndication.FromBottom:
+
+                    FromBottom.SetActive(true);
+                    break;
+                case ArrowIndication.FromLeft:
+
+                    FromLeft.SetActive(true);
+                    break;
+                case ArrowIndication.FromRight:
+
+                    FromRight.SetActive(true);
+                    break;
+            }
         }
     }
 

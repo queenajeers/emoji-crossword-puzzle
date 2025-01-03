@@ -1,10 +1,19 @@
 fileFormatVersion: 2
-guid: f5344ff1a6b0a4631bb5dbeb4ea10383
+guid: cd6c877c2b49746eabdf04114cac9d44
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -7059004701266085812
-    second: opacity_24dp_FFFFFF_FILL0_wght400_GRAD0_opsz24_0
+      213: 6219265030314400165
+    second: zoom_out_map_24dp_FFFFFF_FILL0_wght400_GRAD0_opsz24_0
+  - first:
+      213: -5897953302993922784
+    second: zoom_out_map_24dp_FFFFFF_FILL0_wght400_GRAD0_opsz24_1
+  - first:
+      213: 1914724130684178156
+    second: zoom_out_map_24dp_FFFFFF_FILL0_wght400_GRAD0_opsz24_2
+  - first:
+      213: 3120181155462834865
+    second: zoom_out_map_24dp_FFFFFF_FILL0_wght400_GRAD0_opsz24_3
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -113,13 +122,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: opacity_24dp_FFFFFF_FILL0_wght400_GRAD0_opsz24_0
+      name: zoom_out_map_24dp_FFFFFF_FILL0_wght400_GRAD0_opsz24_0
       rect:
         serializedVersion: 2
-        x: 15
-        y: 11
-        width: 66
-        height: 78
+        x: 11
+        y: 57
+        width: 28
+        height: 28
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +137,74 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: c48f839df90690e90800000000000000
-      internalID: -7059004701266085812
+      spriteID: 5a916ef08944f4650800000000000000
+      internalID: 6219265030314400165
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: zoom_out_map_24dp_FFFFFF_FILL0_wght400_GRAD0_opsz24_1
+      rect:
+        serializedVersion: 2
+        x: 57
+        y: 57
+        width: 28
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 025943938b2462ea0800000000000000
+      internalID: -5897953302993922784
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: zoom_out_map_24dp_FFFFFF_FILL0_wght400_GRAD0_opsz24_2
+      rect:
+        serializedVersion: 2
+        x: 11
+        y: 11
+        width: 28
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cee8c44c377729a10800000000000000
+      internalID: 1914724130684178156
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: zoom_out_map_24dp_FFFFFF_FILL0_wght400_GRAD0_opsz24_3
+      rect:
+        serializedVersion: 2
+        x: 57
+        y: 11
+        width: 28
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1baea3eba3c1d4b20800000000000000
+      internalID: 3120181155462834865
       vertices: []
       indices: 
       edges: []
@@ -148,7 +223,10 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      opacity_24dp_FFFFFF_FILL0_wght400_GRAD0_opsz24_0: -7059004701266085812
+      zoom_out_map_24dp_FFFFFF_FILL0_wght400_GRAD0_opsz24_0: 6219265030314400165
+      zoom_out_map_24dp_FFFFFF_FILL0_wght400_GRAD0_opsz24_1: -5897953302993922784
+      zoom_out_map_24dp_FFFFFF_FILL0_wght400_GRAD0_opsz24_2: 1914724130684178156
+      zoom_out_map_24dp_FFFFFF_FILL0_wght400_GRAD0_opsz24_3: 3120181155462834865
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

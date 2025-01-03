@@ -11,7 +11,8 @@ public enum PuzzleCreatorBrush
     AddLetter,
     MaskLetter,
     AddImage,
-    Clear
+    Clear,
+    Arrow
 
 }
 
@@ -53,18 +54,13 @@ public class PuzzleCreator : MonoBehaviour
             defaultGridSize = emojiCrossWord.gridSize;
         }
 
-        EmojiCrossWordUtility.CenterDataBlocks(emojiCrossWord);
-
         StartCoroutine(CreateTouchBase());
         SelectBrush(PuzzleCreatorBrush.AddLetter);
-
-
 
         ToolBarButton.OnBrushSelected += SelectBrush;
         TouchBlock.OnTouchBlockClicked += TouchBlockClicked;
         HintSelector.OnHintSelected += OnHintSelected;
     }
-
 
     public void SelectBrush(PuzzleCreatorBrush brushType)
     {
@@ -126,7 +122,7 @@ public class PuzzleCreator : MonoBehaviour
             }
         }
 
-        if (currentSelectedBrush == PuzzleCreatorBrush.AddImage)
+        if (currentSelectedBrush == PuzzleCreatorBrush.Arrow)
         {
             if (Input.GetKeyDown(KeyCode.LeftArrow))
             {
@@ -137,8 +133,8 @@ public class PuzzleCreator : MonoBehaviour
                     var db = emojiCrossWord.dataBlocks.Find(db => db.blockLocation == leftBoxLocation);
                     if (db != null)
                     {
-                        db.arrowIndication = ArrowIndication.FromRight;
-                        touchBlocks[leftBoxLocation].SetHintArrowIndication(ArrowIndication.FromRight);
+                        db.AddDirection(ArrowIndication.FromRight);
+                        touchBlocks[leftBoxLocation].SetHintArrowIndication(db.arrowIndications);
                     }
                 }
             }
@@ -151,8 +147,8 @@ public class PuzzleCreator : MonoBehaviour
                     var db = emojiCrossWord.dataBlocks.Find(db => db.blockLocation == rightBoxLocation);
                     if (db != null)
                     {
-                        db.arrowIndication = ArrowIndication.FromLeft;
-                        touchBlocks[rightBoxLocation].SetHintArrowIndication(ArrowIndication.FromLeft);
+                        db.AddDirection(ArrowIndication.FromLeft);
+                        touchBlocks[rightBoxLocation].SetHintArrowIndication(db.arrowIndications);
                     }
                 }
             }
@@ -165,8 +161,8 @@ public class PuzzleCreator : MonoBehaviour
                     var db = emojiCrossWord.dataBlocks.Find(db => db.blockLocation == topBoxLocation);
                     if (db != null)
                     {
-                        db.arrowIndication = ArrowIndication.FromBottom;
-                        touchBlocks[topBoxLocation].SetHintArrowIndication(ArrowIndication.FromBottom);
+                        db.AddDirection(ArrowIndication.FromBottom);
+                        touchBlocks[topBoxLocation].SetHintArrowIndication(db.arrowIndications);
                     }
                 }
             }
@@ -179,8 +175,8 @@ public class PuzzleCreator : MonoBehaviour
                     var db = emojiCrossWord.dataBlocks.Find(db => db.blockLocation == bottomBoxLocation);
                     if (db != null)
                     {
-                        db.arrowIndication = ArrowIndication.FromTop;
-                        touchBlocks[bottomBoxLocation].SetHintArrowIndication(ArrowIndication.FromTop);
+                        db.AddDirection(ArrowIndication.FromTop);
+                        touchBlocks[bottomBoxLocation].SetHintArrowIndication(db.arrowIndications);
                     }
                 }
             }
@@ -318,7 +314,6 @@ public class PuzzleCreator : MonoBehaviour
     {
         foreach (var block in emojiCrossWord.dataBlocks)
         {
-            touchBlocks[block.blockLocation].SetHintArrowIndication(block.arrowIndication);
             if (block is LetterBox letterBox)
             {
                 var blockLocation = letterBox.blockLocation;
@@ -337,6 +332,9 @@ public class PuzzleCreator : MonoBehaviour
                 var blockLocation = hintBox.blockLocation;
                 touchBlocks[blockLocation].SetImage(hintBox.localPath);
             }
+
+            touchBlocks[block.blockLocation].SetHintArrowIndication(block.arrowIndications);
+
         }
     }
 

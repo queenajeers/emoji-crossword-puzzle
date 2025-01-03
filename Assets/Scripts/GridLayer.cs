@@ -38,6 +38,10 @@ public class GridLayer : MonoBehaviour
     {
         return gridBlockBorderSize;
     }
+    public void SetCellBorderSize(float borderSize)
+    {
+        gridBlockBorderSize = borderSize;
+    }
 
 
     IEnumerator CreateBaseGridCor(int rows, int cols)
@@ -46,7 +50,7 @@ public class GridLayer : MonoBehaviour
         canvasWidth = FindFirstObjectByType<Canvas>().gameObject.GetComponent<RectTransform>().sizeDelta.x;
 
 
-        float extraSpace = 30;
+        float extraSpace = 40;
         gridLayoutGroup.constraintCount = cols;
         gridLayoutGroup.spacing = Vector2.one * gridBlockBorderSize;
 
@@ -59,8 +63,10 @@ public class GridLayer : MonoBehaviour
         gridLayoutGroup.cellSize = Vector2.one * cellSize;
 
         // Adjust padding to include extra space
-        int padding = Mathf.CeilToInt(gridBlockBorderSize + extraSpace);
-        gridLayoutGroup.padding = new RectOffset(padding, padding, padding, padding);
+        int paddingX = Mathf.CeilToInt(20);
+        int paddingY = Mathf.CeilToInt(20);
+
+        gridLayoutGroup.padding = new RectOffset(paddingX, paddingX, paddingY, paddingY);
 
         Debug.Log($"Screen width is {canvasWidth}, cell size is {cellSize}, total spacing+borders+extraSpace is {totalSpacingAndBorders}");
 
