@@ -1,11 +1,13 @@
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class PuzzleBlock : MonoBehaviour
 {
     public Image hintImage;
+    private Image BG;
     public TextMeshProUGUI letter;
 
     public GameObject FromTop;
@@ -15,21 +17,26 @@ public class PuzzleBlock : MonoBehaviour
 
     Outline outline;
 
+    public Color hintBG;
+    public Color filledLetterBG;
+
+    public Color highlightColor;
+
     void Awake()
     {
         outline = GetComponent<Outline>();
+        BG = GetComponent<Image>();
     }
 
     public void LoadAsHintBlock(Sprite sprite)
     {
-        GetComponent<Image>().enabled = false;
-        outline.enabled = false;
-
+        BG.color = hintBG;
         hintImage.gameObject.SetActive(true);
         hintImage.sprite = sprite;
     }
     public void LoadAsNormalText(char letter)
     {
+        BG.color = filledLetterBG;
         this.letter.gameObject.SetActive(true);
         this.letter.text = letter.ToString();
     }
@@ -69,6 +76,16 @@ public class PuzzleBlock : MonoBehaviour
                     break;
             }
         }
+    }
+
+    public void HighlightBG()
+    {
+        BG.color = highlightColor;
+    }
+
+    public void NormaliseBG()
+    {
+        BG.color = Color.white;
     }
 
 
