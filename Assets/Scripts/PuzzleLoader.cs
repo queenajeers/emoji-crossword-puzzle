@@ -1,8 +1,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.IO;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PuzzleLoader : MonoBehaviour
 {
@@ -12,14 +14,17 @@ public class PuzzleLoader : MonoBehaviour
     public GameObject puzzleBlockPrefab;
     public Transform puzzleParent;
 
+    public float gridSizeMultiplier;
     public float borderSize;
     public Color borderColor;
 
     public Transform draggableLettersParent;
-    public Dictionary<Vector2Int, Vector2> draggablesSnapPositions = new Dictionary<Vector2Int, Vector2>();
-    public Dictionary<Vector2Int, PuzzleBlock> emptyPuzzleBlocks = new Dictionary<Vector2Int, PuzzleBlock>();
+    Dictionary<Vector2Int, Vector2> draggablesSnapPositions = new Dictionary<Vector2Int, Vector2>();
+    Dictionary<Vector2Int, PuzzleBlock> emptyPuzzleBlocks = new Dictionary<Vector2Int, PuzzleBlock>();
 
-    public RectTransform currentHoldingLetter;
+    RectTransform currentHoldingLetter;
+    private PuzzleBlock currentNearestPuzzleBlock;
+    public float thresholdForNearestPuzzleBlock;
 
     private void Start()
     {
@@ -34,10 +39,7 @@ public class PuzzleLoader : MonoBehaviour
             Debug.LogWarning($"No puzzle with name=> {puzzleName} in difficulty level=> {puzzleDifficulty} found!");
         }
     }
-    void Update()
-    {
-        HighlightNearestPuzzleBlock();
-    }
+
 
     IEnumerator LoadPuzzle()
     {
@@ -46,8 +48,11 @@ public class PuzzleLoader : MonoBehaviour
             Vector2Int gridSize = emojiCrossWord.gridSize;
             GridLayer.Instance.SetCellBorderSize(borderSize);
             GridLayer.Instance.CreateBaseGrid(gridSize.x, gridSize.y);
-
+            GridLayer.Instance.gridSizeMultiplier = gridSizeMultiplier;
             yield return new WaitForSeconds(.4f);
+
+            GetComponent<Outline>().effectDistance = new Vector2(borderSize * 2f, -borderSize * 2f);
+            GetComponent<Outline>().effectColor = borderColor;
 
             GetComponent<RectTransform>().sizeDelta = GridLayer.Instance.GetComponent<RectTransform>().sizeDelta;
             GetComponent<RectTransform>().offsetMax = GridLayer.Instance.GetComponent<RectTransform>().offsetMax;
@@ -55,7 +60,8 @@ public class PuzzleLoader : MonoBehaviour
 
             foreach (var dataBlock in emojiCrossWord.dataBlocks)
             {
-                var blockLocation = dataBlock.blockLocation;
+                Vector2Int blockLocation = dataBlock.blockLocation;
+
                 var puzzleBlock = Instantiate(puzzleBlockPrefab, puzzleParent);
 
                 var puzzleBlockRect = puzzleBlock.GetComponent<RectTransform>();
@@ -85,7 +91,6 @@ public class PuzzleLoader : MonoBehaviour
                     Sprite sprite = Resources.Load<Sprite>(hintBox.localPath);
                     puzzleBlockComp.LoadAsHintBlock(sprite);
                 }
-
 
             }
 
@@ -120,15 +125,24 @@ public class PuzzleLoader : MonoBehaviour
         foreach (var blockLocation in draggablesSnapPositions.Keys)
         {
             float dist = Vector2.Distance(draggablesSnapPositions[blockLocation], currentHoldingLetter.localPosition);
-            if (dist < minDist)
+            if (dist < minDist && dist < thresholdForNearestPuzzleBlock)
             {
                 minDist = dist;
                 targetGridLocation = blockLocation;
             }
         }
+
+        if (currentNearestPuzzleBlock != null)
+        {
+            currentNearestPuzzleBlock.NormaliseBG();
+            currentNearestPuzzleBlock = null;
+        }
+
         if (emptyPuzzleBlocks.ContainsKey(targetGridLocation))
         {
-            emptyPuzzleBlocks[targetGridLocation].HighlightBG();
+            currentNearestPuzzleBlock = emptyPuzzleBlocks[targetGridLocation];
+
+            currentNearestPuzzleBlock.HighlightBG();
         }
 
     }

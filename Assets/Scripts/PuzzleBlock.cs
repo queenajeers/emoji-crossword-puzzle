@@ -17,8 +17,11 @@ public class PuzzleBlock : MonoBehaviour
 
     Outline outline;
 
+    public Color idleColor;
     public Color hintBG;
     public Color filledLetterBG;
+    public Color filledLetter;
+
 
     public Color highlightColor;
 
@@ -38,7 +41,13 @@ public class PuzzleBlock : MonoBehaviour
     {
         BG.color = filledLetterBG;
         this.letter.gameObject.SetActive(true);
+        this.letter.color = filledLetter;
         this.letter.text = letter.ToString();
+    }
+
+    public void SetAsIdleBox()
+    {
+        BG.color = idleColor;
     }
 
     public void SetOutline(Color color, float distance)

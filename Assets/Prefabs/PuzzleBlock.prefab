@@ -266,8 +266,10 @@ MonoBehaviour:
   FromBottom: {fileID: 1673329147447576529}
   FromLeft: {fileID: 3586204313407057966}
   FromRight: {fileID: 6706641512974285965}
-  hintBG: {r: 0.85884655, g: 0.9105158, b: 0.9433962, a: 1}
-  filledLetterBG: {r: 0.9386792, g: 0.9754717, b: 1, a: 1}
+  idleColor: {r: 0.8018868, g: 0.74266636, b: 0.73758453, a: 1}
+  hintBG: {r: 0.9150943, g: 0.9150943, b: 0.9150943, a: 1}
+  filledLetterBG: {r: 0.9716981, g: 0.9716981, b: 0.9716981, a: 1}
+  filledLetter: {r: 0.3018423, g: 0.34438562, b: 0.4811321, a: 1}
   highlightColor: {r: 0.8160377, g: 1, b: 0.8197541, a: 1}
 --- !u!1 &3058317404731838416
 GameObject:

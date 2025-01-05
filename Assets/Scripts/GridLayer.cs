@@ -12,6 +12,8 @@ public class GridLayer : MonoBehaviour
     RectTransform[,] gridBlockRects;
 
     public float gridBlockBorderSize;
+    public float gridSizeMultiplier = 1f;
+
     private GridLayoutGroup gridLayoutGroup;
 
 
@@ -59,14 +61,14 @@ public class GridLayer : MonoBehaviour
 
         // Calculate the cell size
         cellSize = (canvasWidth - totalSpacingAndBorders) / cols;
-
+        cellSize *= gridSizeMultiplier;
         gridLayoutGroup.cellSize = Vector2.one * cellSize;
 
         // Adjust padding to include extra space
         int paddingX = Mathf.CeilToInt(20);
         int paddingY = Mathf.CeilToInt(20);
 
-        gridLayoutGroup.padding = new RectOffset(paddingX, paddingX, paddingY, paddingY);
+        //gridLayoutGroup.padding = new RectOffset(paddingX, paddingX, paddingY, paddingY);
 
         Debug.Log($"Screen width is {canvasWidth}, cell size is {cellSize}, total spacing+borders+extraSpace is {totalSpacingAndBorders}");
 
