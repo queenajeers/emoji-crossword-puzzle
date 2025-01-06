@@ -124,6 +124,7 @@ public class PuzzleLoader : MonoBehaviour
 
             }
 
+            UIUtils.Shuffle(leftOverLetters);
             DraggableLettersContainer.Instance.LoadLetters(GiveNextSetOfLetters());
 
             draggableLettersParent.SetAsLastSibling();
