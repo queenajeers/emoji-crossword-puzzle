@@ -3,6 +3,8 @@ using UnityEngine.EventSystems;
 using System.Collections;
 using TMPro;
 using System;
+using UnityEngine.Events;
+using DG.Tweening;
 
 public class DraggableLetter : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
@@ -36,12 +38,20 @@ public class DraggableLetter : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     public TextMeshProUGUI letterIndicator;
     public char letter;
 
+    public GameObject shadow;
+
     public static Action<DraggableLetter> OnLetterDraggingStarted;
     public static Action<DraggableLetter> OnLetterDraggingEnded;
+
+    public static Action<DraggableLetter> OnLetterReturned;
 
     public bool idleState;
     float gridCellSize;
     float originalCellSize;
+
+    public Vector2Int placedAtLocation;
+
+    public bool placedCorrectly;
 
     private void Awake()
     {
@@ -50,6 +60,7 @@ public class DraggableLetter : MonoBehaviour, IBeginDragHandler, IDragHandler, I
         returnPosition = rectTransform.localPosition;
         originalCellSize = rectTransform.sizeDelta.x;
         gridCellSize = GridLayer.Instance.GetCellSize();
+
     }
 
     public Vector2 CurrentLocalPosition()
@@ -87,6 +98,7 @@ public class DraggableLetter : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     }
     public void OnBeginDrag(PointerEventData eventData)
     {
+        if (placedCorrectly) return;
         isDragging = true;
 
         if (returnCoroutine != null)
@@ -107,12 +119,13 @@ public class DraggableLetter : MonoBehaviour, IBeginDragHandler, IDragHandler, I
         pointerOffset.y += verticalOffset;
 
         UpdatePosition(eventData);
-
+        shadow.SetActive(true);
         OnLetterDraggingStarted?.Invoke(this);
     }
 
     public void OnDrag(PointerEventData eventData)
     {
+        if (placedCorrectly) return;
         UpdatePosition(eventData);
     }
 
@@ -148,9 +161,26 @@ public class DraggableLetter : MonoBehaviour, IBeginDragHandler, IDragHandler, I
 
     public void OnEndDrag(PointerEventData eventData)
     {
+        if (placedCorrectly) return;
         OnLetterDraggingEnded?.Invoke(this);
         isDragging = false;
         returnCoroutine = StartCoroutine(ReturnToOriginalPosition());
+    }
+
+    public void GoBackToOriginalPosition(RemoveFromPlacedLocationEvent removeFromPlacedLocationEvent)
+    {
+        StartCoroutine(GoBackToOriginalPositionCor(removeFromPlacedLocationEvent));
+    }
+
+    IEnumerator GoBackToOriginalPositionCor(RemoveFromPlacedLocationEvent removeFromPlacedLocationEvent)
+    {
+        rectTransform.DOPunchRotation(new Vector3(0, 0, 30), 0.5f, 10, .4f);
+        yield return new WaitForSeconds(.4f);
+        removeFromPlacedLocationEvent(placedAtLocation);
+        placedAtLocation = new Vector2Int(-1, -1);
+        idleState = true;
+        SetReturnPositionOriginalPosition();
+        StartCoroutine(ReturnToOriginalPosition());
     }
 
     private IEnumerator ReturnToOriginalPosition()
@@ -170,6 +200,11 @@ public class DraggableLetter : MonoBehaviour, IBeginDragHandler, IDragHandler, I
             rectTransform.sizeDelta = Vector2.Lerp(currentSize, targetSize, x);
             if (x >= 1f)
             {
+                if (!idleState)
+                {
+                    OnLetterReturned?.Invoke(this);
+                }
+                shadow.SetActive(idleState);
                 break;
             }
             yield return null;

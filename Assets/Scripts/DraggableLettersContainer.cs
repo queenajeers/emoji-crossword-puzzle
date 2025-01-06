@@ -41,7 +41,6 @@ public class DraggableLettersContainer : MonoBehaviour
             letterDraggable.GetComponent<DraggableLetter>().LoadOriginalPosition();
             letterDraggable.GetComponent<DraggableLetter>().AssignLetter(chars[i]);
 
-
         }
     }
 

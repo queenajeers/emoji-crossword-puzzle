@@ -25,6 +25,8 @@ public class PuzzleBlock : MonoBehaviour
 
     public Color highlightColor;
 
+    public Vector2Int blockLocation;
+
     void Awake()
     {
         outline = GetComponent<Outline>();

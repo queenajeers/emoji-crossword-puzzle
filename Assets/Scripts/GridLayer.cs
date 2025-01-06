@@ -16,7 +16,6 @@ public class GridLayer : MonoBehaviour
 
     private GridLayoutGroup gridLayoutGroup;
 
-
     float canvasWidth;
     float cellSize;
 
@@ -50,7 +49,6 @@ public class GridLayer : MonoBehaviour
     {
         yield return null;
         canvasWidth = FindFirstObjectByType<Canvas>().gameObject.GetComponent<RectTransform>().sizeDelta.x;
-
 
         float extraSpace = 40;
         gridLayoutGroup.constraintCount = cols;

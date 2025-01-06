@@ -3,8 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Data.Common;
 using System.IO;
+using System.Linq;
 using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
+
+public delegate void RemoveFromPlacedLocationEvent(Vector2Int location);
 
 public class PuzzleLoader : MonoBehaviour
 {
@@ -19,16 +24,17 @@ public class PuzzleLoader : MonoBehaviour
     public Color borderColor;
 
     public Transform draggableLettersParent;
+    Dictionary<Vector2Int, char> correctCharacters = new Dictionary<Vector2Int, char>();
     Dictionary<Vector2Int, Vector2> draggablesSnapPositions = new Dictionary<Vector2Int, Vector2>();
     Dictionary<Vector2Int, PuzzleBlock> emptyPuzzleBlocks = new Dictionary<Vector2Int, PuzzleBlock>();
 
-    public DraggableLetter currentDraggingLetter;
+    DraggableLetter currentDraggingLetter;
     private PuzzleBlock currentNearestPuzzleBlock;
     public float thresholdForNearestPuzzleBlock;
 
     public int maxDraggableLetters;
-
-
+    public List<Vector2Int> placedLocations = new List<Vector2Int>();
+    private List<char> leftOverLetters = new List<char>(); // bug: O LETTER NOT SPAWNED
 
     private void Start()
     {
@@ -45,7 +51,7 @@ public class PuzzleLoader : MonoBehaviour
 
         DraggableLetter.OnLetterDraggingStarted += OnLetterDragableDragStarted;
         DraggableLetter.OnLetterDraggingEnded += OnLetterDragableDragEnded;
-
+        DraggableLetter.OnLetterReturned += OnLetterDraggableRetuned;
     }
 
     void Update()
@@ -53,6 +59,10 @@ public class PuzzleLoader : MonoBehaviour
         if (currentDraggingLetter != null)
         {
             HighlightNearestPuzzleBlock();
+        }
+        if (Input.GetKeyDown(KeyCode.S))
+        {
+            DraggableLettersContainer.Instance.LoadLetters(GiveNextSetOfLetters());
         }
     }
 
@@ -68,7 +78,6 @@ public class PuzzleLoader : MonoBehaviour
 
             yield return new WaitForSeconds(.4f);
 
-            DraggableLettersContainer.Instance.LoadLetters(new char[] { 'A', 'B', 'C' });
 
             GetComponent<Outline>().effectDistance = new Vector2(borderSize * 2f, -borderSize * 2f);
             GetComponent<Outline>().effectColor = borderColor;
@@ -90,9 +99,10 @@ public class PuzzleLoader : MonoBehaviour
                 var puzzleBlockComp = puzzleBlock.GetComponent<PuzzleBlock>();
                 puzzleBlockComp.SetOutline(borderColor, borderSize);
                 puzzleBlockComp.SetHintArrowIndication(dataBlock.arrowIndications);
-
+                puzzleBlockComp.blockLocation = blockLocation;
                 if (dataBlock is LetterBox letterBox)
                 {
+                    correctCharacters[dataBlock.blockLocation] = letterBox.letter;
                     if (!letterBox.isClue)
                     {
                         // Not Empty Boxs
@@ -101,6 +111,7 @@ public class PuzzleLoader : MonoBehaviour
                     else
                     {
                         // Empty Box
+                        leftOverLetters.Add(letterBox.letter);
                         draggablesSnapPositions[blockLocation] = GridLayer.Instance.GetPositionOfAGridBlock(blockLocation.x, blockLocation.y, draggableLettersParent);
                         emptyPuzzleBlocks[blockLocation] = puzzleBlockComp;
                     }
@@ -112,6 +123,8 @@ public class PuzzleLoader : MonoBehaviour
                 }
 
             }
+
+            DraggableLettersContainer.Instance.LoadLetters(GiveNextSetOfLetters());
 
             draggableLettersParent.SetAsLastSibling();
             yield return null;
@@ -143,6 +156,7 @@ public class PuzzleLoader : MonoBehaviour
         Vector2Int targetGridLocation = new Vector2Int(-1, -1);
         foreach (var blockLocation in draggablesSnapPositions.Keys)
         {
+            if (placedLocations.Contains(blockLocation)) continue;
             float dist = Vector2.Distance(draggablesSnapPositions[blockLocation], currentDraggingLetter.CurrentLocalPosition());
             if (dist < minDist && dist < thresholdForNearestPuzzleBlock)
             {
@@ -173,16 +187,47 @@ public class PuzzleLoader : MonoBehaviour
     }
     private void OnLetterDragableDragEnded(DraggableLetter draggableLetter)
     {
+        currentDraggingLetter = null;
         if (currentNearestPuzzleBlock != null)
         {
+            draggableLetter.placedAtLocation = currentNearestPuzzleBlock.blockLocation;
+            placedLocations.Add(currentNearestPuzzleBlock.blockLocation);
             currentNearestPuzzleBlock.NormaliseBG();
             currentNearestPuzzleBlock = null;
         }
         else
         {
-            currentDraggingLetter.SetReturnPositionOriginalPosition();
-            currentDraggingLetter = null;
+            draggableLetter.placedAtLocation = new Vector2Int(-1, -1);
+            draggableLetter.SetReturnPositionOriginalPosition();
         }
+    }
+
+    private void OnLetterDraggableRetuned(DraggableLetter draggableLetter)
+    {
+        if (draggableLetter.letter == correctCharacters[draggableLetter.placedAtLocation])
+        {
+            // CORRECT
+            draggableLetter.placedCorrectly = true;
+        }
+        else
+        {
+            // WRONG
+            draggableLetter.GoBackToOriginalPosition(RemoveFromPlacedLocations);
+        }
+    }
+
+    public void RemoveFromPlacedLocations(Vector2Int location)
+    {
+        placedLocations.Remove(location);
+    }
+
+
+    public char[] GiveNextSetOfLetters()
+    {
+        return leftOverLetters
+            .Skip(placedLocations.Count)  // Skip the already placed letters
+            .Take(maxDraggableLetters)     // Take the required number of letters
+            .ToArray();                    // Convert the result to a char array
     }
 
 }
