@@ -162,7 +162,7 @@ public class PuzzleLoader : MonoBehaviour
             currentNearestPuzzleBlock = emptyPuzzleBlocks[targetGridLocation];
 
             currentNearestPuzzleBlock.HighlightBG();
-            currentDraggingLetter.SetReturnPosition(draggablesSnapPositions[targetGridLocation]);
+            currentDraggingLetter.SetToSelectedPosition(draggablesSnapPositions[targetGridLocation]);
         }
 
     }

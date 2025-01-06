@@ -17,7 +17,7 @@ public class DraggableLetter : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     [Header("Return Animation")]
     [Tooltip("How quickly the element returns to its original position")]
     [Range(0.1f, 10f)]
-    [SerializeField] private float returnSpeed = 5f;
+    [SerializeField] private float returnTime = 5f;
 
     [Tooltip("Smoothing factor for the return animation (higher = smoother)")]
     [Range(0.1f, 10f)]
@@ -39,12 +39,17 @@ public class DraggableLetter : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     public static Action<DraggableLetter> OnLetterDraggingStarted;
     public static Action<DraggableLetter> OnLetterDraggingEnded;
 
+    public bool idleState;
+    float gridCellSize;
+    float originalCellSize;
 
     private void Awake()
     {
         rectTransform = GetComponent<RectTransform>();
         parentCanvas = GetComponentInParent<Canvas>();
         returnPosition = rectTransform.localPosition;
+        originalCellSize = rectTransform.sizeDelta.x;
+        gridCellSize = GridLayer.Instance.GetCellSize();
     }
 
     public Vector2 CurrentLocalPosition()
@@ -52,18 +57,26 @@ public class DraggableLetter : MonoBehaviour, IBeginDragHandler, IDragHandler, I
         return rectTransform.localPosition;
     }
 
+    public void SetGridBlockSize(float blockSize)
+    {
+        gridCellSize = blockSize;
+    }
+
     public void LoadOriginalPosition()
     {
+        idleState = true;
         originalPosition = rectTransform.localPosition;
         returnPosition = rectTransform.localPosition;
     }
     public void SetReturnPositionOriginalPosition()
     {
+        idleState = true;
         returnPosition = originalPosition;
     }
 
-    public void SetReturnPosition(Vector2 localPosition)
+    public void SetToSelectedPosition(Vector2 localPosition)
     {
+        idleState = false;
         returnPosition = localPosition;
     }
 
@@ -124,6 +137,12 @@ public class DraggableLetter : MonoBehaviour, IBeginDragHandler, IDragHandler, I
                 currentPointerPosition,
                 Time.deltaTime * dragSmoothness
             );
+            rectTransform.sizeDelta = Vector2.Lerp(
+                rectTransform.sizeDelta,
+                Vector2.one * originalCellSize,
+                Time.deltaTime * dragSmoothness
+            );
+
         }
     }
 
@@ -138,12 +157,21 @@ public class DraggableLetter : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     {
         float elapsedTime = 0f;
         Vector2 startPosition = rectTransform.localPosition;
-
-        while (elapsedTime < returnSpeed)
+        Vector2 currentSize = rectTransform.sizeDelta;
+        Vector2 targetSize = Vector2.one * (idleState ? originalCellSize : gridCellSize);
+        while (true)
         {
-            elapsedTime += Time.deltaTime;
-            float t = Mathf.SmoothStep(0f, 1f, (elapsedTime / returnSpeed) * returnSmoothness);
-            rectTransform.localPosition = Vector2.Lerp(startPosition, returnPosition, t);
+            elapsedTime += Time.deltaTime; // Increase elapsed time by time passed
+            // Apply SmoothStep with the normalized time
+            float x = Mathf.Clamp(elapsedTime / returnTime, 0f, 1f);
+            x = x * x * x * (x * (6.0f * x - 15.0f) + 10.0f);
+            // Lerp position and size with smooth transition
+            rectTransform.localPosition = Vector2.Lerp(startPosition, returnPosition, x);
+            rectTransform.sizeDelta = Vector2.Lerp(currentSize, targetSize, x);
+            if (x >= 1f)
+            {
+                break;
+            }
             yield return null;
         }
 

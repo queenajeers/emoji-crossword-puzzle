@@ -39,6 +39,8 @@ public class DraggableLettersContainer : MonoBehaviour
             var letterDraggable = Instantiate(letterDraggablePrefab, lettersDraggableParent);
             letterDraggable.GetComponent<RectTransform>().localPosition = slotPositions[i].localPosition;
             letterDraggable.GetComponent<DraggableLetter>().LoadOriginalPosition();
+            letterDraggable.GetComponent<DraggableLetter>().AssignLetter(chars[i]);
+
 
         }
     }
