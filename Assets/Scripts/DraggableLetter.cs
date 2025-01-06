@@ -1,6 +1,8 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 using System.Collections;
+using TMPro;
+using System;
 
 public class DraggableLetter : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
@@ -21,7 +23,8 @@ public class DraggableLetter : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     [Range(0.1f, 10f)]
     [SerializeField] private float returnSmoothness = 2f;
 
-    private Vector2 originalAnchoredPosition;
+    private Vector2 returnPosition;
+    private Vector2 originalPosition;
     private Vector2 currentPointerPosition;
     private Vector2 pointerOffset;
     private bool isDragging = false;
@@ -29,13 +32,46 @@ public class DraggableLetter : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     private RectTransform rectTransform;
     private Coroutine returnCoroutine;
 
+    [Header("Properties")]
+    public TextMeshProUGUI letterIndicator;
+    public char letter;
+
+    public static Action<DraggableLetter> OnLetterDraggingStarted;
+    public static Action<DraggableLetter> OnLetterDraggingEnded;
+
+
     private void Awake()
     {
         rectTransform = GetComponent<RectTransform>();
         parentCanvas = GetComponentInParent<Canvas>();
-        originalAnchoredPosition = rectTransform.anchoredPosition;
+        returnPosition = rectTransform.localPosition;
     }
 
+    public Vector2 CurrentLocalPosition()
+    {
+        return rectTransform.localPosition;
+    }
+
+    public void LoadOriginalPosition()
+    {
+        originalPosition = rectTransform.localPosition;
+        returnPosition = rectTransform.localPosition;
+    }
+    public void SetReturnPositionOriginalPosition()
+    {
+        returnPosition = originalPosition;
+    }
+
+    public void SetReturnPosition(Vector2 localPosition)
+    {
+        returnPosition = localPosition;
+    }
+
+    public void AssignLetter(char letter)
+    {
+        letterIndicator.text = letter.ToString();
+        this.letter = letter;
+    }
     public void OnBeginDrag(PointerEventData eventData)
     {
         isDragging = true;
@@ -53,11 +89,13 @@ public class DraggableLetter : MonoBehaviour, IBeginDragHandler, IDragHandler, I
             out Vector2 localPoint
         );
 
-        pointerOffset = (Vector2)rectTransform.anchoredPosition - localPoint;
+        pointerOffset = (Vector2)rectTransform.localPosition - localPoint;
         // Add vertical offset to the initial pointer offset
         pointerOffset.y += verticalOffset;
 
         UpdatePosition(eventData);
+
+        OnLetterDraggingStarted?.Invoke(this);
     }
 
     public void OnDrag(PointerEventData eventData)
@@ -81,8 +119,8 @@ public class DraggableLetter : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     {
         if (isDragging)
         {
-            rectTransform.anchoredPosition = Vector2.Lerp(
-                rectTransform.anchoredPosition,
+            rectTransform.localPosition = Vector2.Lerp(
+                rectTransform.localPosition,
                 currentPointerPosition,
                 Time.deltaTime * dragSmoothness
             );
@@ -91,6 +129,7 @@ public class DraggableLetter : MonoBehaviour, IBeginDragHandler, IDragHandler, I
 
     public void OnEndDrag(PointerEventData eventData)
     {
+        OnLetterDraggingEnded?.Invoke(this);
         isDragging = false;
         returnCoroutine = StartCoroutine(ReturnToOriginalPosition());
     }
@@ -98,17 +137,17 @@ public class DraggableLetter : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     private IEnumerator ReturnToOriginalPosition()
     {
         float elapsedTime = 0f;
-        Vector2 startPosition = rectTransform.anchoredPosition;
+        Vector2 startPosition = rectTransform.localPosition;
 
         while (elapsedTime < returnSpeed)
         {
             elapsedTime += Time.deltaTime;
             float t = Mathf.SmoothStep(0f, 1f, (elapsedTime / returnSpeed) * returnSmoothness);
-            rectTransform.anchoredPosition = Vector2.Lerp(startPosition, originalAnchoredPosition, t);
+            rectTransform.localPosition = Vector2.Lerp(startPosition, returnPosition, t);
             yield return null;
         }
 
-        rectTransform.anchoredPosition = originalAnchoredPosition;
+        rectTransform.localPosition = returnPosition;
     }
 
     public void ResetPosition()
@@ -118,6 +157,6 @@ public class DraggableLetter : MonoBehaviour, IBeginDragHandler, IDragHandler, I
         {
             StopCoroutine(returnCoroutine);
         }
-        rectTransform.anchoredPosition = originalAnchoredPosition;
+        rectTransform.localPosition = returnPosition;
     }
 }

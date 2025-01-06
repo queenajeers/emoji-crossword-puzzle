@@ -22,9 +22,13 @@ public class PuzzleLoader : MonoBehaviour
     Dictionary<Vector2Int, Vector2> draggablesSnapPositions = new Dictionary<Vector2Int, Vector2>();
     Dictionary<Vector2Int, PuzzleBlock> emptyPuzzleBlocks = new Dictionary<Vector2Int, PuzzleBlock>();
 
-    RectTransform currentHoldingLetter;
+    public DraggableLetter currentDraggingLetter;
     private PuzzleBlock currentNearestPuzzleBlock;
     public float thresholdForNearestPuzzleBlock;
+
+    public int maxDraggableLetters;
+
+
 
     private void Start()
     {
@@ -38,8 +42,19 @@ public class PuzzleLoader : MonoBehaviour
         {
             Debug.LogWarning($"No puzzle with name=> {puzzleName} in difficulty level=> {puzzleDifficulty} found!");
         }
+
+        DraggableLetter.OnLetterDraggingStarted += OnLetterDragableDragStarted;
+        DraggableLetter.OnLetterDraggingEnded += OnLetterDragableDragEnded;
+
     }
 
+    void Update()
+    {
+        if (currentDraggingLetter != null)
+        {
+            HighlightNearestPuzzleBlock();
+        }
+    }
 
     IEnumerator LoadPuzzle()
     {
@@ -49,7 +64,11 @@ public class PuzzleLoader : MonoBehaviour
             GridLayer.Instance.SetCellBorderSize(borderSize);
             GridLayer.Instance.CreateBaseGrid(gridSize.x, gridSize.y);
             GridLayer.Instance.gridSizeMultiplier = gridSizeMultiplier;
+            DraggableLettersContainer.Instance.InitialiseSlots(maxDraggableLetters);
+
             yield return new WaitForSeconds(.4f);
+
+            DraggableLettersContainer.Instance.LoadLetters(new char[] { 'A', 'B', 'C' });
 
             GetComponent<Outline>().effectDistance = new Vector2(borderSize * 2f, -borderSize * 2f);
             GetComponent<Outline>().effectColor = borderColor;
@@ -124,7 +143,7 @@ public class PuzzleLoader : MonoBehaviour
         Vector2Int targetGridLocation = new Vector2Int(-1, -1);
         foreach (var blockLocation in draggablesSnapPositions.Keys)
         {
-            float dist = Vector2.Distance(draggablesSnapPositions[blockLocation], currentHoldingLetter.localPosition);
+            float dist = Vector2.Distance(draggablesSnapPositions[blockLocation], currentDraggingLetter.CurrentLocalPosition());
             if (dist < minDist && dist < thresholdForNearestPuzzleBlock)
             {
                 minDist = dist;
@@ -143,8 +162,27 @@ public class PuzzleLoader : MonoBehaviour
             currentNearestPuzzleBlock = emptyPuzzleBlocks[targetGridLocation];
 
             currentNearestPuzzleBlock.HighlightBG();
+            currentDraggingLetter.SetReturnPosition(draggablesSnapPositions[targetGridLocation]);
         }
 
+    }
+
+    private void OnLetterDragableDragStarted(DraggableLetter draggableLetter)
+    {
+        currentDraggingLetter = draggableLetter;
+    }
+    private void OnLetterDragableDragEnded(DraggableLetter draggableLetter)
+    {
+        if (currentNearestPuzzleBlock != null)
+        {
+            currentNearestPuzzleBlock.NormaliseBG();
+            currentNearestPuzzleBlock = null;
+        }
+        else
+        {
+            currentDraggingLetter.SetReturnPositionOriginalPosition();
+            currentDraggingLetter = null;
+        }
     }
 
 }

@@ -28,7 +28,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8477097404218867854}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -61,7 +61,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.9528302, g: 0.9528302, b: 0.9528302, a: 1}
+  m_Color: {r: 0.9528302, g: 0.9528302, b: 0.9528302, a: 0}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -130,5 +130,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 810b1e8bd7a284664a30f3f1714130d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxLetters: 3
+  lettersDraggableParent: {fileID: 1716796812932982670}
   letterSlotPrefab: {fileID: 1949084809217261313, guid: dce08d28331b84eaf8b1791b13292de3, type: 3}
+  letterDraggablePrefab: {fileID: 1052071091113615253, guid: 50873c3d9344f417d8b4261642826515, type: 3}
+  letterBoxSize: 120
