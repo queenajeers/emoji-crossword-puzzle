@@ -84,7 +84,6 @@ public class PuzzleLoader : MonoBehaviour
 
             yield return new WaitForSeconds(.4f);
 
-
             GetComponent<Outline>().effectDistance = new Vector2(borderSize * 2f, -borderSize * 2f);
             GetComponent<Outline>().effectColor = borderColor;
 
@@ -203,7 +202,6 @@ public class PuzzleLoader : MonoBehaviour
     return savePath;
 #endif
     }
-
 
     public void HighlightNearestPuzzleBlock()
     {

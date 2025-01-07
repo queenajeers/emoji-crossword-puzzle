@@ -10,7 +10,6 @@ public class DraggableLettersContainer : MonoBehaviour
     public GameObject letterSlotPrefab;
     public GameObject letterDraggablePrefab;
 
-
     List<RectTransform> slotPositions = new List<RectTransform>();
 
     public float letterBoxSize;
@@ -27,9 +26,11 @@ public class DraggableLettersContainer : MonoBehaviour
             var letterSlot = Instantiate(letterSlotPrefab, transform);
             letterSlot.GetComponent<RectTransform>().sizeDelta = Vector2.one * letterBoxSize;
             slotPositions.Add(letterSlot.GetComponent<RectTransform>());
+
         }
 
     }
+
 
     public void LoadLetters(char[] chars)
     {
@@ -42,6 +43,7 @@ public class DraggableLettersContainer : MonoBehaviour
             letterDraggable.GetComponent<DraggableLetter>().LoadOriginalPosition();
             letterDraggable.GetComponent<DraggableLetter>().LoadOriginalSizes();
             letterDraggable.GetComponent<DraggableLetter>().AssignLetter(chars[i]);
+            letterDraggable.GetComponent<DraggableLetter>().PopIn(i * .1f);
 
         }
     }

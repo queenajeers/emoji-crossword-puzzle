@@ -55,12 +55,10 @@ public class DraggableLetter : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     public Vector2Int placedAtLocation;
 
     public bool placedCorrectly;
+    public bool avoidTouch;
 
     [SerializeField] List<GameObject> correctPlacementEffects;
     [SerializeField] List<GameObject> wrongPlacementEffects;
-
-    [SerializeField] Image wrongOverlay;
-    [SerializeField] Color wrongInitial;
 
 
     private void Awake()
@@ -113,6 +111,7 @@ public class DraggableLetter : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     }
     public void OnBeginDrag(PointerEventData eventData)
     {
+        if (avoidTouch) return;
         if (placedCorrectly) return;
         isDragging = true;
 
@@ -140,6 +139,7 @@ public class DraggableLetter : MonoBehaviour, IBeginDragHandler, IDragHandler, I
 
     public void OnDrag(PointerEventData eventData)
     {
+        if (avoidTouch) return;
         if (placedCorrectly) return;
         UpdatePosition(eventData);
     }
@@ -176,6 +176,7 @@ public class DraggableLetter : MonoBehaviour, IBeginDragHandler, IDragHandler, I
 
     public void OnEndDrag(PointerEventData eventData)
     {
+        if (avoidTouch) return;
         if (placedCorrectly) return;
         OnLetterDraggingEnded?.Invoke(this);
         isDragging = false;
@@ -184,11 +185,19 @@ public class DraggableLetter : MonoBehaviour, IBeginDragHandler, IDragHandler, I
 
     public void GoBackToOriginalPosition(RemoveFromPlacedLocationEvent removeFromPlacedLocationEvent)
     {
+        avoidTouch = true;
         StartCoroutine(GoBackToOriginalPositionCor(removeFromPlacedLocationEvent));
+    }
+
+    public void PopIn(float delay)
+    {
+        transform.localScale = Vector3.one * 0f;
+        transform.DOScale(1f, 0.5f).SetDelay(delay).SetEase(Ease.OutBack);
     }
 
     IEnumerator GoBackToOriginalPositionCor(RemoveFromPlacedLocationEvent removeFromPlacedLocationEvent)
     {
+
         rectTransform.DOPunchRotation(new Vector3(0, 0, 30), 0.5f, 10, .4f);
         yield return new WaitForSeconds(.4f);
         removeFromPlacedLocationEvent(placedAtLocation);
@@ -200,6 +209,7 @@ public class DraggableLetter : MonoBehaviour, IBeginDragHandler, IDragHandler, I
 
     private IEnumerator ReturnToOriginalPosition()
     {
+        avoidTouch = true;
         float elapsedTime = 0f;
         Vector2 startPosition = rectTransform.localPosition;
         Vector2 currentSize = rectTransform.sizeDelta;
@@ -221,6 +231,7 @@ public class DraggableLetter : MonoBehaviour, IBeginDragHandler, IDragHandler, I
                 {
                     OnLetterReturned?.Invoke(this);
                 }
+                avoidTouch = false;
                 shadow.SetActive(idleState);
                 break;
             }
@@ -250,8 +261,8 @@ public class DraggableLetter : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     }
     public void ActivateWrongPlacementEffects()
     {
-        //wrongOverlay.color = wrongInitial;
-        Debug.Log("CCTV");
+
+        letterIndicator.gameObject.SetActive(false);
         foreach (var effect in wrongPlacementEffects)
         {
             effect.SetActive(true);

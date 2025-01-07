@@ -152,6 +152,7 @@ MonoBehaviour:
   idleState: 0
   placedAtLocation: {x: 0, y: 0}
   placedCorrectly: 0
+  avoidTouch: 0
   correctPlacementEffects:
   - {fileID: 8548522947771925503}
   - {fileID: 1404908750028700787}
@@ -159,8 +160,6 @@ MonoBehaviour:
   wrongPlacementEffects:
   - {fileID: 7521366983274748850}
   - {fileID: 6354793845508367725}
-  wrongOverlay: {fileID: 1909842480008759783}
-  wrongInitial: {r: 1, g: 0, b: 0, a: 0.14901961}
 --- !u!114 &8955755751588028326
 MonoBehaviour:
   m_ObjectHideFlags: 0
