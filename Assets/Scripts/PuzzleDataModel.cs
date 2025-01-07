@@ -20,9 +20,20 @@ public class EmojiCrossWord
     }
     public EmojiCrossWord LoadFromSavedPath(string path)
     {
+
         if (File.Exists(path))
         {
             return JsonUtility.FromJson<EmojiCrossWord>(File.ReadAllText(path));
+        }
+
+        return null;
+    }
+    public EmojiCrossWord LoadFromSavedPathMobile(string levelName, PuzzleDifficulty puzzleDifficulty)
+    {
+        TextAsset textAsset = Resources.Load<TextAsset>($"Levels/{puzzleDifficulty}/{levelName}");
+        if (textAsset != null)
+        {
+            return JsonUtility.FromJson<EmojiCrossWord>(textAsset.text);
         }
 
         return null;

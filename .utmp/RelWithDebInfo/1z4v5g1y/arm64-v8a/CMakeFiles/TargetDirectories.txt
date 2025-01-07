@@ -1,0 +1,8 @@
+/Users/gnicky/Documents/GitHub/emoji-crossword-puzzle/.utmp/RelWithDebInfo/1z4v5g1y/arm64-v8a/CMakeFiles/edit_cache.dir
+/Users/gnicky/Documents/GitHub/emoji-crossword-puzzle/.utmp/RelWithDebInfo/1z4v5g1y/arm64-v8a/CMakeFiles/rebuild_cache.dir
+/Users/gnicky/Documents/GitHub/emoji-crossword-puzzle/.utmp/RelWithDebInfo/1z4v5g1y/arm64-v8a/GameActivity/CMakeFiles/game.dir
+/Users/gnicky/Documents/GitHub/emoji-crossword-puzzle/.utmp/RelWithDebInfo/1z4v5g1y/arm64-v8a/GameActivity/CMakeFiles/edit_cache.dir
+/Users/gnicky/Documents/GitHub/emoji-crossword-puzzle/.utmp/RelWithDebInfo/1z4v5g1y/arm64-v8a/GameActivity/CMakeFiles/rebuild_cache.dir
+/Users/gnicky/Documents/GitHub/emoji-crossword-puzzle/.utmp/RelWithDebInfo/1z4v5g1y/arm64-v8a/FramePacing/CMakeFiles/swappywrapper.dir
+/Users/gnicky/Documents/GitHub/emoji-crossword-puzzle/.utmp/RelWithDebInfo/1z4v5g1y/arm64-v8a/FramePacing/CMakeFiles/edit_cache.dir
+/Users/gnicky/Documents/GitHub/emoji-crossword-puzzle/.utmp/RelWithDebInfo/1z4v5g1y/arm64-v8a/FramePacing/CMakeFiles/rebuild_cache.dir

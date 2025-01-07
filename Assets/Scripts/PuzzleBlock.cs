@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Data;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -9,7 +10,7 @@ public class PuzzleBlock : MonoBehaviour
     public Image hintImage;
     private Image BG;
     public TextMeshProUGUI letter;
-
+    public TextMeshProUGUI numberTextIndicator;
     public GameObject FromTop;
     public GameObject FromBottom;
     public GameObject FromLeft;
@@ -21,7 +22,6 @@ public class PuzzleBlock : MonoBehaviour
     public Color hintBG;
     public Color filledLetterBG;
     public Color filledLetter;
-
 
     public Color highlightColor;
 
@@ -97,6 +97,12 @@ public class PuzzleBlock : MonoBehaviour
     public void NormaliseBG()
     {
         BG.color = Color.white;
+    }
+
+    public void SetWordIndex(int index)
+    {
+        numberTextIndicator.gameObject.SetActive(true);
+        numberTextIndicator.text = $"{index + 1}.";
     }
 
 

@@ -5,6 +5,8 @@ using TMPro;
 using System;
 using UnityEngine.Events;
 using DG.Tweening;
+using System.Collections.Generic;
+using UnityEngine.UI;
 
 public class DraggableLetter : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
@@ -40,9 +42,10 @@ public class DraggableLetter : MonoBehaviour, IBeginDragHandler, IDragHandler, I
 
     public GameObject shadow;
 
+    private CanvasGroup canvasGroup;
+
     public static Action<DraggableLetter> OnLetterDraggingStarted;
     public static Action<DraggableLetter> OnLetterDraggingEnded;
-
     public static Action<DraggableLetter> OnLetterReturned;
 
     public bool idleState;
@@ -53,13 +56,19 @@ public class DraggableLetter : MonoBehaviour, IBeginDragHandler, IDragHandler, I
 
     public bool placedCorrectly;
 
+    [SerializeField] List<GameObject> correctPlacementEffects;
+    [SerializeField] List<GameObject> wrongPlacementEffects;
+
+    [SerializeField] Image wrongOverlay;
+    [SerializeField] Color wrongInitial;
+
+
     private void Awake()
     {
         rectTransform = GetComponent<RectTransform>();
         parentCanvas = GetComponentInParent<Canvas>();
         returnPosition = rectTransform.localPosition;
-        originalCellSize = rectTransform.sizeDelta.x;
-        gridCellSize = GridLayer.Instance.GetCellSize();
+        TryGetComponent<CanvasGroup>(out canvasGroup);
 
     }
 
@@ -71,6 +80,12 @@ public class DraggableLetter : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     public void SetGridBlockSize(float blockSize)
     {
         gridCellSize = blockSize;
+    }
+
+    public void LoadOriginalSizes()
+    {
+        originalCellSize = rectTransform.sizeDelta.x;
+        gridCellSize = GridLayer.Instance.GetCellSize();
     }
 
     public void LoadOriginalPosition()
@@ -192,8 +207,10 @@ public class DraggableLetter : MonoBehaviour, IBeginDragHandler, IDragHandler, I
         while (true)
         {
             elapsedTime += Time.deltaTime; // Increase elapsed time by time passed
-            // Apply SmoothStep with the normalized time
+                                           // Apply SmoothStep with the normalized time
+
             float x = Mathf.Clamp(elapsedTime / returnTime, 0f, 1f);
+
             x = x * x * x * (x * (6.0f * x - 15.0f) + 10.0f);
             // Lerp position and size with smooth transition
             rectTransform.localPosition = Vector2.Lerp(startPosition, returnPosition, x);
@@ -221,5 +238,32 @@ public class DraggableLetter : MonoBehaviour, IBeginDragHandler, IDragHandler, I
             StopCoroutine(returnCoroutine);
         }
         rectTransform.localPosition = returnPosition;
+    }
+
+    public void ActivateCorrectPlacementEffects()
+    {
+        foreach (var effect in correctPlacementEffects)
+        {
+            effect.SetActive(true);
+        }
+        FadeOut();
+    }
+    public void ActivateWrongPlacementEffects()
+    {
+        //wrongOverlay.color = wrongInitial;
+        Debug.Log("CCTV");
+        foreach (var effect in wrongPlacementEffects)
+        {
+            effect.SetActive(true);
+        }
+    }
+
+    void FadeOut()
+    {
+        if (canvasGroup != null)
+        {
+            canvasGroup.DOFade(0, .4f)
+            .SetDelay(.55f);
+        }
     }
 }

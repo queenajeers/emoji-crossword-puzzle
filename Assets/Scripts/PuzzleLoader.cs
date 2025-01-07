@@ -33,13 +33,14 @@ public class PuzzleLoader : MonoBehaviour
     public float thresholdForNearestPuzzleBlock;
 
     public int maxDraggableLetters;
+    int currentPlacedCorrectly = 0;
     public List<Vector2Int> placedLocations = new List<Vector2Int>();
     private List<char> leftOverLetters = new List<char>(); // bug: O LETTER NOT SPAWNED
 
     private void Start()
     {
-        emojiCrossWord = emojiCrossWord.LoadFromSavedPath(GetSavePath());
-
+        //emojiCrossWord = emojiCrossWord.LoadFromSavedPath(GetSavePath());
+        emojiCrossWord = emojiCrossWord.LoadFromSavedPathMobile(puzzleName, puzzleDifficulty);
         if (emojiCrossWord != null)
         {
             StartCoroutine(LoadPuzzle());
@@ -60,14 +61,19 @@ public class PuzzleLoader : MonoBehaviour
         {
             HighlightNearestPuzzleBlock();
         }
-        if (Input.GetKeyDown(KeyCode.S))
-        {
-            DraggableLettersContainer.Instance.LoadLetters(GiveNextSetOfLetters());
-        }
+
+    }
+
+    public void BringNextSetOfLetters()
+    {
+        DraggableLettersContainer.Instance.LoadLetters(GiveNextSetOfLetters());
+
     }
 
     IEnumerator LoadPuzzle()
     {
+        Dictionary<Vector2Int, PuzzleBlock> allPuzzleBlocks = new Dictionary<Vector2Int, PuzzleBlock>();
+
         if (GridLayer.Instance != null)
         {
             Vector2Int gridSize = emojiCrossWord.gridSize;
@@ -100,6 +106,7 @@ public class PuzzleLoader : MonoBehaviour
                 puzzleBlockComp.SetOutline(borderColor, borderSize);
                 puzzleBlockComp.SetHintArrowIndication(dataBlock.arrowIndications);
                 puzzleBlockComp.blockLocation = blockLocation;
+                allPuzzleBlocks[blockLocation] = puzzleBlockComp;
                 if (dataBlock is LetterBox letterBox)
                 {
                     correctCharacters[dataBlock.blockLocation] = letterBox.letter;
@@ -124,8 +131,26 @@ public class PuzzleLoader : MonoBehaviour
 
             }
 
+            int currentWordIndex = 0;
+            for (int col = 0; col < emojiCrossWord.gridSize.y; col++)
+            {
+                for (int row = 0; row < emojiCrossWord.gridSize.x; row++)
+                {
+                    Vector2Int blockLocation = new Vector2Int(row, col);
+                    DataBlock dataBlock = emojiCrossWord.dataBlocks.Find(db => db.blockLocation == blockLocation);
+                    if (dataBlock != null)
+                    {
+                        if (dataBlock.arrowIndications.Count > 0)
+                        {
+                            allPuzzleBlocks[blockLocation].SetWordIndex(currentWordIndex);
+                            currentWordIndex++;
+                        }
+                    }
+                }
+            }
+
             UIUtils.Shuffle(leftOverLetters);
-            DraggableLettersContainer.Instance.LoadLetters(GiveNextSetOfLetters());
+            BringNextSetOfLetters();
 
             draggableLettersParent.SetAsLastSibling();
             yield return null;
@@ -134,6 +159,8 @@ public class PuzzleLoader : MonoBehaviour
 
     public string GetSavePath()
     {
+#if UNITY_ANDROID || UNITY_IOS
+        // Mobile-specific logic using Resources.Load
         string difficultyFolder = "";
         switch (puzzleDifficulty)
         {
@@ -147,9 +174,36 @@ public class PuzzleLoader : MonoBehaviour
                 difficultyFolder = "Expert";
                 break;
         }
-        string savePath = Path.Combine(Application.dataPath, "Resources", "Levels", difficultyFolder, $"{puzzleName}.json");
-        return savePath;
+
+        string relativePath = Path.Combine("Levels", difficultyFolder, puzzleName).Replace("\\", "/");
+        TextAsset saveFile = Resources.Load<TextAsset>(relativePath);
+
+        if (saveFile == null)
+        {
+            Debug.LogError($"Save file not found at Resources/{relativePath}");
+        }
+
+        return saveFile != null ? $"Resources/{relativePath}" : null; // Return a string for consistency
+#else
+    // Non-mobile platforms logic using Application.dataPath
+    string difficultyFolder = "";
+    switch (puzzleDifficulty)
+    {
+        case PuzzleDifficulty.Easy:
+            difficultyFolder = "Easy";
+            break;
+        case PuzzleDifficulty.Hard:
+            difficultyFolder = "Hard";
+            break;
+        case PuzzleDifficulty.Expert:
+            difficultyFolder = "Expert";
+            break;
     }
+    string savePath = Path.Combine(Application.dataPath, "Resources", "Levels", difficultyFolder, $"{puzzleName}.json");
+    return savePath;
+#endif
+    }
+
 
     public void HighlightNearestPuzzleBlock()
     {
@@ -209,10 +263,20 @@ public class PuzzleLoader : MonoBehaviour
         {
             // CORRECT
             draggableLetter.placedCorrectly = true;
+            draggableLetter.ActivateCorrectPlacementEffects();
+            emptyPuzzleBlocks[draggableLetter.placedAtLocation].LoadAsNormalText(draggableLetter.letter);
+            currentPlacedCorrectly++;
+            if (currentPlacedCorrectly == maxDraggableLetters)
+            {
+                currentPlacedCorrectly = 0;
+                BringNextSetOfLetters();
+            }
+
         }
         else
         {
             // WRONG
+            draggableLetter.ActivateWrongPlacementEffects();
             draggableLetter.GoBackToOriginalPosition(RemoveFromPlacedLocations);
         }
     }

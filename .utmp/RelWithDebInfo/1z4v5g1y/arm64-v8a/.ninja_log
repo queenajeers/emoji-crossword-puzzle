@@ -1,0 +1,12 @@
+# ninja log v5
+4	298	1736246209671693660	FramePacing/CMakeFiles/swappywrapper.dir/UnitySwappyWrapper.cpp.o	7c50406077140925
+299	449	1736246209820177654	/Users/gnicky/Documents/GitHub/emoji-crossword-puzzle/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/intermediates/cxx/RelWithDebInfo/1z4v5g1y/obj/arm64-v8a/libswappywrapper.so	cbf9f395e05901a1
+3	823	1736246210196659016	GameActivity/CMakeFiles/game.dir/UGAInputKeyEvent.cpp.o	1fd8417758f8c2f3
+1	931	1736246210306082798	GameActivity/CMakeFiles/game.dir/UGAEntry.cpp.o	66f9a308288c0c0d
+1	1000	1736246210375254619	GameActivity/CMakeFiles/game.dir/UGAConfiguration.cpp.o	ca803d81ae3e9485
+3	1026	1736246210402117051	GameActivity/CMakeFiles/game.dir/UGAInputMotionEvent.cpp.o	54e65f2984b2c1a6
+3	1056	1736246210431740344	GameActivity/CMakeFiles/game.dir/UGASoftKeyboard.cpp.o	c319815c456a436c
+1	1114	1736246210489779055	GameActivity/CMakeFiles/game.dir/UGADebug.cpp.o	889d1e8b7c9fb2e5
+2	1271	1736246210647094490	GameActivity/CMakeFiles/game.dir/UGAInput.cpp.o	11b1d774a29c6cce
+0	1350	1736246210726664409	GameActivity/CMakeFiles/game.dir/UGAApplication.cpp.o	465ffab387c67152
+1350	1460	1736246210833247257	/Users/gnicky/Documents/GitHub/emoji-crossword-puzzle/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/intermediates/cxx/RelWithDebInfo/1z4v5g1y/obj/arm64-v8a/libgame.so	3b289e7a466fa793
