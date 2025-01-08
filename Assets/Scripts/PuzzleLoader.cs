@@ -274,6 +274,7 @@ public class PuzzleLoader : MonoBehaviour
         else
         {
             // WRONG
+            draggableLetter.avoidTouch = true;
             draggableLetter.ActivateWrongPlacementEffects();
             draggableLetter.GoBackToOriginalPosition(RemoveFromPlacedLocations);
         }

@@ -692,6 +692,10 @@ PrefabInstance:
       propertyPath: defaultGridSize.y
       value: 6
       objectReference: {fileID: 0}
+    - target: {fileID: 4640415162642794730, guid: a3d280f84f8f14c61bbcec901b0e9cf7, type: 3}
+      propertyPath: emojiCrossWord.crossWords.Array.size
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4862063686116717907, guid: a3d280f84f8f14c61bbcec901b0e9cf7, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0

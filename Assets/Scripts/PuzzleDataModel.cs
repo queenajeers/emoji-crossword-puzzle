@@ -10,7 +10,7 @@ public class EmojiCrossWord
     public string puzzleName;
     public Vector2Int gridSize;
     [SerializeReference] public List<DataBlock> dataBlocks = new List<DataBlock>();
-    public List<CrossWord> crossWords = new List<CrossWord>();
+    public List<string> crossWords = new List<string>();
 
     public void SaveCrossWordPuzzle(string path)
     {
@@ -41,26 +41,6 @@ public class EmojiCrossWord
 
 }
 
-
-[System.Serializable]
-public class CrossWord
-{
-
-    public string word; // HELLO
-    public string maskedWord;// __LL_
-    public Vector2Int startingPosition;
-    public CrossWordDirection crossWordDirection;
-
-}
-
-
-public enum CrossWordDirection
-{
-    Left,
-    Right,
-    Up,
-    Down,
-}
 
 [System.Serializable]
 public class DataBlock

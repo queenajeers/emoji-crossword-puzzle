@@ -113,6 +113,7 @@ public class DraggableLetter : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     {
         if (avoidTouch) return;
         if (placedCorrectly) return;
+        Debug.Log("#1");
         isDragging = true;
 
         if (returnCoroutine != null)
@@ -141,6 +142,7 @@ public class DraggableLetter : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     {
         if (avoidTouch) return;
         if (placedCorrectly) return;
+        Debug.Log("#2");
         UpdatePosition(eventData);
     }
 
@@ -178,6 +180,7 @@ public class DraggableLetter : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     {
         if (avoidTouch) return;
         if (placedCorrectly) return;
+        Debug.Log("#3");
         OnLetterDraggingEnded?.Invoke(this);
         isDragging = false;
         returnCoroutine = StartCoroutine(ReturnToOriginalPosition());
@@ -185,7 +188,6 @@ public class DraggableLetter : MonoBehaviour, IBeginDragHandler, IDragHandler, I
 
     public void GoBackToOriginalPosition(RemoveFromPlacedLocationEvent removeFromPlacedLocationEvent)
     {
-        avoidTouch = true;
         StartCoroutine(GoBackToOriginalPositionCor(removeFromPlacedLocationEvent));
     }
 
@@ -230,8 +232,15 @@ public class DraggableLetter : MonoBehaviour, IBeginDragHandler, IDragHandler, I
                 if (!idleState)
                 {
                     OnLetterReturned?.Invoke(this);
+                    transform.DOScale(.85f, .2f).SetEase(Ease.OutBack).OnComplete(() =>
+                    {
+                        transform.DOScale(1f, .2f).SetEase(Ease.OutBack);
+                    });
                 }
-                avoidTouch = false;
+                if (idleState)
+                {
+                    avoidTouch = false;
+                }
                 shadow.SetActive(idleState);
                 break;
             }
@@ -261,8 +270,6 @@ public class DraggableLetter : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     }
     public void ActivateWrongPlacementEffects()
     {
-
-        letterIndicator.gameObject.SetActive(false);
         foreach (var effect in wrongPlacementEffects)
         {
             effect.SetActive(true);

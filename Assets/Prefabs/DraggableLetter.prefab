@@ -144,7 +144,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   verticalOffset: 200
   dragSmoothness: 20
-  returnTime: 0.2
+  returnTime: 0.14
   returnSmoothness: 10
   letterIndicator: {fileID: 4874608224140240768}
   letter: 107
