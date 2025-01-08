@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Data;
+using DG.Tweening;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -9,6 +10,7 @@ public class PuzzleBlock : MonoBehaviour
 {
     public Image hintImage;
     private Image BG;
+    public char correctLetter;
     public TextMeshProUGUI letter;
     public TextMeshProUGUI numberTextIndicator;
     public GameObject FromTop;
@@ -27,12 +29,18 @@ public class PuzzleBlock : MonoBehaviour
 
     public Vector2Int blockLocation;
 
+    public Color correctColorBG;
+    public Color correctColorText;
+
+    public bool filledCorrectly;
+
+    public GameObject starEffect;
+
     void Awake()
     {
         outline = GetComponent<Outline>();
         BG = GetComponent<Image>();
     }
-
     public void LoadAsHintBlock(Sprite sprite)
     {
         BG.color = hintBG;
@@ -41,6 +49,7 @@ public class PuzzleBlock : MonoBehaviour
     }
     public void LoadAsNormalText(char letter)
     {
+        filledCorrectly = true;
         BG.color = filledLetterBG;
         this.letter.gameObject.SetActive(true);
         this.letter.color = filledLetter;
@@ -105,5 +114,16 @@ public class PuzzleBlock : MonoBehaviour
         numberTextIndicator.text = $"{index + 1}.";
     }
 
+    public void MarkAsCorrectBlock(float animationDelay)
+    {
+        letter.gameObject.SetActive(true);
+        letter.transform.DOScale(1.2f, .2f).SetDelay(animationDelay).OnComplete(() =>
+        {
+            letter.transform.DOScale(1f, .2f);
+            starEffect.SetActive(true);
+        });
+        BG.DOColor(correctColorBG, .2f).SetDelay(animationDelay);
+        letter.DOColor(correctColorText, .2f).SetDelay(animationDelay);
+    }
 
 }

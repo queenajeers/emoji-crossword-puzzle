@@ -232,7 +232,7 @@ public class DraggableLetter : MonoBehaviour, IBeginDragHandler, IDragHandler, I
                 if (!idleState)
                 {
                     OnLetterReturned?.Invoke(this);
-                    transform.DOScale(.85f, .2f).SetEase(Ease.OutBack).OnComplete(() =>
+                    transform.DOScale(.9f, .14f).SetEase(Ease.OutBack).OnComplete(() =>
                     {
                         transform.DOScale(1f, .2f).SetEase(Ease.OutBack);
                     });

@@ -1,16 +1,11 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Data.Common;
 using System.IO;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.Events;
-using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 public delegate void RemoveFromPlacedLocationEvent(Vector2Int location);
-
 public class PuzzleLoader : MonoBehaviour
 {
     public string puzzleName;
@@ -27,14 +22,16 @@ public class PuzzleLoader : MonoBehaviour
     Dictionary<Vector2Int, char> correctCharacters = new Dictionary<Vector2Int, char>();
     Dictionary<Vector2Int, Vector2> draggablesSnapPositions = new Dictionary<Vector2Int, Vector2>();
     Dictionary<Vector2Int, PuzzleBlock> emptyPuzzleBlocks = new Dictionary<Vector2Int, PuzzleBlock>();
+    Dictionary<Vector2Int, PuzzleBlock> allPuzzleBlocks = new Dictionary<Vector2Int, PuzzleBlock>();
 
+    Dictionary<string, List<PuzzleBlock>> wordLinkedPuzzleBlocks = new Dictionary<string, List<PuzzleBlock>>();
     DraggableLetter currentDraggingLetter;
     private PuzzleBlock currentNearestPuzzleBlock;
     public float thresholdForNearestPuzzleBlock;
 
     public int maxDraggableLetters;
     int currentPlacedCorrectly = 0;
-    public List<Vector2Int> placedLocations = new List<Vector2Int>();
+    List<Vector2Int> placedLocations = new List<Vector2Int>();
     private List<char> leftOverLetters = new List<char>(); // bug: O LETTER NOT SPAWNED
 
     private void Start()
@@ -62,6 +59,16 @@ public class PuzzleLoader : MonoBehaviour
             HighlightNearestPuzzleBlock();
         }
 
+        if (Input.GetKeyDown(KeyCode.K))
+        {
+            for (int i = 0; i < wordLinkedPuzzleBlocks["WORLD"].Count; i++)
+            {
+                wordLinkedPuzzleBlocks["WORLD"][i].MarkAsCorrectBlock(i * 0.2f);
+            }
+
+
+        }
+
     }
 
     public void BringNextSetOfLetters()
@@ -72,7 +79,6 @@ public class PuzzleLoader : MonoBehaviour
 
     IEnumerator LoadPuzzle()
     {
-        Dictionary<Vector2Int, PuzzleBlock> allPuzzleBlocks = new Dictionary<Vector2Int, PuzzleBlock>();
 
         if (GridLayer.Instance != null)
         {
@@ -108,6 +114,7 @@ public class PuzzleLoader : MonoBehaviour
                 allPuzzleBlocks[blockLocation] = puzzleBlockComp;
                 if (dataBlock is LetterBox letterBox)
                 {
+                    puzzleBlockComp.correctLetter = letterBox.letter;
                     correctCharacters[dataBlock.blockLocation] = letterBox.letter;
                     if (!letterBox.isClue)
                     {
@@ -146,6 +153,10 @@ public class PuzzleLoader : MonoBehaviour
                         }
                     }
                 }
+            }
+            foreach (var word in emojiCrossWord.crossWords)
+            {
+                wordLinkedPuzzleBlocks[word] = GetPuzzleBlocksForWord(word);
             }
 
             UIUtils.Shuffle(leftOverLetters);
@@ -255,6 +266,38 @@ public class PuzzleLoader : MonoBehaviour
         }
     }
 
+    void HighlightFinishedWord(char lastPlacedLetter)
+    {
+        List<string> finished = new List<string>();
+        foreach (var word in wordLinkedPuzzleBlocks.Keys)
+        {
+            if (word.Contains(lastPlacedLetter))
+            {
+                var emptyBlock = wordLinkedPuzzleBlocks[word].Find(pb => pb.filledCorrectly == false);
+                if (emptyBlock == null)
+                {
+                    MarkWordAsFinished(wordLinkedPuzzleBlocks[word]);
+                    finished.Add(word);
+                }
+            }
+        }
+        foreach (var finishedWord in finished)
+        {
+            wordLinkedPuzzleBlocks.Remove(finishedWord);
+        }
+    }
+
+    public void MarkWordAsFinished(List<PuzzleBlock> puzzleBlocks)
+    {
+        float initialDelay = .5f;
+
+        for (int i = 0; i < puzzleBlocks.Count; i++)
+        {
+            puzzleBlocks[i].MarkAsCorrectBlock(initialDelay + (i * .07f));
+        }
+
+    }
+
     private void OnLetterDraggableRetuned(DraggableLetter draggableLetter)
     {
         if (draggableLetter.letter == correctCharacters[draggableLetter.placedAtLocation])
@@ -269,6 +312,7 @@ public class PuzzleLoader : MonoBehaviour
                 currentPlacedCorrectly = 0;
                 BringNextSetOfLetters();
             }
+            HighlightFinishedWord(draggableLetter.letter);
 
         }
         else
@@ -292,6 +336,71 @@ public class PuzzleLoader : MonoBehaviour
             .Skip(placedLocations.Count)  // Skip the already placed letters
             .Take(maxDraggableLetters)     // Take the required number of letters
             .ToArray();                    // Convert the result to a char array
+    }
+
+    public List<PuzzleBlock> GetPuzzleBlocksForWord(string word)
+    {
+        string capitalisedWord = word.ToUpper();
+        char firstLetter = word[0];
+        List<LetterBox> possibleTargetLetters = emojiCrossWord.dataBlocks.OfType<LetterBox>().Where(db => db.letter == firstLetter).ToList();
+        foreach (LetterBox targetLetter in possibleTargetLetters)
+        {
+            foreach (ArrowIndication arrowIndication in targetLetter.arrowIndications)
+            {
+                var targetPuzzleBlocks = GetTargetBlocks(targetLetter.blockLocation, word, arrowIndication);
+                if (targetPuzzleBlocks.Count > 0)
+                {
+                    return targetPuzzleBlocks;
+                }
+            }
+        }
+        return null;
+    }
+
+    public List<PuzzleBlock> GetTargetBlocks(Vector2Int startLocation, string word, ArrowIndication directionToSearch)
+    {
+        List<PuzzleBlock> targetTouchBlocks = new List<PuzzleBlock>();
+        if (directionToSearch != ArrowIndication.None)
+        {
+            for (int x = 0; x < word.Length; x++)
+            {
+                var searchLocation = startLocation;
+                switch (directionToSearch)
+                {
+                    case ArrowIndication.FromLeft:
+                        searchLocation = startLocation + new Vector2Int(0, x);
+                        break;
+                    case ArrowIndication.FromRight:
+                        searchLocation = startLocation - new Vector2Int(0, x);
+                        break;
+                    case ArrowIndication.FromTop:
+                        searchLocation = startLocation + new Vector2Int(x, 0);
+                        break;
+                    case ArrowIndication.FromBottom:
+                        searchLocation = startLocation - new Vector2Int(x, 0);
+                        break;
+                }
+
+                if (!allPuzzleBlocks.ContainsKey(searchLocation))
+                {
+                    targetTouchBlocks.Clear();
+                    break;
+                }
+
+                if (word[x] == allPuzzleBlocks[searchLocation].correctLetter)
+                {
+                    targetTouchBlocks.Add(allPuzzleBlocks[searchLocation]);
+                }
+
+                else
+                {
+                    targetTouchBlocks.Clear();
+                    break;
+                }
+            }
+        }
+
+        return targetTouchBlocks;
     }
 
 }

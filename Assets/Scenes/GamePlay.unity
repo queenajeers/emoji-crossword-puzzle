@@ -1261,6 +1261,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1292270332}
     m_Modifications:
+    - target: {fileID: 520015612270236093, guid: d2576db91faf14cc2acf1ab2973cd3b1, type: 3}
+      propertyPath: m_Alpha
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4980536804177373835, guid: d2576db91faf14cc2acf1ab2973cd3b1, type: 3}
       propertyPath: m_Padding.m_Top
       value: 20
