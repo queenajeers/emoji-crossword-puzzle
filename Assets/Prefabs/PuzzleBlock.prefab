@@ -791,7 +791,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1057422619047166367, guid: 03e0960aedd2343729386b2c5c3a304a, type: 3}
       propertyPath: _duration
-      value: 0.6
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1057422619047166367, guid: 03e0960aedd2343729386b2c5c3a304a, type: 3}
       propertyPath: _startDelay
@@ -803,7 +803,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1057422619047166367, guid: 03e0960aedd2343729386b2c5c3a304a, type: 3}
       propertyPath: _lifetime.m_ConstantMax
-      value: 0.6
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1057422619047166367, guid: 03e0960aedd2343729386b2c5c3a304a, type: 3}
       propertyPath: _startColor.m_ColorMax.b
