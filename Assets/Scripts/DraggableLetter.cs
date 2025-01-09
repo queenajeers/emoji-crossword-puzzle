@@ -260,13 +260,20 @@ public class DraggableLetter : MonoBehaviour, IBeginDragHandler, IDragHandler, I
         rectTransform.localPosition = returnPosition;
     }
 
-    public void ActivateCorrectPlacementEffects()
+    public void ActivateCorrectPlacementEffects(bool immediate)
     {
-        foreach (var effect in correctPlacementEffects)
+        if (!immediate)
         {
-            effect.SetActive(true);
+            foreach (var effect in correctPlacementEffects)
+            {
+                effect.SetActive(true);
+            }
+            FadeOut();
         }
-        FadeOut();
+        else
+        {
+            FadeOutImmediate();
+        }
     }
     public void ActivateWrongPlacementEffects()
     {
@@ -281,7 +288,15 @@ public class DraggableLetter : MonoBehaviour, IBeginDragHandler, IDragHandler, I
         if (canvasGroup != null)
         {
             canvasGroup.DOFade(0, .4f)
-            .SetDelay(.55f);
+            .SetDelay(.35f);
+        }
+    }
+    void FadeOutImmediate()
+    {
+        if (canvasGroup != null)
+        {
+            canvasGroup.DOFade(0, .4f)
+            .SetDelay(.1f);
         }
     }
 }

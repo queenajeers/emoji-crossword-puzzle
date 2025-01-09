@@ -8,6 +8,7 @@ using UnityEngine.UI;
 public delegate void RemoveFromPlacedLocationEvent(Vector2Int location);
 public class PuzzleLoader : MonoBehaviour
 {
+    public static PuzzleLoader Instance { get; private set; }
     public string puzzleName;
     public PuzzleDifficulty puzzleDifficulty;
     private EmojiCrossWord emojiCrossWord = new EmojiCrossWord();
@@ -34,6 +35,10 @@ public class PuzzleLoader : MonoBehaviour
     List<Vector2Int> placedLocations = new List<Vector2Int>();
     private List<char> leftOverLetters = new List<char>(); // bug: O LETTER NOT SPAWNED
 
+    void Awake()
+    {
+        Instance = this;
+    }
     private void Start()
     {
         //emojiCrossWord = emojiCrossWord.LoadFromSavedPath(GetSavePath());
@@ -57,16 +62,6 @@ public class PuzzleLoader : MonoBehaviour
         if (currentDraggingLetter != null)
         {
             HighlightNearestPuzzleBlock();
-        }
-
-        if (Input.GetKeyDown(KeyCode.K))
-        {
-            for (int i = 0; i < wordLinkedPuzzleBlocks["WORLD"].Count; i++)
-            {
-                wordLinkedPuzzleBlocks["WORLD"][i].MarkAsCorrectBlock(i * 0.2f);
-            }
-
-
         }
 
     }
@@ -266,7 +261,12 @@ public class PuzzleLoader : MonoBehaviour
         }
     }
 
-    void HighlightFinishedWord(char lastPlacedLetter)
+    public PuzzleBlock GetPuzzleBlockAtLocation(Vector2Int location)
+    {
+        return allPuzzleBlocks[location];
+    }
+
+    bool HighlightFinishedWord(char lastPlacedLetter)
     {
         List<string> finished = new List<string>();
         foreach (var word in wordLinkedPuzzleBlocks.Keys)
@@ -281,19 +281,20 @@ public class PuzzleLoader : MonoBehaviour
                 }
             }
         }
+
         foreach (var finishedWord in finished)
         {
             wordLinkedPuzzleBlocks.Remove(finishedWord);
         }
+
+        return finished.Count > 0;
     }
 
     public void MarkWordAsFinished(List<PuzzleBlock> puzzleBlocks)
     {
-        float initialDelay = .5f;
-
         for (int i = 0; i < puzzleBlocks.Count; i++)
         {
-            puzzleBlocks[i].MarkAsCorrectBlock(initialDelay + (i * .07f));
+            puzzleBlocks[i].MarkAsCorrectBlock(i);
         }
 
     }
@@ -304,7 +305,7 @@ public class PuzzleLoader : MonoBehaviour
         {
             // CORRECT
             draggableLetter.placedCorrectly = true;
-            draggableLetter.ActivateCorrectPlacementEffects();
+
             emptyPuzzleBlocks[draggableLetter.placedAtLocation].LoadAsNormalText(draggableLetter.letter);
             currentPlacedCorrectly++;
             if (currentPlacedCorrectly == maxDraggableLetters)
@@ -312,7 +313,7 @@ public class PuzzleLoader : MonoBehaviour
                 currentPlacedCorrectly = 0;
                 BringNextSetOfLetters();
             }
-            HighlightFinishedWord(draggableLetter.letter);
+            draggableLetter.ActivateCorrectPlacementEffects(HighlightFinishedWord(draggableLetter.letter));
 
         }
         else

@@ -114,16 +114,19 @@ public class PuzzleBlock : MonoBehaviour
         numberTextIndicator.text = $"{index + 1}.";
     }
 
-    public void MarkAsCorrectBlock(float animationDelay)
+    public void MarkAsCorrectBlock(int index)
     {
         letter.gameObject.SetActive(true);
-        letter.transform.DOScale(1.2f, .2f).SetDelay(animationDelay).OnComplete(() =>
+        BG.DOColor(correctColorBG, .2f);
+        //letter.DOColor(correctColorText, .2f);
+        outline.effectColor = correctColorText + (.15f * Color.white);
+        transform.DOScale(.85f, .06f + (index * .05f)).SetEase(Ease.InOutSine).OnComplete(() =>
         {
-            letter.transform.DOScale(1f, .2f);
             starEffect.SetActive(true);
+            transform.DOScale(1f, .11f + (index * .05f)).SetEase(Ease.InOutSine);
+
         });
-        BG.DOColor(correctColorBG, .2f).SetDelay(animationDelay);
-        letter.DOColor(correctColorText, .2f).SetDelay(animationDelay);
+
     }
 
 }

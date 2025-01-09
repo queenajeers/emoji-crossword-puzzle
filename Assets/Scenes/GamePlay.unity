@@ -1245,6 +1245,10 @@ PrefabInstance:
       value: 0.9
       objectReference: {fileID: 0}
     - target: {fileID: 5209431174319645550, guid: f3a7d01edc1b9421cae0b1ae4442ac6e, type: 3}
+      propertyPath: maxDraggableLetters
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5209431174319645550, guid: f3a7d01edc1b9421cae0b1ae4442ac6e, type: 3}
       propertyPath: draggableLettersParent
       value: 
       objectReference: {fileID: 4257481111163564856}
