@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -26,6 +27,7 @@ public class PuzzleLoader : MonoBehaviour
     Dictionary<Vector2Int, PuzzleBlock> allPuzzleBlocks = new Dictionary<Vector2Int, PuzzleBlock>();
 
     Dictionary<string, List<PuzzleBlock>> wordLinkedPuzzleBlocks = new Dictionary<string, List<PuzzleBlock>>();
+    List<string> finishedWords = new List<string>();
     DraggableLetter currentDraggingLetter;
     private PuzzleBlock currentNearestPuzzleBlock;
     public float thresholdForNearestPuzzleBlock;
@@ -62,6 +64,10 @@ public class PuzzleLoader : MonoBehaviour
         if (currentDraggingLetter != null)
         {
             HighlightNearestPuzzleBlock();
+        }
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            LevelFinished();
         }
 
     }
@@ -271,20 +277,16 @@ public class PuzzleLoader : MonoBehaviour
         List<string> finished = new List<string>();
         foreach (var word in wordLinkedPuzzleBlocks.Keys)
         {
-            if (word.Contains(lastPlacedLetter))
+            if (word.Contains(lastPlacedLetter) && !finishedWords.Contains(word))
             {
-                var emptyBlock = wordLinkedPuzzleBlocks[word].Find(pb => pb.filledCorrectly == false);
+                var emptyBlock = wordLinkedPuzzleBlocks[word].Find(pb => pb.filledCorrectly == false && !pb.isHint);
                 if (emptyBlock == null)
                 {
                     MarkWordAsFinished(wordLinkedPuzzleBlocks[word]);
                     finished.Add(word);
+                    finishedWords.Add(word);
                 }
             }
-        }
-
-        foreach (var finishedWord in finished)
-        {
-            wordLinkedPuzzleBlocks.Remove(finishedWord);
         }
 
         return finished.Count > 0;
@@ -314,7 +316,10 @@ public class PuzzleLoader : MonoBehaviour
                 BringNextSetOfLetters();
             }
             draggableLetter.ActivateCorrectPlacementEffects(HighlightFinishedWord(draggableLetter.letter));
-
+            if (finishedWords.Count == wordLinkedPuzzleBlocks.Count)
+            {
+                LevelFinished();
+            }
         }
         else
         {
@@ -360,15 +365,51 @@ public class PuzzleLoader : MonoBehaviour
 
     public List<PuzzleBlock> GetTargetBlocks(Vector2Int startLocation, string word, ArrowIndication directionToSearch)
     {
-        List<PuzzleBlock> targetTouchBlocks = new List<PuzzleBlock>();
+        List<PuzzleBlock> targetPuzzleBlocks = new();
+
         if (directionToSearch != ArrowIndication.None)
         {
+            _ = new Vector2Int(-1, -1);
+            Vector2Int hintLocation;
+            switch (directionToSearch)
+            {
+                case ArrowIndication.FromLeft:
+
+                    hintLocation = startLocation - new Vector2Int(0, 1);
+                    if (allPuzzleBlocks.ContainsKey(hintLocation))
+                    {
+                        targetPuzzleBlocks.Add(allPuzzleBlocks[hintLocation]);
+                    }
+                    break;
+                case ArrowIndication.FromRight:
+                    hintLocation = startLocation + new Vector2Int(0, 1);
+                    if (allPuzzleBlocks.ContainsKey(hintLocation))
+                    {
+                        targetPuzzleBlocks.Add(allPuzzleBlocks[hintLocation]);
+                    }
+                    break;
+                case ArrowIndication.FromTop:
+                    hintLocation = startLocation - new Vector2Int(1, 0);
+                    if (allPuzzleBlocks.ContainsKey(hintLocation))
+                    {
+                        targetPuzzleBlocks.Add(allPuzzleBlocks[hintLocation]);
+                    }
+                    break;
+                case ArrowIndication.FromBottom:
+                    hintLocation = startLocation + new Vector2Int(1, 0);
+                    if (allPuzzleBlocks.ContainsKey(hintLocation))
+                    {
+                        targetPuzzleBlocks.Add(allPuzzleBlocks[hintLocation]);
+                    }
+                    break;
+            }
             for (int x = 0; x < word.Length; x++)
             {
                 var searchLocation = startLocation;
                 switch (directionToSearch)
                 {
                     case ArrowIndication.FromLeft:
+
                         searchLocation = startLocation + new Vector2Int(0, x);
                         break;
                     case ArrowIndication.FromRight:
@@ -384,24 +425,49 @@ public class PuzzleLoader : MonoBehaviour
 
                 if (!allPuzzleBlocks.ContainsKey(searchLocation))
                 {
-                    targetTouchBlocks.Clear();
+                    targetPuzzleBlocks.Clear();
                     break;
                 }
 
                 if (word[x] == allPuzzleBlocks[searchLocation].correctLetter)
                 {
-                    targetTouchBlocks.Add(allPuzzleBlocks[searchLocation]);
+                    targetPuzzleBlocks.Add(allPuzzleBlocks[searchLocation]);
                 }
 
                 else
                 {
-                    targetTouchBlocks.Clear();
+                    targetPuzzleBlocks.Clear();
                     break;
                 }
             }
         }
 
-        return targetTouchBlocks;
+        return targetPuzzleBlocks;
+    }
+
+    public void LevelFinished()
+    {
+        StartCoroutine(LevelFinishedCor());
+    }
+
+    IEnumerator LevelFinishedCor()
+    {
+        yield return new WaitForSeconds(.3f);
+
+        puzzleParent.DOScale(1.05f, .2f).SetEase(Ease.OutQuad).OnComplete(() =>
+        {
+            puzzleParent.DOScale(1f, .9f).SetEase(Ease.OutElastic);
+        });
+
+        yield return new WaitForSeconds(.2f + .9f);
+        foreach (var blocks in wordLinkedPuzzleBlocks.Values)
+        {
+            for (int i = 0; i < blocks.Count; i++)
+            {
+                blocks[i].FadeOut(i);
+            }
+            yield return new WaitForSeconds(.2f);
+        }
     }
 
 }

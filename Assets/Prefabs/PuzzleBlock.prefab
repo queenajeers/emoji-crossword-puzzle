@@ -279,6 +279,7 @@ MonoBehaviour:
   correctColorBG: {r: 0.8745098, g: 0.9843137, b: 0.8352941, a: 1}
   correctColorText: {r: 0.2784314, g: 0.6039216, b: 0.28627452, a: 1}
   filledCorrectly: 0
+  isHint: 0
   starEffect: {fileID: 8259704852942182139}
 --- !u!1 &2140591532457175920
 GameObject:

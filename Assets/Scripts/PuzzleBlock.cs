@@ -33,6 +33,7 @@ public class PuzzleBlock : MonoBehaviour
     public Color correctColorText;
 
     public bool filledCorrectly;
+    public bool isHint;
 
     public GameObject starEffect;
 
@@ -43,6 +44,7 @@ public class PuzzleBlock : MonoBehaviour
     }
     public void LoadAsHintBlock(Sprite sprite)
     {
+        isHint = true;
         BG.color = hintBG;
         hintImage.gameObject.SetActive(true);
         hintImage.sprite = sprite;
@@ -116,17 +118,31 @@ public class PuzzleBlock : MonoBehaviour
 
     public void MarkAsCorrectBlock(int index)
     {
-        letter.gameObject.SetActive(true);
         BG.DOColor(correctColorBG, .2f);
-        //letter.DOColor(correctColorText, .2f);
+        letter.DOColor(correctColorText, .2f);
         outline.effectColor = correctColorText + (.15f * Color.white);
-        transform.DOScale(.85f, .06f + (index * .05f)).SetEase(Ease.InOutSine).OnComplete(() =>
+        transform.DOScale(.8f, .06f + (index * .03f)).SetEase(Ease.InOutSine).OnComplete(() =>
         {
             starEffect.SetActive(true);
-            transform.DOScale(1f, .11f + (index * .05f)).SetEase(Ease.InOutSine);
+            transform.DOScale(1f, .11f + (index * .03f)).SetEase(Ease.InOutSine);
 
         });
 
+    }
+
+    bool faded = false;
+    public void FadeOut(int index)
+    {
+        if (!faded)
+        {
+            faded = true;
+            var cg = gameObject.GetComponent<CanvasGroup>();
+            if (cg == null)
+                cg = gameObject.AddComponent<CanvasGroup>();
+
+            cg.DOFade(0f, .3f).SetTarget(cg).SetDelay(index * .01f);
+            transform.DOScale(0.6f, .29f).SetDelay(index * .01f);
+        }
     }
 
 }
