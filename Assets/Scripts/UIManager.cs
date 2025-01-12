@@ -9,7 +9,10 @@ public class UIManager : MonoBehaviour
     public DOTweenAnimation draggableLettersBG;
 
     public GameObject coinsBg;
+    [SerializeField] GameObject confetti;
     Animator coinsBGAnimator;
+
+    public GameObject LevelFinishedPage;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()
@@ -29,13 +32,12 @@ public class UIManager : MonoBehaviour
         coinsBg.SetActive(true);
     }
 
-    void Update()
+    public void ActivateConfetti()
     {
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            levelHeaderAnimation.DORewind();
-        }
+        confetti.SetActive(true);
     }
+
+
 
     public void OnCoinReached()
     {
@@ -45,6 +47,7 @@ public class UIManager : MonoBehaviour
     public void OnAllCoinsFinished()
     {
         coinsBGAnimator.Play("Reverse", 0, 0);
+        LevelFinishedPage.SetActive(true);
     }
 
 }

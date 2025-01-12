@@ -455,6 +455,7 @@ public class PuzzleLoader : MonoBehaviour
 
         puzzleParent.DOScale(1.05f, .1f).SetEase(Ease.OutQuad).OnComplete(() =>
         {
+            UIManager.Instance.ActivateConfetti();
             puzzleParent.DOScale(1f, .5f).SetEase(Ease.OutBack);
         });
 
