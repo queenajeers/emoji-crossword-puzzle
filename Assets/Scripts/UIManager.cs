@@ -37,8 +37,6 @@ public class UIManager : MonoBehaviour
         confetti.SetActive(true);
     }
 
-
-
     public void OnCoinReached()
     {
         coinsBGAnimator.Play("CoinCollect", 0, 0);
