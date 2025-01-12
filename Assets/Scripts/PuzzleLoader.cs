@@ -452,22 +452,34 @@ public class PuzzleLoader : MonoBehaviour
 
     IEnumerator LevelFinishedCor()
     {
-        yield return new WaitForSeconds(.3f);
 
-        puzzleParent.DOScale(1.05f, .2f).SetEase(Ease.OutQuad).OnComplete(() =>
+        puzzleParent.DOScale(1.05f, .1f).SetEase(Ease.OutQuad).OnComplete(() =>
         {
-            puzzleParent.DOScale(1f, .9f).SetEase(Ease.OutElastic);
+            puzzleParent.DOScale(1f, .5f).SetEase(Ease.OutBack);
         });
 
         yield return new WaitForSeconds(.2f + .9f);
+
+        UIManager.Instance.OutLevelHeaderInCoins();
+
         foreach (var blocks in wordLinkedPuzzleBlocks.Values)
         {
+            var posMean = Vector2.zero;
             for (int i = 0; i < blocks.Count; i++)
             {
+                posMean += (Vector2)blocks[i].rectTransform.localPosition;
                 blocks[i].FadeOut(i);
             }
-            yield return new WaitForSeconds(.2f);
+            posMean /= blocks.Count;
+
+            CoinsGenerator.Instance.SpawnACoin(posMean);
+
+            yield return new WaitForSeconds(.3f);
         }
+
+        yield return new WaitForSeconds(1.5f);
+
+        UIManager.Instance.OnAllCoinsFinished();
     }
 
 }

@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 4660143627177789719}
   - component: {fileID: 5209431174319645550}
   - component: {fileID: 4762868163451437369}
+  - component: {fileID: 1512993702474877243}
   m_Layer: 5
   m_Name: Puzzle
   m_TagString: Untagged
@@ -94,13 +95,12 @@ MonoBehaviour:
   puzzleDifficulty: 0
   puzzleBlockPrefab: {fileID: 1781791610517184905, guid: f5600f08e36024384b827ebdeaebe1bb, type: 3}
   puzzleParent: {fileID: 497177479066508836}
-  gridSizeMultiplier: 0.85
-  borderSize: 1.4
+  gridSizeMultiplier: 0.9
+  borderSize: 2
   borderColor: {r: 0.377314, g: 0.4433666, b: 0.5754717, a: 1}
   draggableLettersParent: {fileID: 0}
   thresholdForNearestPuzzleBlock: 100
   maxDraggableLetters: 3
-  placedLocations: []
 --- !u!114 &4762868163451437369
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -116,6 +116,18 @@ MonoBehaviour:
   m_EffectColor: {r: 0, g: 0, b: 0, a: 1}
   m_EffectDistance: {x: 3, y: -3}
   m_UseGraphicAlpha: 1
+--- !u!114 &1512993702474877243
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2609661536131177781}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 86d7664febbf54fdc9724bf5e1f9c1cd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &3901534079844052330
 GameObject:
   m_ObjectHideFlags: 0
@@ -146,8 +158,8 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1048195444041229615}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 800, y: 1600}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}

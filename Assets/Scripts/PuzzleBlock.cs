@@ -37,11 +37,16 @@ public class PuzzleBlock : MonoBehaviour
 
     public GameObject starEffect;
 
+    [HideInInspector]
+    public RectTransform rectTransform;
+
     void Awake()
     {
+        rectTransform = GetComponent<RectTransform>();
         outline = GetComponent<Outline>();
         BG = GetComponent<Image>();
     }
+
     public void LoadAsHintBlock(Sprite sprite)
     {
         isHint = true;
@@ -121,10 +126,10 @@ public class PuzzleBlock : MonoBehaviour
         BG.DOColor(correctColorBG, .2f);
         letter.DOColor(correctColorText, .2f);
         outline.effectColor = correctColorText + (.15f * Color.white);
-        transform.DOScale(.8f, .06f + (index * .03f)).SetEase(Ease.InOutSine).OnComplete(() =>
+        transform.DOScale(.9f, .06f + (index * .03f)).SetEase(Ease.InOutSine).OnComplete(() =>
         {
             starEffect.SetActive(true);
-            transform.DOScale(1f, .11f + (index * .03f)).SetEase(Ease.InOutSine);
+            transform.DOScale(1f, .9f + (index * .03f)).SetEase(Ease.OutElastic);
 
         });
 
