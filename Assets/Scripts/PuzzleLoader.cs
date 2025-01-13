@@ -27,6 +27,7 @@ public class PuzzleLoader : MonoBehaviour
     Dictionary<Vector2Int, PuzzleBlock> allPuzzleBlocks = new Dictionary<Vector2Int, PuzzleBlock>();
 
     Dictionary<string, List<PuzzleBlock>> wordLinkedPuzzleBlocks = new Dictionary<string, List<PuzzleBlock>>();
+    Dictionary<Vector2Int, LetterBox> letterBoxes = new Dictionary<Vector2Int, LetterBox>();
     List<string> finishedWords = new List<string>();
     DraggableLetter currentDraggingLetter;
     private PuzzleBlock currentNearestPuzzleBlock;
@@ -37,14 +38,43 @@ public class PuzzleLoader : MonoBehaviour
     List<Vector2Int> placedLocations = new List<Vector2Int>();
     private List<char> leftOverLetters = new List<char>(); // bug: O LETTER NOT SPAWNED
 
+    [SerializeField] string gameFilesFolderName;
     void Awake()
     {
         Instance = this;
     }
     private void Start()
     {
-        //emojiCrossWord = emojiCrossWord.LoadFromSavedPath(GetSavePath());
-        emojiCrossWord = emojiCrossWord.LoadFromSavedPathMobile(puzzleName, puzzleDifficulty);
+        FirstTimeInitialisations();
+
+
+
+        DraggableLetter.OnLetterDraggingStarted += OnLetterDragableDragStarted;
+        DraggableLetter.OnLetterDraggingEnded += OnLetterDragableDragEnded;
+        DraggableLetter.OnLetterReturned += OnLetterDraggableRetuned;
+    }
+
+    void FirstTimeInitialisations()
+    {
+        if (PlayerPrefs.GetInt("FirstTime", 0) == 0)
+        {
+            if (Directory.Exists(GetPersistantSaveFolderPath()))
+            {
+                Directory.Delete(GetPersistantSaveFolderPath());
+            }
+            PlayerPrefs.SetInt("FirstTime", 1);
+            emojiCrossWord = emojiCrossWord.LoadFromSavedPathMobile(puzzleName, puzzleDifficulty);
+            CreateSaveDirectory(GetPersistantSaveFolderPath());
+            if (emojiCrossWord != null)
+            {
+                emojiCrossWord.SaveCrossWordPuzzle(GetPersistantSaveFilePath());
+            }
+        }
+        else
+        {
+            emojiCrossWord = emojiCrossWord.LoadFromSavedPath(GetPersistantSaveFilePath());
+        }
+
         if (emojiCrossWord != null)
         {
             StartCoroutine(LoadPuzzle());
@@ -53,11 +83,38 @@ public class PuzzleLoader : MonoBehaviour
         {
             Debug.LogWarning($"No puzzle with name=> {puzzleName} in difficulty level=> {puzzleDifficulty} found!");
         }
-
-        DraggableLetter.OnLetterDraggingStarted += OnLetterDragableDragStarted;
-        DraggableLetter.OnLetterDraggingEnded += OnLetterDragableDragEnded;
-        DraggableLetter.OnLetterReturned += OnLetterDraggableRetuned;
     }
+
+    public void SavePuzzle()
+    {
+        emojiCrossWord.SaveCrossWordPuzzle(GetPersistantSaveFilePath());
+    }
+
+    public string GetPersistantSaveFolderPath()
+    {
+        return Path.Combine(Application.persistentDataPath, gameFilesFolderName, puzzleDifficulty.ToString());
+    }
+    public string GetPersistantSaveFilePath()
+    {
+        return Path.Combine(Application.persistentDataPath, gameFilesFolderName, puzzleDifficulty.ToString(), puzzleName);
+    }
+
+    public void CreateSaveDirectory(string path)
+    {
+
+        if (!Directory.Exists(path))
+        {
+            // Create the folder
+            Directory.CreateDirectory(path);
+            Debug.Log($"Folder created at: {path}");
+        }
+        else
+        {
+            Debug.Log($"Folder already exists at: {path}");
+        }
+    }
+
+
 
     void Update()
     {
@@ -115,6 +172,7 @@ public class PuzzleLoader : MonoBehaviour
                 allPuzzleBlocks[blockLocation] = puzzleBlockComp;
                 if (dataBlock is LetterBox letterBox)
                 {
+                    letterBoxes[blockLocation] = letterBox;
                     puzzleBlockComp.correctLetter = letterBox.letter;
                     correctCharacters[dataBlock.blockLocation] = letterBox.letter;
                     if (!letterBox.isClue)
@@ -320,6 +378,11 @@ public class PuzzleLoader : MonoBehaviour
             {
                 LevelFinished();
             }
+
+            // save cross word
+            letterBoxes[draggableLetter.placedAtLocation].isClue = false;
+            SavePuzzle();
+
         }
         else
         {

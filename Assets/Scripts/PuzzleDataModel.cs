@@ -28,6 +28,7 @@ public class EmojiCrossWord
 
         return null;
     }
+
     public EmojiCrossWord LoadFromSavedPathMobile(string levelName, PuzzleDifficulty puzzleDifficulty)
     {
         TextAsset textAsset = Resources.Load<TextAsset>($"Levels/{puzzleDifficulty}/{levelName}");
