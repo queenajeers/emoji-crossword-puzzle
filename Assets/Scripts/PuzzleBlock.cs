@@ -121,17 +121,27 @@ public class PuzzleBlock : MonoBehaviour
         numberTextIndicator.text = $"{index + 1}.";
     }
 
-    public void MarkAsCorrectBlock(int index)
+    public void MarkAsCorrectBlock(int index, bool noAnimation = false)
     {
-        BG.DOColor(correctColorBG, .2f);
-        letter.DOColor(correctColorText, .2f);
-        outline.effectColor = correctColorText + (.15f * Color.white);
-        transform.DOScale(.9f, .06f + (index * .03f)).SetEase(Ease.InOutSine).OnComplete(() =>
+        if (!noAnimation)
         {
-            starEffect.SetActive(true);
-            transform.DOScale(1f, .9f + (index * .03f)).SetEase(Ease.OutElastic);
+            BG.DOColor(correctColorBG, .2f);
+            letter.DOColor(correctColorText, .2f);
+            outline.effectColor = correctColorText + (.15f * Color.white);
+            transform.DOScale(.9f, .06f + (index * .03f)).SetEase(Ease.InOutSine).OnComplete(() =>
+            {
+                starEffect.SetActive(true);
+                transform.DOScale(1f, .9f + (index * .03f)).SetEase(Ease.OutElastic);
 
-        });
+            });
+        }
+        else
+        {
+            BG.color = correctColorBG;
+            letter.color = correctColorText;
+            outline.effectColor = correctColorText + (.15f * Color.white);
+
+        }
 
     }
 

@@ -12,6 +12,11 @@ public class EmojiCrossWord
     [SerializeReference] public List<DataBlock> dataBlocks = new List<DataBlock>();
     public List<string> crossWords = new List<string>();
 
+    public List<char> totalLeftOverWords = new List<char>();
+    public List<char> currentLeftOverWords = new List<char>();
+
+    public int placedWords = 0;
+
     public void SaveCrossWordPuzzle(string path)
     {
         var jsonText = JsonUtility.ToJson(this);

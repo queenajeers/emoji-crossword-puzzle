@@ -12,7 +12,7 @@ public class PuzzleLoader : MonoBehaviour
     public static PuzzleLoader Instance { get; private set; }
     public string puzzleName;
     public PuzzleDifficulty puzzleDifficulty;
-    private EmojiCrossWord emojiCrossWord = new EmojiCrossWord();
+    public EmojiCrossWord emojiCrossWord = new EmojiCrossWord();
     public GameObject puzzleBlockPrefab;
     public Transform puzzleParent;
 
@@ -34,7 +34,6 @@ public class PuzzleLoader : MonoBehaviour
     public float thresholdForNearestPuzzleBlock;
 
     public int maxDraggableLetters;
-    int currentPlacedCorrectly = 0;
     List<Vector2Int> placedLocations = new List<Vector2Int>();
     private List<char> leftOverLetters = new List<char>(); // bug: O LETTER NOT SPAWNED
 
@@ -58,9 +57,9 @@ public class PuzzleLoader : MonoBehaviour
     {
         if (PlayerPrefs.GetInt("FirstTime", 0) == 0)
         {
-            if (Directory.Exists(GetPersistantSaveFolderPath()))
+            if (Directory.Exists(GetPersistantSaveFilePath()))
             {
-                Directory.Delete(GetPersistantSaveFolderPath());
+                Directory.Delete(GetPersistantSaveFilePath());
             }
             PlayerPrefs.SetInt("FirstTime", 1);
             emojiCrossWord = emojiCrossWord.LoadFromSavedPathMobile(puzzleName, puzzleDifficulty);
@@ -131,7 +130,12 @@ public class PuzzleLoader : MonoBehaviour
 
     public void BringNextSetOfLetters()
     {
-        DraggableLettersContainer.Instance.LoadLetters(GiveNextSetOfLetters());
+        if (emojiCrossWord.currentLeftOverWords.Count == 0)
+        {
+            emojiCrossWord.currentLeftOverWords = new List<char>(GiveNextSetOfLetters());
+        }
+
+        DraggableLettersContainer.Instance.LoadLetters(emojiCrossWord.currentLeftOverWords.ToArray());
 
     }
 
@@ -218,7 +222,19 @@ public class PuzzleLoader : MonoBehaviour
                 wordLinkedPuzzleBlocks[word] = GetPuzzleBlocksForWord(word);
             }
 
-            UIUtils.Shuffle(leftOverLetters);
+            HighlightFinishedWordsNoAnimation();
+
+            if (emojiCrossWord.totalLeftOverWords.Count == 0)
+            {
+                UIUtils.Shuffle(leftOverLetters);
+                emojiCrossWord.totalLeftOverWords = new List<char>(leftOverLetters);
+                SavePuzzle();
+            }
+            else
+            {
+                leftOverLetters = emojiCrossWord.totalLeftOverWords;
+            }
+
             BringNextSetOfLetters();
 
             draggableLettersParent.SetAsLastSibling();
@@ -349,12 +365,30 @@ public class PuzzleLoader : MonoBehaviour
 
         return finished.Count > 0;
     }
+    void HighlightFinishedWordsNoAnimation()
+    {
+        List<string> finished = new List<string>();
+        foreach (var word in wordLinkedPuzzleBlocks.Keys)
+        {
+            if (!finishedWords.Contains(word))
+            {
+                var emptyBlock = wordLinkedPuzzleBlocks[word].Find(pb => pb.filledCorrectly == false && !pb.isHint);
+                if (emptyBlock == null)
+                {
+                    MarkWordAsFinished(wordLinkedPuzzleBlocks[word], true);
+                    finished.Add(word);
+                    finishedWords.Add(word);
+                }
+            }
+        }
 
-    public void MarkWordAsFinished(List<PuzzleBlock> puzzleBlocks)
+    }
+
+    public void MarkWordAsFinished(List<PuzzleBlock> puzzleBlocks, bool noAnimation = false)
     {
         for (int i = 0; i < puzzleBlocks.Count; i++)
         {
-            puzzleBlocks[i].MarkAsCorrectBlock(i);
+            puzzleBlocks[i].MarkAsCorrectBlock(i, noAnimation);
         }
 
     }
@@ -366,11 +400,14 @@ public class PuzzleLoader : MonoBehaviour
             // CORRECT
             draggableLetter.placedCorrectly = true;
 
+            emojiCrossWord.placedWords++;
             emptyPuzzleBlocks[draggableLetter.placedAtLocation].LoadAsNormalText(draggableLetter.letter);
-            currentPlacedCorrectly++;
-            if (currentPlacedCorrectly == maxDraggableLetters)
+            if (emojiCrossWord.currentLeftOverWords.Count > 0)
             {
-                currentPlacedCorrectly = 0;
+                emojiCrossWord.currentLeftOverWords.Remove(draggableLetter.letter);
+            }
+            if (emojiCrossWord.currentLeftOverWords.Count == 0)
+            {
                 BringNextSetOfLetters();
             }
             draggableLetter.ActivateCorrectPlacementEffects(HighlightFinishedWord(draggableLetter.letter));
@@ -402,7 +439,7 @@ public class PuzzleLoader : MonoBehaviour
     public char[] GiveNextSetOfLetters()
     {
         return leftOverLetters
-            .Skip(placedLocations.Count)  // Skip the already placed letters
+            .Skip(emojiCrossWord.placedWords)  // Skip the already placed letters
             .Take(maxDraggableLetters)     // Take the required number of letters
             .ToArray();                    // Convert the result to a char array
     }
