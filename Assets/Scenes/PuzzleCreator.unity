@@ -682,15 +682,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4640415162642794730, guid: a3d280f84f8f14c61bbcec901b0e9cf7, type: 3}
       propertyPath: puzzleName
-      value: test3
+      value: test6
       objectReference: {fileID: 0}
     - target: {fileID: 4640415162642794730, guid: a3d280f84f8f14c61bbcec901b0e9cf7, type: 3}
       propertyPath: defaultGridSize.x
-      value: 6
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 4640415162642794730, guid: a3d280f84f8f14c61bbcec901b0e9cf7, type: 3}
       propertyPath: defaultGridSize.y
-      value: 6
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 4640415162642794730, guid: a3d280f84f8f14c61bbcec901b0e9cf7, type: 3}
       propertyPath: emojiCrossWord.crossWords.Array.size

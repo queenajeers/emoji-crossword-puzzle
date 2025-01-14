@@ -55,13 +55,13 @@ public class PuzzleLoader : MonoBehaviour
 
     void FirstTimeInitialisations()
     {
-        if (PlayerPrefs.GetInt("FirstTime", 0) == 0)
+        if (PlayerPrefs.GetInt($"FirstTime_{puzzleName}", 0) == 0)
         {
             if (Directory.Exists(GetPersistantSaveFilePath()))
             {
                 Directory.Delete(GetPersistantSaveFilePath());
             }
-            PlayerPrefs.SetInt("FirstTime", 1);
+            PlayerPrefs.SetInt($"FirstTime_{puzzleName}", 1);
             emojiCrossWord = emojiCrossWord.LoadFromSavedPathMobile(puzzleName, puzzleDifficulty);
             CreateSaveDirectory(GetPersistantSaveFolderPath());
             if (emojiCrossWord != null)
