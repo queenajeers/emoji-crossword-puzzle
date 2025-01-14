@@ -135,7 +135,7 @@ public class PuzzleLoader : MonoBehaviour
             emojiCrossWord.currentLeftOverWords = new List<char>(GiveNextSetOfLetters());
         }
 
-        DraggableLettersContainer.Instance.LoadLetters(emojiCrossWord.currentLeftOverWords.ToArray());
+        // DraggableLettersContainer.Instance.LoadLetters(emojiCrossWord.currentLeftOverWords.ToArray());
 
     }
 
@@ -148,7 +148,8 @@ public class PuzzleLoader : MonoBehaviour
             GridLayer.Instance.SetCellBorderSize(borderSize);
             GridLayer.Instance.CreateBaseGrid(gridSize.x, gridSize.y);
             GridLayer.Instance.gridSizeMultiplier = gridSizeMultiplier;
-            DraggableLettersContainer.Instance.InitialiseSlots(maxDraggableLetters);
+
+            // DraggableLettersContainer.Instance?.InitialiseSlots(maxDraggableLetters);
 
             yield return new WaitForSeconds(.4f);
 

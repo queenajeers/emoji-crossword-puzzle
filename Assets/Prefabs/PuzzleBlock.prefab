@@ -271,7 +271,7 @@ MonoBehaviour:
   FromLeft: {fileID: 3586204313407057966}
   FromRight: {fileID: 6706641512974285965}
   idleColor: {r: 0.8018868, g: 0.74266636, b: 0.73758453, a: 1}
-  hintBG: {r: 0.7921569, g: 0.8980392, b: 0.98039216, a: 1}
+  hintBG: {r: 0.8632076, g: 0.9401533, b: 1, a: 1}
   filledLetterBG: {r: 0.93333334, g: 0.9607843, b: 0.9843137, a: 1}
   filledLetter: {r: 0.3018423, g: 0.34438562, b: 0.4811321, a: 1}
   highlightColor: {r: 0.7971698, g: 1, b: 0.8012264, a: 1}
