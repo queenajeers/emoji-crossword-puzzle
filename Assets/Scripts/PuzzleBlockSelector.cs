@@ -1,0 +1,123 @@
+using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
+using UnityEngine.UI;
+
+public class PuzzleBlockSelector : MonoBehaviour
+{
+    public static PuzzleBlockSelector Instance { get; private set; }
+    PuzzleBlock currentBlockSelected;
+    List<PuzzleBlock> allHighlightedPuzzleBlocks = new List<PuzzleBlock>();
+    public RectTransform selectorRect;
+    int currentBlockIndex;
+    void Awake()
+    {
+        Instance = this;
+    }
+
+    void Start()
+    {
+        PuzzleBlock.OnPuzzleBlockSelected += SelectBlock;
+        KeyboardButton.OnCharacterTyped += KeyBoardTyped;
+    }
+
+    public void SetSelectorDimensions(float size, Color borderColor, float borderSize)
+    {
+        selectorRect.sizeDelta = new Vector2(size + (2 * borderSize), size + (2 * borderSize));
+        selectorRect.GetComponent<Outline>().effectColor = borderColor;
+
+        selectorRect.GetComponent<Outline>().effectDistance = new Vector2(borderSize / 3f, -borderSize / 3f);
+        selectorRect.GetComponent<Image>().color = borderColor;
+
+    }
+
+    public void SelectBlock(PuzzleBlock puzzleBlock)
+    {
+        if (currentBlockSelected != null)
+        {
+            if (currentBlockSelected.filledCorrectly)
+            {
+                currentBlockSelected.SetFilledBG();
+            }
+            else
+            {
+                currentBlockSelected.Dim();
+            }
+        }
+        if (allHighlightedPuzzleBlocks.Count > 0)
+        {
+            foreach (PuzzleBlock item in allHighlightedPuzzleBlocks)
+            {
+                if (!item.filledCorrectly)
+                {
+                    item.Dim();
+                }
+                else
+                {
+                    item.SetFilledBG();
+                }
+            }
+        }
+
+        currentBlockSelected = puzzleBlock;
+        currentBlockSelected.Highlight();
+        selectorRect.localPosition = puzzleBlock.rectTransform.localPosition;
+        HighlightOtherBlocks();
+    }
+
+    void HighlightOtherBlocks()
+    {
+        if (currentBlockSelected != null)
+        {
+            Debug.Log("CURRENT HIGGLIGHT WORD " + currentBlockSelected.CurrentHightWord());
+            List<PuzzleBlock> otherPuzzleBlocks = new List<PuzzleBlock>();
+            allHighlightedPuzzleBlocks = otherPuzzleBlocks;
+            var puzzleBlocks = PuzzleLoader.Instance.GetPuzzleBlocksLinkedForWord(currentBlockSelected.CurrentHightWord());
+            puzzleBlocks = puzzleBlocks.Skip(1).ToList();
+            for (int i = 0; i < puzzleBlocks.Count; i++)
+            {
+                var pb = puzzleBlocks[i];
+                if (!pb.filledCorrectly && !pb.isHint)
+                {
+                    pb.HighlightSecondary();
+                    otherPuzzleBlocks.Add(pb);
+                }
+            }
+            for (int i = 0; i < otherPuzzleBlocks.Count; i++)
+            {
+                if (currentBlockSelected == otherPuzzleBlocks[i])
+                {
+                    otherPuzzleBlocks[i].Highlight();
+                    currentBlockIndex = i;
+                }
+            }
+            if (currentBlockSelected.filledCorrectly && otherPuzzleBlocks.Count > 0)
+            {
+                otherPuzzleBlocks[0].SelectThis();
+            }
+
+        }
+    }
+
+    public void KeyBoardTyped(char letter)
+    {
+        if (currentBlockSelected != null)
+        {
+            if (currentBlockSelected.OnLetterTyped(letter))
+            {
+                var nextBlock = allHighlightedPuzzleBlocks[(currentBlockIndex + 1) % allHighlightedPuzzleBlocks.Count];
+                if (!nextBlock.filledCorrectly)
+                {
+                    allHighlightedPuzzleBlocks[(currentBlockIndex + 1) % allHighlightedPuzzleBlocks.Count].SelectThis();
+                }
+                else
+                {
+                    var finishedWord = currentBlockSelected.CurrentHightWord();
+                    Debug.Log($"WORD {finishedWord} is FINISHED!");
+                    PuzzleLoader.Instance.SetWordAsFinished(finishedWord);
+                    PuzzleLoader.Instance.HighlightNextWord();
+                }
+            }
+        }
+    }
+}

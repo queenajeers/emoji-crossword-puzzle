@@ -25,8 +25,6 @@ public class DraggableLetter : MonoBehaviour, IBeginDragHandler, IDragHandler, I
 
     [Tooltip("Smoothing factor for the return animation (higher = smoother)")]
     [Range(0.1f, 10f)]
-    [SerializeField] private float returnSmoothness = 2f;
-
     private Vector2 returnPosition;
     private Vector2 originalPosition;
     private Vector2 currentPointerPosition;
@@ -66,7 +64,7 @@ public class DraggableLetter : MonoBehaviour, IBeginDragHandler, IDragHandler, I
         rectTransform = GetComponent<RectTransform>();
         parentCanvas = GetComponentInParent<Canvas>();
         returnPosition = rectTransform.localPosition;
-        TryGetComponent<CanvasGroup>(out canvasGroup);
+        TryGetComponent(out canvasGroup);
 
     }
 

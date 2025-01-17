@@ -12,7 +12,7 @@ public class PuzzleLoader : MonoBehaviour
     public static PuzzleLoader Instance { get; private set; }
     public string puzzleName;
     public PuzzleDifficulty puzzleDifficulty;
-    public EmojiCrossWord emojiCrossWord = new EmojiCrossWord();
+    EmojiCrossWord emojiCrossWord = new EmojiCrossWord();
     public GameObject puzzleBlockPrefab;
     public Transform puzzleParent;
 
@@ -35,9 +35,9 @@ public class PuzzleLoader : MonoBehaviour
 
     public int maxDraggableLetters;
     List<Vector2Int> placedLocations = new List<Vector2Int>();
-    private List<char> leftOverLetters = new List<char>(); // bug: O LETTER NOT SPAWNED
-
+    private List<char> leftOverLetters = new List<char>();
     [SerializeField] string gameFilesFolderName;
+    List<string> unsolvedCrossWords = new List<string>();
     void Awake()
     {
         Instance = this;
@@ -45,8 +45,6 @@ public class PuzzleLoader : MonoBehaviour
     private void Start()
     {
         FirstTimeInitialisations();
-
-
 
         DraggableLetter.OnLetterDraggingStarted += OnLetterDragableDragStarted;
         DraggableLetter.OnLetterDraggingEnded += OnLetterDragableDragEnded;
@@ -135,7 +133,7 @@ public class PuzzleLoader : MonoBehaviour
             emojiCrossWord.currentLeftOverWords = new List<char>(GiveNextSetOfLetters());
         }
 
-        // DraggableLettersContainer.Instance.LoadLetters(emojiCrossWord.currentLeftOverWords.ToArray());
+        //DraggableLettersContainer.Instance.LoadLetters(emojiCrossWord.currentLeftOverWords.ToArray());
 
     }
 
@@ -149,10 +147,12 @@ public class PuzzleLoader : MonoBehaviour
             GridLayer.Instance.CreateBaseGrid(gridSize.x, gridSize.y);
             GridLayer.Instance.gridSizeMultiplier = gridSizeMultiplier;
 
-            // DraggableLettersContainer.Instance?.InitialiseSlots(maxDraggableLetters);
+            //DraggableLettersContainer.Instance?.InitialiseSlots(maxDraggableLetters);
 
             yield return new WaitForSeconds(.4f);
 
+
+            PuzzleBlockSelector.Instance.SetSelectorDimensions(GridLayer.Instance.GetCellSize(), borderColor, borderSize);
             GetComponent<Outline>().effectDistance = new Vector2(borderSize * 2f, -borderSize * 2f);
             GetComponent<Outline>().effectColor = borderColor;
 
@@ -202,6 +202,9 @@ public class PuzzleLoader : MonoBehaviour
             }
 
             int currentWordIndex = 0;
+
+            List<PuzzleBlock> numberedBlocks = new List<PuzzleBlock>();
+
             for (int col = 0; col < emojiCrossWord.gridSize.y; col++)
             {
                 for (int row = 0; row < emojiCrossWord.gridSize.x; row++)
@@ -213,6 +216,7 @@ public class PuzzleLoader : MonoBehaviour
                         if (dataBlock.arrowIndications.Count > 0)
                         {
                             allPuzzleBlocks[blockLocation].SetWordIndex(currentWordIndex);
+                            numberedBlocks.Add(allPuzzleBlocks[blockLocation]);
                             currentWordIndex++;
                         }
                     }
@@ -223,7 +227,21 @@ public class PuzzleLoader : MonoBehaviour
                 wordLinkedPuzzleBlocks[word] = GetPuzzleBlocksForWord(word);
             }
 
+            for (int i = 0; i < numberedBlocks.Count; i++)
+            {
+                var partOfWords = numberedBlocks[i].partOfWords;
+                for (int j = 0; j < partOfWords.Count; j++)
+                {
+                    unsolvedCrossWords.Add(partOfWords[j]);
+                }
+            }
+            unsolvedCrossWords = unsolvedCrossWords
+      .Where(new HashSet<string>().Add)
+      .ToList();
+
             HighlightFinishedWordsNoAnimation();
+            PuzzleBlockSelector.Instance.selectorRect.transform.SetAsLastSibling();
+            HighlightNextWord();
 
             if (emojiCrossWord.totalLeftOverWords.Count == 0)
             {
@@ -240,6 +258,24 @@ public class PuzzleLoader : MonoBehaviour
 
             draggableLettersParent.SetAsLastSibling();
             yield return null;
+        }
+    }
+
+    public void SetWordAsFinished(string word)
+    {
+        unsolvedCrossWords.Remove(word);
+        foreach (var pb in wordLinkedPuzzleBlocks[word])
+        {
+            pb.partOfWords.Remove(word);
+        }
+        MarkWordAsFinished(word);
+    }
+    public void HighlightNextWord()
+    {
+        if (unsolvedCrossWords.Count > 0)
+        {
+            Debug.LogWarning($"Highlighting word {unsolvedCrossWords[0]}");
+            wordLinkedPuzzleBlocks[unsolvedCrossWords[0]][1].SelectThis();
         }
     }
 
@@ -379,6 +415,11 @@ public class PuzzleLoader : MonoBehaviour
                     MarkWordAsFinished(wordLinkedPuzzleBlocks[word], true);
                     finished.Add(word);
                     finishedWords.Add(word);
+                    unsolvedCrossWords.Remove(word);
+                    foreach (var item in wordLinkedPuzzleBlocks[word])
+                    {
+                        item.partOfWords.Remove(word);
+                    }
                 }
             }
         }
@@ -392,6 +433,14 @@ public class PuzzleLoader : MonoBehaviour
             puzzleBlocks[i].MarkAsCorrectBlock(i, noAnimation);
         }
 
+    }
+    public void MarkWordAsFinished(string word)
+    {
+        var puzzleBlocks = wordLinkedPuzzleBlocks[word];
+        for (int i = 0; i < puzzleBlocks.Count; i++)
+        {
+            puzzleBlocks[i].MarkAsCorrectBlock(i, false);
+        }
     }
 
     private void OnLetterDraggableRetuned(DraggableLetter draggableLetter)
@@ -435,7 +484,11 @@ public class PuzzleLoader : MonoBehaviour
     {
         placedLocations.Remove(location);
     }
-
+    public void RemoveClueForCrosswordblock(Vector2Int blockLocation)
+    {
+        letterBoxes[blockLocation].isClue = false;
+        SavePuzzle();
+    }
 
     public char[] GiveNextSetOfLetters()
     {
@@ -445,6 +498,11 @@ public class PuzzleLoader : MonoBehaviour
             .ToArray();                    // Convert the result to a char array
     }
 
+
+    public List<PuzzleBlock> GetPuzzleBlocksLinkedForWord(string word)
+    {
+        return wordLinkedPuzzleBlocks[word];
+    }
     public List<PuzzleBlock> GetPuzzleBlocksForWord(string word)
     {
         string capitalisedWord = word.ToUpper();
@@ -457,6 +515,11 @@ public class PuzzleLoader : MonoBehaviour
                 var targetPuzzleBlocks = GetTargetBlocks(targetLetter.blockLocation, word, arrowIndication);
                 if (targetPuzzleBlocks.Count > 0)
                 {
+                    foreach (var item in targetPuzzleBlocks)
+                    {
+                        item.partOfWords.Add(word);
+                    }
+
                     return targetPuzzleBlocks;
                 }
             }
@@ -504,13 +567,13 @@ public class PuzzleLoader : MonoBehaviour
                     }
                     break;
             }
+
             for (int x = 0; x < word.Length; x++)
             {
                 var searchLocation = startLocation;
                 switch (directionToSearch)
                 {
                     case ArrowIndication.FromLeft:
-
                         searchLocation = startLocation + new Vector2Int(0, x);
                         break;
                     case ArrowIndication.FromRight:
