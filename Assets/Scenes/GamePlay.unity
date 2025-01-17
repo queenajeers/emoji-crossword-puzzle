@@ -6777,7 +6777,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5209431174319645550, guid: f3a7d01edc1b9421cae0b1ae4442ac6e, type: 3}
       propertyPath: puzzleName
-      value: test7
+      value: test8
       objectReference: {fileID: 0}
     - target: {fileID: 5209431174319645550, guid: f3a7d01edc1b9421cae0b1ae4442ac6e, type: 3}
       propertyPath: borderColor.b
@@ -6793,7 +6793,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5209431174319645550, guid: f3a7d01edc1b9421cae0b1ae4442ac6e, type: 3}
       propertyPath: gridSizeMultiplier
-      value: 0.9
+      value: 0.85
       objectReference: {fileID: 0}
     - target: {fileID: 5209431174319645550, guid: f3a7d01edc1b9421cae0b1ae4442ac6e, type: 3}
       propertyPath: draggableLettersParent
