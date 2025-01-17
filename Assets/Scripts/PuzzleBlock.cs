@@ -12,6 +12,7 @@ public class PuzzleBlock : MonoBehaviour, IPointerClickHandler
     private Image BG;
     public char correctLetter;
     public TextMeshProUGUI letter;
+    RectTransform letterRect;
     public TextMeshProUGUI numberTextIndicator;
     public GameObject FromTop;
     public GameObject FromBottom;
@@ -34,6 +35,7 @@ public class PuzzleBlock : MonoBehaviour, IPointerClickHandler
     public Color correctColorText;
 
     public bool filledCorrectly;
+    bool markedAsFinished;
     public bool isHint;
 
 
@@ -58,6 +60,7 @@ public class PuzzleBlock : MonoBehaviour, IPointerClickHandler
 
     void Awake()
     {
+        letterRect = letter.gameObject.GetComponent<RectTransform>();
         rectTransform = GetComponent<RectTransform>();
         outline = GetComponent<Outline>();
         BG = GetComponent<Image>();
@@ -81,11 +84,14 @@ public class PuzzleBlock : MonoBehaviour, IPointerClickHandler
     public void LoadAsNormalText(char letter)
     {
         filledCorrectly = true;
+
         BG.color = filledLetterBG;
+
         this.letter.gameObject.SetActive(true);
         this.letter.color = filledLetter;
         this.letter.text = letter.ToString();
     }
+
 
     public void SetAsIdleBox()
     {
@@ -142,6 +148,7 @@ public class PuzzleBlock : MonoBehaviour, IPointerClickHandler
 
     public void SetFilledBG()
     {
+        if (markedAsFinished) return;
         BG.color = filledLetterBG;
     }
 
@@ -153,11 +160,12 @@ public class PuzzleBlock : MonoBehaviour, IPointerClickHandler
 
     public void MarkAsCorrectBlock(int index, bool noAnimation = false)
     {
+        markedAsFinished = true;
         if (!noAnimation)
         {
             BG.DOColor(correctColorBG, .2f);
             letter.DOColor(correctColorText, .2f);
-            outline.effectColor = correctColorText + (.15f * Color.white);
+            //outline.effectColor = correctColorText + (.15f * Color.white);
             transform.DOScale(.9f, .06f + (index * .03f)).SetEase(Ease.InOutSine).OnComplete(() =>
             {
                 starEffect.SetActive(true);
@@ -169,7 +177,7 @@ public class PuzzleBlock : MonoBehaviour, IPointerClickHandler
         {
             BG.color = correctColorBG;
             letter.color = correctColorText;
-            outline.effectColor = correctColorText + (.15f * Color.white);
+            //outline.effectColor = correctColorText + (.15f * Color.white);
 
         }
 
@@ -192,19 +200,23 @@ public class PuzzleBlock : MonoBehaviour, IPointerClickHandler
 
     public void Highlight()
     {
+        if (markedAsFinished) return;
         BG.color = selectColor;
     }
-    public void HighlightSecondary()
+    public void HighlightSecondary(string word)
     {
+        clickIndex = partOfWords.IndexOf(word);
         BG.color = selectSecondaryColor;
     }
     public void Dim()
     {
+        if (markedAsFinished) return;
         BG.color = normalColor;
     }
 
     public void OnPointerClick(PointerEventData eventData)
     {
+        if (PuzzleBlockSelector.Instance.avoidTouch) return;
         SelectThis();
     }
 
@@ -213,6 +225,14 @@ public class PuzzleBlock : MonoBehaviour, IPointerClickHandler
         if (!isHint && partOfWords.Count > 0)
         {
             clickIndex++;
+            OnPuzzleBlockSelected?.Invoke(this);
+        }
+    }
+    public void SelectThisWithWord(string word)
+    {
+        if (!isHint && partOfWords.Count > 0)
+        {
+            clickIndex = partOfWords.IndexOf(word);
             OnPuzzleBlockSelected?.Invoke(this);
         }
     }
@@ -234,35 +254,40 @@ public class PuzzleBlock : MonoBehaviour, IPointerClickHandler
         {
             LoadAsNormalText(letter);
             PuzzleLoader.Instance.RemoveClueForCrosswordblock(blockLocation);
+
+            this.letter.transform.DOScale(1.2f, .2f).OnComplete(() =>
+            {
+                this.letter.transform.DOScale(1f, .14f);
+            });
+
             return true;
         }
         else
         {
 
+            PuzzleBlockSelector.Instance.avoidTouch = true;
             this.letter.gameObject.SetActive(true);
             Color wrongColorNoAlpha = wrongColor;
             wrongColorNoAlpha.a = 0;
             this.letter.color = new Color(wrongColor.r, wrongColor.g, wrongColor.b, 0f);
             this.letter.DOColor(wrongColor, .2f);
-            transform.rotation = Quaternion.identity;
-            this.letter.transform
-                .DORotate(new Vector3(0, 0, -30f), .12f)
-                .SetEase(Ease.InQuad)
+            letterRect.localPosition = Vector3.zero;
+            letterRect.DOKill();
+            letterRect
+                .DOShakeAnchorPos(1f, new Vector3(10f, 0f, 0f), 10, 25, true, true)
                 .OnComplete(() =>
                 {
-                    this.letter.transform.DORotate(Vector3.zero, .5f).SetEase(Ease.OutElastic).OnComplete(() =>
-                    {
-                        this.letter.transform.rotation = Quaternion.identity;
-                        this.letter.DOColor(wrongColorNoAlpha, .2f).OnComplete(() =>
-                        {
-                            this.letter.gameObject.SetActive(false);
-                        });
-                    });
+                    this.letter.DOColor(wrongColorNoAlpha, .05f).OnComplete(() =>
+                         {
+                             PuzzleBlockSelector.Instance.avoidTouch = false;
+                             this.letter.gameObject.SetActive(false);
+                         });
 
                 });
 
             return false;
         }
     }
+
 
 }

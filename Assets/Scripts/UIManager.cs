@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class UIManager : MonoBehaviour
 {
@@ -46,6 +47,13 @@ public class UIManager : MonoBehaviour
     {
         coinsBGAnimator.Play("Reverse", 0, 0);
         LevelFinishedPage.SetActive(true);
+    }
+
+    public void RestartScene()
+    {
+        PlayerPrefs.DeleteAll();
+        SceneManager.LoadSceneAsync(0);
+
     }
 
 }

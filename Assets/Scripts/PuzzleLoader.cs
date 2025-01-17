@@ -38,6 +38,7 @@ public class PuzzleLoader : MonoBehaviour
     private List<char> leftOverLetters = new List<char>();
     [SerializeField] string gameFilesFolderName;
     List<string> unsolvedCrossWords = new List<string>();
+
     void Awake()
     {
         Instance = this;
@@ -49,6 +50,13 @@ public class PuzzleLoader : MonoBehaviour
         DraggableLetter.OnLetterDraggingStarted += OnLetterDragableDragStarted;
         DraggableLetter.OnLetterDraggingEnded += OnLetterDragableDragEnded;
         DraggableLetter.OnLetterReturned += OnLetterDraggableRetuned;
+    }
+
+    void OnDestroy()
+    {
+        DraggableLetter.OnLetterDraggingStarted -= OnLetterDragableDragStarted;
+        DraggableLetter.OnLetterDraggingEnded -= OnLetterDragableDragEnded;
+        DraggableLetter.OnLetterReturned -= OnLetterDraggableRetuned;
     }
 
     void FirstTimeInitialisations()
@@ -488,6 +496,11 @@ public class PuzzleLoader : MonoBehaviour
     {
         letterBoxes[blockLocation].isClue = false;
         SavePuzzle();
+    }
+
+    public bool AllWordsFinished()
+    {
+        return unsolvedCrossWords.Count == 0;
     }
 
     public char[] GiveNextSetOfLetters()

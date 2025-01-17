@@ -10,6 +10,10 @@ public class PuzzleBlockSelector : MonoBehaviour
     List<PuzzleBlock> allHighlightedPuzzleBlocks = new List<PuzzleBlock>();
     public RectTransform selectorRect;
     int currentBlockIndex;
+    string currentHighlightWord;
+
+    public bool avoidTouch;
+
     void Awake()
     {
         Instance = this;
@@ -21,12 +25,18 @@ public class PuzzleBlockSelector : MonoBehaviour
         KeyboardButton.OnCharacterTyped += KeyBoardTyped;
     }
 
+    void OnDestroy()
+    {
+        PuzzleBlock.OnPuzzleBlockSelected -= SelectBlock;
+        KeyboardButton.OnCharacterTyped -= KeyBoardTyped;
+    }
+
     public void SetSelectorDimensions(float size, Color borderColor, float borderSize)
     {
         selectorRect.sizeDelta = new Vector2(size + (2 * borderSize), size + (2 * borderSize));
         selectorRect.GetComponent<Outline>().effectColor = borderColor;
 
-        selectorRect.GetComponent<Outline>().effectDistance = new Vector2(borderSize / 3f, -borderSize / 3f);
+        selectorRect.GetComponent<Outline>().effectDistance = new Vector2(borderSize / 2f, -borderSize / 2f);
         selectorRect.GetComponent<Image>().color = borderColor;
 
     }
@@ -61,6 +71,7 @@ public class PuzzleBlockSelector : MonoBehaviour
 
         currentBlockSelected = puzzleBlock;
         currentBlockSelected.Highlight();
+        currentHighlightWord = currentBlockSelected.CurrentHightWord();
         selectorRect.localPosition = puzzleBlock.rectTransform.localPosition;
         HighlightOtherBlocks();
     }
@@ -79,7 +90,7 @@ public class PuzzleBlockSelector : MonoBehaviour
                 var pb = puzzleBlocks[i];
                 if (!pb.filledCorrectly && !pb.isHint)
                 {
-                    pb.HighlightSecondary();
+                    pb.HighlightSecondary(currentHighlightWord);
                     otherPuzzleBlocks.Add(pb);
                 }
             }
@@ -93,7 +104,7 @@ public class PuzzleBlockSelector : MonoBehaviour
             }
             if (currentBlockSelected.filledCorrectly && otherPuzzleBlocks.Count > 0)
             {
-                otherPuzzleBlocks[0].SelectThis();
+                otherPuzzleBlocks[0].SelectThisWithWord(currentHighlightWord);
             }
 
         }
@@ -101,6 +112,8 @@ public class PuzzleBlockSelector : MonoBehaviour
 
     public void KeyBoardTyped(char letter)
     {
+        if (avoidTouch) return;
+
         if (currentBlockSelected != null)
         {
             if (currentBlockSelected.OnLetterTyped(letter))
@@ -108,7 +121,7 @@ public class PuzzleBlockSelector : MonoBehaviour
                 var nextBlock = allHighlightedPuzzleBlocks[(currentBlockIndex + 1) % allHighlightedPuzzleBlocks.Count];
                 if (!nextBlock.filledCorrectly)
                 {
-                    allHighlightedPuzzleBlocks[(currentBlockIndex + 1) % allHighlightedPuzzleBlocks.Count].SelectThis();
+                    allHighlightedPuzzleBlocks[(currentBlockIndex + 1) % allHighlightedPuzzleBlocks.Count].SelectThisWithWord(currentHighlightWord);
                 }
                 else
                 {
@@ -116,6 +129,10 @@ public class PuzzleBlockSelector : MonoBehaviour
                     Debug.Log($"WORD {finishedWord} is FINISHED!");
                     PuzzleLoader.Instance.SetWordAsFinished(finishedWord);
                     PuzzleLoader.Instance.HighlightNextWord();
+                    if (PuzzleLoader.Instance.AllWordsFinished())
+                    {
+                        selectorRect.gameObject.SetActive(false);
+                    }
                 }
             }
         }
