@@ -45,7 +45,6 @@ public class PuzzleBlock : MonoBehaviour, IPointerClickHandler
     [HideInInspector]
     public RectTransform rectTransform;
 
-
     public static Action<PuzzleBlock> OnPuzzleBlockSelected;
 
     public Color selectColor;
@@ -80,6 +79,7 @@ public class PuzzleBlock : MonoBehaviour, IPointerClickHandler
         hintRoundedOutline.gameObject.SetActive(true);
         hintImage.gameObject.SetActive(true);
         hintImage.sprite = sprite;
+
     }
     public void LoadAsNormalText(char letter)
     {
@@ -90,6 +90,10 @@ public class PuzzleBlock : MonoBehaviour, IPointerClickHandler
         this.letter.gameObject.SetActive(true);
         this.letter.color = filledLetter;
         this.letter.text = letter.ToString();
+        if (TryGetComponent<Animator>(out var animator))
+        {
+            Destroy(animator);
+        }
     }
 
 
@@ -289,5 +293,13 @@ public class PuzzleBlock : MonoBehaviour, IPointerClickHandler
         }
     }
 
+    [HideInInspector]
+    public Vector2 goToPosition;
+    public void GoToPosition(Vector2 pos)
+    {
+        goToPosition = pos;
+        //rectTransform.DOKill();
+        rectTransform.DOLocalMove(pos, 0.3f).SetEase(Ease.InOutSine);
+    }
 
 }

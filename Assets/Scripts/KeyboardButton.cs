@@ -4,7 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class KeyboardButton : MonoBehaviour, IPointerClickHandler, IPointerDownHandler, IPointerExitHandler, IPointerUpHandler
+public class KeyboardButton : MonoBehaviour, IPointerDownHandler, IPointerExitHandler, IPointerUpHandler
 {
     public TextMeshProUGUI buttonTxt;
     public char attatchedLetter;
@@ -12,6 +12,8 @@ public class KeyboardButton : MonoBehaviour, IPointerClickHandler, IPointerDownH
     public static Action<char> OnCharacterTyped;
 
     RectTransform myRect;
+
+    bool clicked;
 
     void Start()
     {
@@ -23,26 +25,28 @@ public class KeyboardButton : MonoBehaviour, IPointerClickHandler, IPointerDownH
         buttonTxt.text = char.ToUpper(c).ToString();
     }
 
-    public void OnPointerClick(PointerEventData eventData)
-    {
-        Debug.Log("Clicked " + attatchedLetter);
-        OnCharacterTyped?.Invoke(attatchedLetter);
-    }
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        myRect.DOKill();
-        myRect.DOScale(.8f, .1f);
+        if (!clicked)
+        {
+            OnCharacterTyped?.Invoke(attatchedLetter);
+            clicked = true;
+            myRect.DOKill();
+            myRect.DOScale(.8f, .1f);
+        }
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
+        clicked = false;
         myRect.DOKill(true);
         myRect.DOScale(1f, .1f);
     }
 
     public void OnPointerUp(PointerEventData eventData)
     {
+        clicked = false;
         myRect.DOKill(true);
         myRect.DOScale(1f, .1f);
     }

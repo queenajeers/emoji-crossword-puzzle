@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -13,6 +14,8 @@ public class PuzzleBlockSelector : MonoBehaviour
     string currentHighlightWord;
 
     public bool avoidTouch;
+
+    GameObject prevActiveHint;
 
     void Awake()
     {
@@ -53,6 +56,9 @@ public class PuzzleBlockSelector : MonoBehaviour
             {
                 currentBlockSelected.Dim();
             }
+
+
+
         }
         if (allHighlightedPuzzleBlocks.Count > 0)
         {
@@ -84,7 +90,18 @@ public class PuzzleBlockSelector : MonoBehaviour
             List<PuzzleBlock> otherPuzzleBlocks = new List<PuzzleBlock>();
             allHighlightedPuzzleBlocks = otherPuzzleBlocks;
             var puzzleBlocks = PuzzleLoader.Instance.GetPuzzleBlocksLinkedForWord(currentBlockSelected.CurrentHightWord());
+
+            if (prevActiveHint != null && (prevActiveHint != puzzleBlocks[0].gameObject))
+            {
+                prevActiveHint.SetActive(false);
+            }
+
+            prevActiveHint = puzzleBlocks[0].gameObject;
+
+            prevActiveHint.SetActive(true);
+            PuzzleBlocksCentrify.Instance.CenterRects();
             puzzleBlocks = puzzleBlocks.Skip(1).ToList();
+
             for (int i = 0; i < puzzleBlocks.Count; i++)
             {
                 var pb = puzzleBlocks[i];
@@ -135,6 +152,20 @@ public class PuzzleBlockSelector : MonoBehaviour
                     }
                 }
             }
+        }
+    }
+
+    public void GoToPosition()
+    {
+        if (currentBlockSelected != null)
+        {
+            var goToPosition = currentBlockSelected.goToPosition;
+            avoidTouch = true;
+            //selectorRect.DOKill();
+            selectorRect.DOLocalMove(goToPosition, 0.3f).SetEase(Ease.InOutSine).OnComplete(() =>
+            {
+                avoidTouch = false;
+            });
         }
     }
 }

@@ -4779,6 +4779,32 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1784690734}
   m_CullTransparentMesh: 1
+--- !u!1 &1899955146 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3901534079844052330, guid: f3a7d01edc1b9421cae0b1ae4442ac6e, type: 3}
+  m_PrefabInstance: {fileID: 4935093878500606647}
+  m_PrefabAsset: {fileID: 0}
+--- !u!224 &1899955147 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 497177479066508836, guid: f3a7d01edc1b9421cae0b1ae4442ac6e, type: 3}
+  m_PrefabInstance: {fileID: 4935093878500606647}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1899955148
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1899955146}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 956cd919a4a4b4af29fbe80b27483501, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  childPuzzleBlocks: []
+  puzzleBlockRects: []
+  relativeToPanel: {fileID: 1364289768018792498}
+  parentPanel: {fileID: 1899955147}
 --- !u!1 &1905040793
 GameObject:
   m_ObjectHideFlags: 0
@@ -6675,6 +6701,30 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1292270332}
     m_Modifications:
+    - target: {fileID: 497177479066508836, guid: f3a7d01edc1b9421cae0b1ae4442ac6e, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 497177479066508836, guid: f3a7d01edc1b9421cae0b1ae4442ac6e, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 497177479066508836, guid: f3a7d01edc1b9421cae0b1ae4442ac6e, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 497177479066508836, guid: f3a7d01edc1b9421cae0b1ae4442ac6e, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 497177479066508836, guid: f3a7d01edc1b9421cae0b1ae4442ac6e, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 497177479066508836, guid: f3a7d01edc1b9421cae0b1ae4442ac6e, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1048195444041229615, guid: f3a7d01edc1b9421cae0b1ae4442ac6e, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -6773,27 +6823,27 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5209431174319645550, guid: f3a7d01edc1b9421cae0b1ae4442ac6e, type: 3}
       propertyPath: borderSize
-      value: 2.4
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5209431174319645550, guid: f3a7d01edc1b9421cae0b1ae4442ac6e, type: 3}
       propertyPath: puzzleName
-      value: test8
+      value: test8_1
       objectReference: {fileID: 0}
     - target: {fileID: 5209431174319645550, guid: f3a7d01edc1b9421cae0b1ae4442ac6e, type: 3}
       propertyPath: borderColor.b
-      value: 0.2735849
+      value: 0.38679248
       objectReference: {fileID: 0}
     - target: {fileID: 5209431174319645550, guid: f3a7d01edc1b9421cae0b1ae4442ac6e, type: 3}
       propertyPath: borderColor.g
-      value: 0.19185358
+      value: 0.28865802
       objectReference: {fileID: 0}
     - target: {fileID: 5209431174319645550, guid: f3a7d01edc1b9421cae0b1ae4442ac6e, type: 3}
       propertyPath: borderColor.r
-      value: 0.1509879
+      value: 0.24265754
       objectReference: {fileID: 0}
     - target: {fileID: 5209431174319645550, guid: f3a7d01edc1b9421cae0b1ae4442ac6e, type: 3}
       propertyPath: gridSizeMultiplier
-      value: 0.85
+      value: 0.8
       objectReference: {fileID: 0}
     - target: {fileID: 5209431174319645550, guid: f3a7d01edc1b9421cae0b1ae4442ac6e, type: 3}
       propertyPath: draggableLettersParent
@@ -6814,7 +6864,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 3901534079844052330, guid: f3a7d01edc1b9421cae0b1ae4442ac6e, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1899955148}
   m_SourcePrefab: {fileID: 100100000, guid: f3a7d01edc1b9421cae0b1ae4442ac6e, type: 3}
 --- !u!1001 &5584103493985172810
 PrefabInstance:

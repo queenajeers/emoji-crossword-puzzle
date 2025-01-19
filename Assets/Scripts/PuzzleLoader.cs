@@ -247,9 +247,10 @@ public class PuzzleLoader : MonoBehaviour
       .Where(new HashSet<string>().Add)
       .ToList();
 
+            PuzzleBlocksCentrify.Instance.LoadChildPuzzleBlocks();
+
             HighlightFinishedWordsNoAnimation();
             PuzzleBlockSelector.Instance.selectorRect.transform.SetAsLastSibling();
-            HighlightNextWord();
 
             if (emojiCrossWord.totalLeftOverWords.Count == 0)
             {
@@ -265,6 +266,17 @@ public class PuzzleLoader : MonoBehaviour
             BringNextSetOfLetters();
 
             draggableLettersParent.SetAsLastSibling();
+
+
+            foreach (var item in wordLinkedPuzzleBlocks.Values)
+            {
+                item[0].gameObject.SetActive(false);
+            }
+
+            HighlightNextWord();
+
+            PuzzleBlocksCentrify.Instance.CenterRects();
+
             yield return null;
         }
     }
@@ -421,6 +433,7 @@ public class PuzzleLoader : MonoBehaviour
                 if (emptyBlock == null)
                 {
                     MarkWordAsFinished(wordLinkedPuzzleBlocks[word], true);
+
                     finished.Add(word);
                     finishedWords.Add(word);
                     unsolvedCrossWords.Remove(word);
@@ -436,19 +449,25 @@ public class PuzzleLoader : MonoBehaviour
 
     public void MarkWordAsFinished(List<PuzzleBlock> puzzleBlocks, bool noAnimation = false)
     {
-        for (int i = 0; i < puzzleBlocks.Count; i++)
+        for (int i = 1; i < puzzleBlocks.Count; i++)
         {
             puzzleBlocks[i].MarkAsCorrectBlock(i, noAnimation);
         }
+
+        //PuzzleBlocksCentrify.Instance.RemovePuzzleBlock(puzzleBlocks[0], !noAnimation);
 
     }
     public void MarkWordAsFinished(string word)
     {
         var puzzleBlocks = wordLinkedPuzzleBlocks[word];
-        for (int i = 0; i < puzzleBlocks.Count; i++)
+        puzzleBlocks[0].gameObject.SetActive(false);
+        for (int i = 1; i < puzzleBlocks.Count; i++)
         {
             puzzleBlocks[i].MarkAsCorrectBlock(i, false);
         }
+
+        //PuzzleBlocksCentrify.Instance.RemovePuzzleBlock(puzzleBlocks[0], true);
+
     }
 
     private void OnLetterDraggableRetuned(DraggableLetter draggableLetter)
