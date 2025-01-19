@@ -129,7 +129,7 @@ public class PuzzleBlockSelector : MonoBehaviour
 
     public void KeyBoardTyped(char letter)
     {
-        if (avoidTouch) return;
+        // if (avoidTouch) return;
 
         if (currentBlockSelected != null)
         {

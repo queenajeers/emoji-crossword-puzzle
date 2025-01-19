@@ -514,7 +514,7 @@ public class PuzzleLoader : MonoBehaviour
     public void RemoveClueForCrosswordblock(Vector2Int blockLocation)
     {
         letterBoxes[blockLocation].isClue = false;
-        SavePuzzle();
+        //SavePuzzle();
     }
 
     public bool AllWordsFinished()

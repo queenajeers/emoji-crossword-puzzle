@@ -4,7 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class KeyboardButton : MonoBehaviour, IPointerDownHandler, IPointerExitHandler, IPointerUpHandler
+public class KeyboardButton : MonoBehaviour, IPointerClickHandler
 {
     public TextMeshProUGUI buttonTxt;
     public char attatchedLetter;
@@ -26,28 +26,33 @@ public class KeyboardButton : MonoBehaviour, IPointerDownHandler, IPointerExitHa
     }
 
 
-    public void OnPointerDown(PointerEventData eventData)
-    {
-        if (!clicked)
-        {
-            OnCharacterTyped?.Invoke(attatchedLetter);
-            clicked = true;
-            myRect.DOKill();
-            myRect.DOScale(.8f, .1f);
-        }
-    }
+    // public void OnPointerDown(PointerEventData eventData)
+    // {
+    //     if (!clicked)
+    //     {
+    //         OnCharacterTyped?.Invoke(attatchedLetter);
+    //         clicked = true;
+    //         myRect.DOKill();
+    //         myRect.DOScale(.8f, .1f);
+    //     }
+    // }
 
-    public void OnPointerExit(PointerEventData eventData)
-    {
-        clicked = false;
-        myRect.DOKill(true);
-        myRect.DOScale(1f, .1f);
-    }
+    // public void OnPointerExit(PointerEventData eventData)
+    // {
+    //     clicked = false;
+    //     myRect.DOKill(true);
+    //     myRect.DOScale(1f, .1f);
+    // }
 
-    public void OnPointerUp(PointerEventData eventData)
+    // public void OnPointerUp(PointerEventData eventData)
+    // {
+    //     clicked = false;
+    //     myRect.DOKill(true);
+    //     myRect.DOScale(1f, .1f);
+    // }
+
+    public void OnPointerClick(PointerEventData eventData)
     {
-        clicked = false;
-        myRect.DOKill(true);
-        myRect.DOScale(1f, .1f);
+        OnCharacterTyped?.Invoke(attatchedLetter);
     }
 }

@@ -273,12 +273,13 @@ public class PuzzleBlock : MonoBehaviour, IPointerClickHandler
             this.letter.gameObject.SetActive(true);
             Color wrongColorNoAlpha = wrongColor;
             wrongColorNoAlpha.a = 0;
+            this.letter.DOKill();
             this.letter.color = new Color(wrongColor.r, wrongColor.g, wrongColor.b, 0f);
             this.letter.DOColor(wrongColor, .2f);
             letterRect.localPosition = Vector3.zero;
             letterRect.DOKill();
             letterRect
-                .DOShakeAnchorPos(1f, new Vector3(10f, 0f, 0f), 10, 25, true, true)
+                .DOShakeAnchorPos(.5f, new Vector3(10f, 0f, 0f), 10, 25, true, true)
                 .OnComplete(() =>
                 {
                     this.letter.DOColor(wrongColorNoAlpha, .05f).OnComplete(() =>
