@@ -39,8 +39,6 @@ public class PuzzleBlock : MonoBehaviour, IPointerClickHandler
     bool markedAsFinished;
     public bool isHint;
 
-
-
     public GameObject starEffect;
 
     [HideInInspector]
@@ -55,7 +53,6 @@ public class PuzzleBlock : MonoBehaviour, IPointerClickHandler
 
     public Color wrongColor;
     public Color wrongColorBG;
-
 
     public List<string> partOfWords = new List<string>();
     int clickIndex = -1;
@@ -84,6 +81,7 @@ public class PuzzleBlock : MonoBehaviour, IPointerClickHandler
         hintImage.sprite = sprite;
 
     }
+
     public void LoadAsNormalText(char letter)
     {
         isLetterfilled = true;
@@ -101,6 +99,11 @@ public class PuzzleBlock : MonoBehaviour, IPointerClickHandler
         this.letter.gameObject.SetActive(true);
         this.letter.color = filledLetter;
         this.letter.text = letter.ToString();
+
+        this.letter.transform.DOScale(1.3f, .2f).OnComplete(() =>
+           {
+               this.letter.transform.DOScale(1f, .14f);
+           });
     }
 
     public void ClearText()
@@ -133,6 +136,7 @@ public class PuzzleBlock : MonoBehaviour, IPointerClickHandler
             Color wrongColorNoAlpha = wrongColor;
             wrongColorNoAlpha.a = 0;
             this.letter.DOKill();
+            this.letter.transform.localScale = Vector2.one;
             this.letter.color = new Color(wrongColor.r, wrongColor.g, wrongColor.b, 0f);
             this.letter.DOColor(wrongColor, .2f);
             letterRect.localPosition = Vector3.zero;

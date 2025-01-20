@@ -138,12 +138,10 @@ public class PuzzleLoader : MonoBehaviour
         }
 
         //DraggableLettersContainer.Instance.LoadLetters(emojiCrossWord.currentLeftOverWords.ToArray());
-
     }
 
     IEnumerator LoadPuzzle()
     {
-
         if (GridLayer.Instance != null)
         {
             Vector2Int gridSize = emojiCrossWord.gridSize;
@@ -287,6 +285,11 @@ public class PuzzleLoader : MonoBehaviour
         {
             Debug.LogWarning($"Highlighting word {unsolvedCrossWords[0]}");
             wordLinkedPuzzleBlocks[unsolvedCrossWords[0]][1].SelectThis();
+        }
+        else
+        {
+            PuzzleBlockSelector.Instance.avoidTouch = true;
+            LevelFinished();
         }
     }
 

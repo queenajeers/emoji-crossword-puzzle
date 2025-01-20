@@ -157,6 +157,7 @@ public class PuzzleBlockSelector : MonoBehaviour
 
     public void BackspaceClicked()
     {
+        if (avoidTouch) return;
         var currentWord = currentBlockSelected.CurrentHightWord();
         var puzzleBlocks = PuzzleLoader.Instance.GetPuzzleBlocksLinkedForWord(currentWord);
         puzzleBlocks = puzzleBlocks.Skip(1).ToList();
