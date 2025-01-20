@@ -106,7 +106,10 @@ public class PuzzleBlock : MonoBehaviour, IPointerClickHandler
     public void ClearText()
     {
         isLetterfilled = false;
+        isLetterfilledCorrectly = false;
+        markedAsFinished = false;
         this.letter.gameObject.SetActive(false);
+        Dim();
     }
 
     public void ValidateBlock()
@@ -224,6 +227,7 @@ public class PuzzleBlock : MonoBehaviour, IPointerClickHandler
         if (markedAsFinished) return;
         BG.color = filledLetterBG;
     }
+
 
     public void SetWordIndex(int index)
     {

@@ -70,7 +70,14 @@ public class PuzzleBlockSelector : MonoBehaviour
                 }
                 else
                 {
-                    item.SetFilledBG();
+                    if (item.isLetterfilledCorrectly)
+                    {
+                        item.SetFilledBG();
+                    }
+                    else
+                    {
+                        item.NormaliseBG();
+                    }
                 }
             }
         }
@@ -153,6 +160,7 @@ public class PuzzleBlockSelector : MonoBehaviour
         var currentWord = currentBlockSelected.CurrentHightWord();
         var puzzleBlocks = PuzzleLoader.Instance.GetPuzzleBlocksLinkedForWord(currentWord);
         puzzleBlocks = puzzleBlocks.Skip(1).ToList();
+        puzzleBlocks = puzzleBlocks.Where(pb => !pb.isLetterfilledCorrectly).ToList();
         int currentIndex = puzzleBlocks.IndexOf(currentBlockSelected);
         currentIndex--;
         if (currentIndex < 0)
