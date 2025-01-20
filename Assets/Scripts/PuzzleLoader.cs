@@ -127,10 +127,6 @@ public class PuzzleLoader : MonoBehaviour
         {
             HighlightNearestPuzzleBlock();
         }
-        if (Input.GetKeyDown(KeyCode.F))
-        {
-            LevelFinished();
-        }
 
     }
 
@@ -267,11 +263,6 @@ public class PuzzleLoader : MonoBehaviour
 
             draggableLettersParent.SetAsLastSibling();
 
-
-            foreach (var item in wordLinkedPuzzleBlocks.Values)
-            {
-                item[0].gameObject.SetActive(false);
-            }
 
             HighlightNextWord();
 
@@ -410,7 +401,7 @@ public class PuzzleLoader : MonoBehaviour
         {
             if (word.Contains(lastPlacedLetter) && !finishedWords.Contains(word))
             {
-                var emptyBlock = wordLinkedPuzzleBlocks[word].Find(pb => pb.filledCorrectly == false && !pb.isHint);
+                var emptyBlock = wordLinkedPuzzleBlocks[word].Find(pb => pb.isLetterfilled == false && !pb.isHint);
                 if (emptyBlock == null)
                 {
                     MarkWordAsFinished(wordLinkedPuzzleBlocks[word]);
@@ -429,7 +420,7 @@ public class PuzzleLoader : MonoBehaviour
         {
             if (!finishedWords.Contains(word))
             {
-                var emptyBlock = wordLinkedPuzzleBlocks[word].Find(pb => pb.filledCorrectly == false && !pb.isHint);
+                var emptyBlock = wordLinkedPuzzleBlocks[word].Find(pb => pb.isLetterfilled == false && !pb.isHint);
                 if (emptyBlock == null)
                 {
                     MarkWordAsFinished(wordLinkedPuzzleBlocks[word], true);
@@ -460,12 +451,10 @@ public class PuzzleLoader : MonoBehaviour
     public void MarkWordAsFinished(string word)
     {
         var puzzleBlocks = wordLinkedPuzzleBlocks[word];
-        puzzleBlocks[0].gameObject.SetActive(false);
         for (int i = 1; i < puzzleBlocks.Count; i++)
         {
             puzzleBlocks[i].MarkAsCorrectBlock(i, false);
         }
-
         //PuzzleBlocksCentrify.Instance.RemovePuzzleBlock(puzzleBlocks[0], true);
 
     }
@@ -535,7 +524,7 @@ public class PuzzleLoader : MonoBehaviour
     {
         return wordLinkedPuzzleBlocks[word];
     }
-    public List<PuzzleBlock> GetPuzzleBlocksForWord(string word)
+    private List<PuzzleBlock> GetPuzzleBlocksForWord(string word)
     {
         string capitalisedWord = word.ToUpper();
         char firstLetter = word[0];

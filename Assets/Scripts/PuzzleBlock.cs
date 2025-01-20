@@ -30,11 +30,12 @@ public class PuzzleBlock : MonoBehaviour, IPointerClickHandler
     public Color highlightColor;
 
     public Vector2Int blockLocation;
-
     public Color correctColorBG;
     public Color correctColorText;
 
-    public bool filledCorrectly;
+    public bool isLetterfilled;
+    public bool isLetterfilledCorrectly;
+
     bool markedAsFinished;
     public bool isHint;
 
@@ -53,6 +54,8 @@ public class PuzzleBlock : MonoBehaviour, IPointerClickHandler
     public Color normalColor;
 
     public Color wrongColor;
+    public Color wrongColorBG;
+
 
     public List<string> partOfWords = new List<string>();
     int clickIndex = -1;
@@ -83,19 +86,85 @@ public class PuzzleBlock : MonoBehaviour, IPointerClickHandler
     }
     public void LoadAsNormalText(char letter)
     {
-        filledCorrectly = true;
+        isLetterfilled = true;
 
         BG.color = filledLetterBG;
 
         this.letter.gameObject.SetActive(true);
         this.letter.color = filledLetter;
         this.letter.text = letter.ToString();
-        if (TryGetComponent<Animator>(out var animator))
+
+    }
+    public void EnterText(char letter)
+    {
+        isLetterfilled = true;
+        this.letter.gameObject.SetActive(true);
+        this.letter.color = filledLetter;
+        this.letter.text = letter.ToString();
+    }
+
+    public void ClearText()
+    {
+        isLetterfilled = false;
+        this.letter.gameObject.SetActive(false);
+    }
+
+    public void ValidateBlock()
+    {
+        if (IsItCorrectLetter())
         {
-            Destroy(animator);
+            isLetterfilledCorrectly = true;
+            markedAsFinished = true;
+            BG.DOColor(filledLetterBG, .2f);
+            letter.DOColor(filledLetter, .2f);
+            this.letter.transform.DOScale(1.3f, .2f).OnComplete(() =>
+           {
+               this.letter.transform.DOScale(1f, .14f);
+           });
+        }
+        else
+        {
+            Color currentBgColor = BG.color;
+            BG.DOColor(wrongColorBG, .2f);
+
+            Color wrongColorNoAlpha = wrongColor;
+            wrongColorNoAlpha.a = 0;
+            this.letter.DOKill();
+            this.letter.color = new Color(wrongColor.r, wrongColor.g, wrongColor.b, 0f);
+            this.letter.DOColor(wrongColor, .2f);
+            letterRect.localPosition = Vector3.zero;
+            letterRect.DOKill();
+            Sequence shakeSequence = DOTween.Sequence();
+            float duration = 0.07f; // Base duration per step
+            float dampingFactor = 0.2f; // Controls how much each step decreases
+            float initialAmplitude = 8f; // Initial movement distance
+
+            for (int i = 0; i < 5; i++) // Number of oscillations
+            {
+                float amplitude = initialAmplitude * Mathf.Pow(dampingFactor, i); // Reduce amplitude over time
+                shakeSequence.Append(letterRect.DOAnchorPosX(letterRect.anchoredPosition.x + amplitude, duration))
+                             .Append(letterRect.DOAnchorPosX(letterRect.anchoredPosition.x - amplitude, duration));
+            }
+
+            shakeSequence // Smooth in/out easing
+                         .OnComplete(() =>
+                         {
+                             BG.DOColor(currentBgColor, .05f);
+                             this.letter.DOColor(wrongColorNoAlpha, .05f).OnComplete(() =>
+                             {
+                                 PuzzleBlockSelector.Instance.WrongAnimationsDone();
+                                 PuzzleBlockSelector.Instance.avoidTouch = false;
+                                 ClearText();
+                             });
+                         });
         }
     }
 
+    public bool IsItCorrectLetter()
+    {
+        char currentLetter = this.letter.text.ToString()[0];
+        return correctLetter == currentLetter;
+    }
 
     public void SetAsIdleBox()
     {
@@ -165,6 +234,7 @@ public class PuzzleBlock : MonoBehaviour, IPointerClickHandler
     public void MarkAsCorrectBlock(int index, bool noAnimation = false)
     {
         markedAsFinished = true;
+        isLetterfilledCorrectly = true;
         if (!noAnimation)
         {
             BG.DOColor(correctColorBG, .2f);
@@ -246,9 +316,9 @@ public class PuzzleBlock : MonoBehaviour, IPointerClickHandler
         return partOfWords[clickIndex % partOfWords.Count];
     }
 
-    public bool OnLetterTyped(char letter)
+    public void OnLetterTyped(char letter)
     {
-        return ValidateLetter(letter);
+        EnterText(letter);
     }
 
     bool ValidateLetter(char letter)

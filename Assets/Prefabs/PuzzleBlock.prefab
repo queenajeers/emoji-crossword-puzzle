@@ -127,7 +127,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1673329147447576529}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
@@ -163,7 +163,6 @@ GameObject:
   - component: {fileID: 5029467327520225570}
   - component: {fileID: 8755062854593352342}
   - component: {fileID: 2052279000185409676}
-  - component: {fileID: 2977632614757508582}
   m_Layer: 5
   m_Name: PuzzleBlock
   m_TagString: Untagged
@@ -274,14 +273,15 @@ MonoBehaviour:
   FromRight: {fileID: 6706641512974285965}
   hintRoundedOutline: {fileID: 1628175667006601887}
   idleColor: {r: 0.8018868, g: 0.74266636, b: 0.73758453, a: 1}
-  hintBG: {r: 1, g: 0.9534734, b: 0.8537736, a: 1}
+  hintBG: {r: 0.7921569, g: 0.8980392, b: 0.98039216, a: 1}
   filledLetterBG: {r: 0.93333334, g: 0.9607843, b: 0.9843137, a: 1}
   filledLetter: {r: 0.3018423, g: 0.34438562, b: 0.4811321, a: 1}
   highlightColor: {r: 0.7971698, g: 1, b: 0.8012264, a: 1}
   blockLocation: {x: 0, y: 0}
   correctColorBG: {r: 1, g: 0.94845015, b: 0.759434, a: 1}
   correctColorText: {r: 0.33962262, g: 0.278397, b: 0.059273757, a: 1}
-  filledCorrectly: 0
+  isLetterfilled: 0
+  isLetterfilledCorrectly: 0
   isHint: 0
   starEffect: {fileID: 8259704852942182139}
   rectTransform: {fileID: 0}
@@ -289,30 +289,9 @@ MonoBehaviour:
   selectSecondaryColor: {r: 0.73945177, g: 1, b: 0.7122642, a: 1}
   normalColor: {r: 1, g: 1, b: 1, a: 1}
   wrongColor: {r: 1, g: 0.24056602, b: 0.24056602, a: 1}
+  wrongColorBG: {r: 1, g: 0.9009434, b: 0.9009434, a: 1}
   partOfWords: []
   goToPosition: {x: 0, y: 0}
---- !u!95 &2977632614757508582
-Animator:
-  serializedVersion: 7
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1781791610517184905}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 402d948ae7ce14dfe9fe1bd949879d10, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_AnimatePhysics: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &2140591532457175920
 GameObject:
   m_ObjectHideFlags: 0
@@ -637,7 +616,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3586204313407057966}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
@@ -713,7 +692,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4025199804364082501}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
@@ -803,7 +782,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4116609569416202842}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
@@ -878,7 +857,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6706641512974285965}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 

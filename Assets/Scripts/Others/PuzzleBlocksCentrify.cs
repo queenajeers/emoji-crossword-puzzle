@@ -49,7 +49,6 @@ public class PuzzleBlocksCentrify : MonoBehaviour
 
         for (int i = 0; i < puzzleBlockRects.Count; i++)
         {
-            if (!childPuzzleBlocks[i].gameObject.activeInHierarchy) continue;
             Vector2 pos = puzzleBlockRects[i].localPosition;
             minX = Mathf.Min(minX, pos.x);
             maxX = Mathf.Max(maxX, pos.x);
