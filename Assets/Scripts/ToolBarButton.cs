@@ -8,12 +8,11 @@ public class ToolBarButton : MonoBehaviour
     public Outline selectOutline;
     public static Action<PuzzleCreatorBrush> OnBrushSelected;
 
-
     public void SelectButton()
     {
         selectOutline.effectDistance = new Vector2(4, -4);
-
     }
+
     public void DeSelectButton()
     {
         selectOutline.effectDistance = new Vector2(0, 0);

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -9,6 +10,8 @@ public class TouchBlock : MonoBehaviour
     public Vector2Int blockLocation;
 
     public TextMeshProUGUI attatchedLetter;
+    public TextMeshProUGUI attatchedHintText;
+
     public Image hintImage;
 
     public static Action<TouchBlock> OnTouchBlockClicked;
@@ -46,6 +49,31 @@ public class TouchBlock : MonoBehaviour
         ClearBox();
         attatchedLetter.text = letter.ToString();
         MakeABox(GridLayer.Instance.GetCellBorderSize());
+    }
+    public void AddLetterToText(char letter)
+    {
+        attatchedLetter.text = "";
+        attatchedHintText.text += letter.ToString();
+        MakeABox(GridLayer.Instance.GetCellBorderSize());
+    }
+    public void SetLetterToText(string text)
+    {
+        attatchedLetter.text = "";
+        attatchedHintText.text += text;
+        MakeABox(GridLayer.Instance.GetCellBorderSize());
+    }
+    public string BackSpaceHintLetter()
+    {
+
+        attatchedLetter.text = "";
+        var hintText = attatchedHintText.text;
+        if (hintText.Length > 0)
+        {
+            hintText = hintText.Substring(0, hintText.Length - 1);
+            attatchedHintText.text = hintText;
+        }
+        MakeABox(GridLayer.Instance.GetCellBorderSize());
+        return hintText;
     }
 
     public void SetImage(string imageLocalPath)
@@ -94,6 +122,7 @@ public class TouchBlock : MonoBehaviour
         outline.effectDistance = new Vector2(0, 0);
         outline.effectColor = outlineDefault;
         attatchedLetter.text = ' '.ToString();
+        attatchedHintText.text = "";
         hintImage.gameObject.SetActive(false);
         MakeAsNormalLetter();
         SetHintArrowIndication(null);

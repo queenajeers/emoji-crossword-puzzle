@@ -200,6 +200,10 @@ public class PuzzleLoader : MonoBehaviour
                     Sprite sprite = Resources.Load<Sprite>(hintBox.localPath);
                     puzzleBlockComp.LoadAsHintBlock(sprite);
                 }
+                else if (dataBlock is TextHint textHint)
+                {
+                    puzzleBlockComp.LoadAsTextHintBlock(textHint.content);
+                }
 
             }
 
@@ -264,7 +268,7 @@ public class PuzzleLoader : MonoBehaviour
 
             HighlightNextWord();
 
-            PuzzleBlocksCentrify.Instance.CenterRects();
+            //PuzzleBlocksCentrify.Instance.CenterRects();
 
             yield return null;
         }

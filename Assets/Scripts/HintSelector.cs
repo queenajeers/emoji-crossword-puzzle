@@ -7,9 +7,8 @@ public class HintSelector : MonoBehaviour, IPointerClickHandler
 {
     public Image hintImage;
     public string imageLocalPath;
-
+    
     public static Action<string> OnHintSelected;
-
     public void LoadImage(string path)
     {
         imageLocalPath = path;

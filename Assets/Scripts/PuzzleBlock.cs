@@ -12,6 +12,7 @@ public class PuzzleBlock : MonoBehaviour, IPointerClickHandler
     private Image BG;
     public char correctLetter;
     public TextMeshProUGUI letter;
+    public TextMeshProUGUI hintText;
     RectTransform letterRect;
     public TextMeshProUGUI numberTextIndicator;
     public GameObject FromTop;
@@ -74,11 +75,22 @@ public class PuzzleBlock : MonoBehaviour, IPointerClickHandler
     {
         isHint = true;
         BG.color = hintBG;
-        BG.enabled = false;
-        outline.enabled = false;
-        hintRoundedOutline.gameObject.SetActive(true);
+        // BG.enabled = false;
+        // outline.enabled = false;
+        //hintRoundedOutline.gameObject.SetActive(true);
         hintImage.gameObject.SetActive(true);
         hintImage.sprite = sprite;
+
+    }
+    public void LoadAsTextHintBlock(string textHint)
+    {
+        isHint = true;
+        BG.color = hintBG;
+        // BG.enabled = false;
+        // outline.enabled = false;
+        //hintRoundedOutline.gameObject.SetActive(true);
+        hintText.gameObject.SetActive(true);
+        hintText.text = textHint;
 
     }
 

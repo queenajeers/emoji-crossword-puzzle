@@ -11,7 +11,8 @@ public enum PuzzleCreatorBrush
     MaskLetter,
     AddImage,
     Clear,
-    Arrow
+    Arrow,
+    TextHint
 
 }
 
@@ -119,6 +120,15 @@ public class PuzzleCreator : MonoBehaviour
                 Debug.Log($"Character clicked {upperC}");
                 CharacterClicked(upperC);
             }
+        }
+
+        if (Input.GetKeyDown(KeyCode.Backspace))
+        {
+            BackspaceClicked();
+        }
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            CharacterClicked(' ');
         }
 
         if (currentSelectedBrush == PuzzleCreatorBrush.Arrow)
@@ -234,6 +244,47 @@ public class PuzzleCreator : MonoBehaviour
     }
 
 
+    void BackspaceClicked()
+    {
+        if (currentSelectedBrush == PuzzleCreatorBrush.TextHint)
+        {
+            if (currentSelectedTouchBlock != null)
+            {
+
+                var dataBlock = emojiCrossWord.dataBlocks.Find(db => db.blockLocation == currentSelectedTouchBlock.blockLocation);
+
+                if (dataBlock == null)
+                {
+                    currentSelectedTouchBlock.BackSpaceHintLetter();
+                    dataBlock = new TextHint()
+                    {
+                        blockLocation = currentSelectedTouchBlock.blockLocation
+                    };
+                    var th = dataBlock as TextHint;
+                    th.content = currentSelectedTouchBlock.attatchedHintText.text;
+                    emojiCrossWord.dataBlocks.Add(dataBlock);
+                }
+                else
+                {
+                    currentSelectedTouchBlock.BackSpaceHintLetter();
+
+                    if (dataBlock is not TextHint th)
+                    {
+                        th = new TextHint
+                        {
+                            blockLocation = currentSelectedTouchBlock.blockLocation
+                        };
+                        dataBlock = th;
+                    }
+
+                    th.content = currentSelectedTouchBlock.attatchedHintText.text;
+                }
+
+            }
+        }
+
+    }
+
 
     void CharacterClicked(char c)
     {
@@ -267,6 +318,42 @@ public class PuzzleCreator : MonoBehaviour
 
             }
 
+        }
+        else if (currentSelectedBrush == PuzzleCreatorBrush.TextHint)
+        {
+            if (currentSelectedTouchBlock != null)
+            {
+
+                var dataBlock = emojiCrossWord.dataBlocks.Find(db => db.blockLocation == currentSelectedTouchBlock.blockLocation);
+
+                if (dataBlock == null)
+                {
+                    Debug.Log("#1");
+                    currentSelectedTouchBlock.AddLetterToText(c);
+
+                    dataBlock = new TextHint()
+                    {
+                        blockLocation = currentSelectedTouchBlock.blockLocation
+                    };
+                    var th = dataBlock as TextHint;
+                    th.content = currentSelectedTouchBlock.attatchedHintText.text;
+                    emojiCrossWord.dataBlocks.Add(dataBlock);
+                }
+                else
+                {
+                    Debug.Log("#2");
+                    currentSelectedTouchBlock.AddLetterToText(c);
+                    emojiCrossWord.dataBlocks.Remove(dataBlock);
+                    var th = new TextHint
+                    {
+                        blockLocation = currentSelectedTouchBlock.blockLocation,
+                        content = currentSelectedTouchBlock.attatchedHintText.text
+                    };
+                    emojiCrossWord.dataBlocks.Add(th);
+
+                }
+
+            }
         }
     }
 
@@ -330,6 +417,11 @@ public class PuzzleCreator : MonoBehaviour
             {
                 var blockLocation = hintBox.blockLocation;
                 touchBlocks[blockLocation].SetImage(hintBox.localPath);
+            }
+            else if (block is TextHint textHintBox)
+            {
+                var blockLocation = textHintBox.blockLocation;
+                touchBlocks[blockLocation].SetLetterToText(textHintBox.content);
             }
 
             touchBlocks[block.blockLocation].SetHintArrowIndication(block.arrowIndications);

@@ -6865,25 +6865,41 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4762868163451437369, guid: f3a7d01edc1b9421cae0b1ae4442ac6e, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4762868163451437369, guid: f3a7d01edc1b9421cae0b1ae4442ac6e, type: 3}
+      propertyPath: m_UseGraphicAlpha
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4762868163451437369, guid: f3a7d01edc1b9421cae0b1ae4442ac6e, type: 3}
+      propertyPath: m_EffectDistance.x
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4762868163451437369, guid: f3a7d01edc1b9421cae0b1ae4442ac6e, type: 3}
+      propertyPath: m_EffectDistance.y
+      value: -1.5
+      objectReference: {fileID: 0}
     - target: {fileID: 5209431174319645550, guid: f3a7d01edc1b9421cae0b1ae4442ac6e, type: 3}
       propertyPath: borderSize
-      value: 2
+      value: 1.2
       objectReference: {fileID: 0}
     - target: {fileID: 5209431174319645550, guid: f3a7d01edc1b9421cae0b1ae4442ac6e, type: 3}
       propertyPath: puzzleName
-      value: test8_1
+      value: test8
       objectReference: {fileID: 0}
     - target: {fileID: 5209431174319645550, guid: f3a7d01edc1b9421cae0b1ae4442ac6e, type: 3}
       propertyPath: borderColor.b
-      value: 0.38679248
+      value: 0.6132076
       objectReference: {fileID: 0}
     - target: {fileID: 5209431174319645550, guid: f3a7d01edc1b9421cae0b1ae4442ac6e, type: 3}
       propertyPath: borderColor.g
-      value: 0.28865802
+      value: 0.50571644
       objectReference: {fileID: 0}
     - target: {fileID: 5209431174319645550, guid: f3a7d01edc1b9421cae0b1ae4442ac6e, type: 3}
       propertyPath: borderColor.r
-      value: 0.24265754
+      value: 0.45412073
       objectReference: {fileID: 0}
     - target: {fileID: 5209431174319645550, guid: f3a7d01edc1b9421cae0b1ae4442ac6e, type: 3}
       propertyPath: gridSizeMultiplier
@@ -6904,6 +6920,18 @@ PrefabInstance:
     - target: {fileID: 6032017465319412674, guid: f3a7d01edc1b9421cae0b1ae4442ac6e, type: 3}
       propertyPath: m_RaycastTargetCache
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8565948237187864469, guid: f3a7d01edc1b9421cae0b1ae4442ac6e, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 8565948237187864469, guid: f3a7d01edc1b9421cae0b1ae4442ac6e, type: 3}
+      propertyPath: m_Color.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8565948237187864469, guid: f3a7d01edc1b9421cae0b1ae4442ac6e, type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -6927,19 +6955,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4980536804177373835, guid: d2576db91faf14cc2acf1ab2973cd3b1, type: 3}
       propertyPath: m_Padding.m_Top
-      value: 20
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4980536804177373835, guid: d2576db91faf14cc2acf1ab2973cd3b1, type: 3}
       propertyPath: m_Padding.m_Left
-      value: 20
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4980536804177373835, guid: d2576db91faf14cc2acf1ab2973cd3b1, type: 3}
       propertyPath: m_Padding.m_Right
-      value: 20
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4980536804177373835, guid: d2576db91faf14cc2acf1ab2973cd3b1, type: 3}
       propertyPath: m_Padding.m_Bottom
-      value: 20
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5529647411370921845, guid: d2576db91faf14cc2acf1ab2973cd3b1, type: 3}
       propertyPath: m_Pivot.x
