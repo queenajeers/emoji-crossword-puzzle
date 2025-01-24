@@ -11,20 +11,24 @@ public class HintsLoader : MonoBehaviour
     {
         Instance = this;
     }
-    private void Start()
-    {
-        LoadHintImages();
-    }
 
-    public void LoadHintImages()
+    public void LoadHintImages(string levelName)
     {
-        foreach (var sprite in Resources.LoadAll<Sprite>("Emojis"))
+        if (!spritesLoaded)
         {
-            var hintSelectorComp = Instantiate(hintSelectorPrefab, hintsParent).GetComponent<HintSelector>();
-            string spritePath = $"Emojis/{sprite.name}";
-            hintSelectorComp.LoadImage(spritePath);
+            spritesLoaded = true;
+            foreach (var sprite in Resources.LoadAll<Sprite>($"{levelName}"))
+            {
+                var hintSelectorComp = Instantiate(hintSelectorPrefab, hintsParent).GetComponent<HintSelector>();
+                string spritePath = $"{levelName}/{sprite.name}";
+                hintSelectorComp.LoadImage(spritePath);
+            }
         }
     }
+
+    bool spritesLoaded = false;
+
+
 
     public void OpenHintsLoader()
     {

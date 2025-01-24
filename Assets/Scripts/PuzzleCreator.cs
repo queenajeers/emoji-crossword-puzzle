@@ -25,6 +25,7 @@ public enum PuzzleDifficulty
 
 public class PuzzleCreator : MonoBehaviour
 {
+
     public Vector2Int defaultGridSize;
     public string puzzleName;
     public PuzzleDifficulty puzzleDifficulty;
@@ -236,6 +237,7 @@ public class PuzzleCreator : MonoBehaviour
 
             case PuzzleCreatorBrush.AddImage:
 
+                HintsLoader.Instance.LoadHintImages(puzzleName);
                 HintsLoader.Instance.OpenHintsLoader();
 
                 break;
