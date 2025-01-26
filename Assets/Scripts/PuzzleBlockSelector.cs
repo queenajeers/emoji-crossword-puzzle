@@ -133,9 +133,14 @@ public class PuzzleBlockSelector : MonoBehaviour
                     currentBlockIndex = i;
                 }
             }
-            if (currentBlockSelected.isLetterfilled && allHighlightedPuzzleBlocks.Count > 0)
+
+            if (currentBlockSelected.isLetterfilledCorrectly && allHighlightedPuzzleBlocks.Count > 0)
             {
                 allHighlightedPuzzleBlocks[0].SelectThisWithWord(currentHighlightWord);
+            }
+            else if (currentBlockSelected.isLetterfilled)
+            {
+                currentBlockSelected.Highlight();
             }
         }
     }
@@ -194,6 +199,7 @@ public class PuzzleBlockSelector : MonoBehaviour
         puzzleBlocks = puzzleBlocks.Skip(1).ToList();
         puzzleBlocks = puzzleBlocks.Where(pb => !pb.isLetterfilledCorrectly).ToList();
         int currentIndex = puzzleBlocks.IndexOf(currentBlockSelected);
+        puzzleBlocks[currentIndex].ClearText();
         currentIndex--;
         if (currentIndex < 0)
         {

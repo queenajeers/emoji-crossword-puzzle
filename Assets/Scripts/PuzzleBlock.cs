@@ -328,7 +328,6 @@ public class PuzzleBlock : MonoBehaviour, IPointerClickHandler
     public void JustNowHighlightedMain(string word)
     {
         clickIndex = partOfWords.IndexOf(word);
-
     }
 
     public void OnPointerClick(PointerEventData eventData)

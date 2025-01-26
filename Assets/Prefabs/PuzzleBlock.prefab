@@ -423,8 +423,8 @@ MonoBehaviour:
   isHint: 0
   starEffect: {fileID: 8259704852942182139}
   rectTransform: {fileID: 0}
-  selectColor: {r: 1, g: 0.9372549, b: 0.52156866, a: 1}
-  selectSecondaryColor: {r: 1, g: 0.97587377, b: 0.8160377, a: 1}
+  selectColor: {r: 1, g: 0.92638415, b: 0.43867922, a: 1}
+  selectSecondaryColor: {r: 1, g: 0.9624628, b: 0.7028302, a: 1}
   normalColor: {r: 1, g: 1, b: 1, a: 1}
   wrongColor: {r: 1, g: 0.24056602, b: 0.24056602, a: 1}
   wrongColorBG: {r: 1, g: 0.9009434, b: 0.9009434, a: 1}
