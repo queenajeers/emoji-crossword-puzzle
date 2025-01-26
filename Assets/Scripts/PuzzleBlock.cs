@@ -109,9 +109,8 @@ public class PuzzleBlock : MonoBehaviour, IPointerClickHandler
     {
         isLetterfilled = true;
         this.letter.gameObject.SetActive(true);
-        this.letter.color = filledLetter;
         this.letter.text = letter.ToString();
-
+        this.letter.color = filledLetter;
         this.letter.transform.DOScale(1.3f, .2f).OnComplete(() =>
            {
                this.letter.transform.DOScale(1f, .14f);
@@ -124,7 +123,7 @@ public class PuzzleBlock : MonoBehaviour, IPointerClickHandler
         isLetterfilledCorrectly = false;
         markedAsFinished = false;
         this.letter.gameObject.SetActive(false);
-        Dim();
+        DimNormal();
     }
 
     public void ValidateBlock()
@@ -233,7 +232,7 @@ public class PuzzleBlock : MonoBehaviour, IPointerClickHandler
         BG.color = highlightColor;
     }
 
-    public void NormaliseBG()
+    public void MakeBgWhite()
     {
         BG.color = Color.white;
     }
@@ -304,11 +303,17 @@ public class PuzzleBlock : MonoBehaviour, IPointerClickHandler
     }
 
 
-    public void Dim()
+    public void DimHighlight()
     {
         if (markedAsFinished) return;
-        BG.color = normalColor;
 
+        BG.color = selectSecondaryColor;
+    }
+    public void DimNormal()
+    {
+        if (markedAsFinished) return;
+
+        BG.color = normalColor;
     }
 
     public void JustNowHighlightedSecondary(string word)

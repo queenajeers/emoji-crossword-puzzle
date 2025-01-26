@@ -363,7 +363,7 @@ public class PuzzleLoader : MonoBehaviour
 
         if (currentNearestPuzzleBlock != null)
         {
-            currentNearestPuzzleBlock.NormaliseBG();
+            currentNearestPuzzleBlock.MakeBgWhite();
             currentNearestPuzzleBlock = null;
         }
 
@@ -388,7 +388,7 @@ public class PuzzleLoader : MonoBehaviour
         {
             draggableLetter.placedAtLocation = currentNearestPuzzleBlock.blockLocation;
             placedLocations.Add(currentNearestPuzzleBlock.blockLocation);
-            currentNearestPuzzleBlock.NormaliseBG();
+            currentNearestPuzzleBlock.MakeBgWhite();
             currentNearestPuzzleBlock = null;
         }
         else

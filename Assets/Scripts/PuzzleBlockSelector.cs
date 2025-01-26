@@ -10,6 +10,7 @@ public class PuzzleBlockSelector : MonoBehaviour
     public static PuzzleBlockSelector Instance { get; private set; }
     PuzzleBlock currentBlockSelected;
     List<PuzzleBlock> allHighlightedPuzzleBlocks = new List<PuzzleBlock>();
+    List<PuzzleBlock> allHighlightedLetterPuzzleBlocks = new List<PuzzleBlock>();
     public RectTransform selectorRect;
     int currentBlockIndex;
     string currentHighlightWord;
@@ -56,9 +57,18 @@ public class PuzzleBlockSelector : MonoBehaviour
             }
             else
             {
-                currentBlockSelected.Dim();
+                currentBlockSelected.DimNormal();
             }
-
+        }
+        if (allHighlightedLetterPuzzleBlocks.Count > 0)
+        {
+            foreach (var item in allHighlightedLetterPuzzleBlocks)
+            {
+                if (!item.isLetterfilledCorrectly)
+                {
+                    item.MakeBgWhite();
+                }
+            }
         }
         if (allHighlightedPuzzleBlocks.Count > 0)
         {
@@ -66,7 +76,7 @@ public class PuzzleBlockSelector : MonoBehaviour
             {
                 if (!item.isLetterfilled)
                 {
-                    item.Dim();
+                    item.DimNormal();
                 }
                 else
                 {
@@ -76,7 +86,7 @@ public class PuzzleBlockSelector : MonoBehaviour
                     }
                     else
                     {
-                        item.NormaliseBG();
+                        item.MakeBgWhite();
                     }
                 }
             }
@@ -94,10 +104,10 @@ public class PuzzleBlockSelector : MonoBehaviour
         if (currentBlockSelected != null)
         {
             Debug.Log("CURRENT HIGHLIGHT WORD " + currentBlockSelected.CurrentHightWord());
-            List<PuzzleBlock> otherPuzzleBlocks = new List<PuzzleBlock>();
-            allHighlightedPuzzleBlocks = otherPuzzleBlocks;
+            allHighlightedPuzzleBlocks = new List<PuzzleBlock>();
             var puzzleBlocks = PuzzleLoader.Instance.GetPuzzleBlocksLinkedForWord(currentBlockSelected.CurrentHightWord());
             puzzleBlocks = puzzleBlocks.Skip(1).ToList();
+            allHighlightedLetterPuzzleBlocks.Clear();
 
             for (int i = 0; i < puzzleBlocks.Count; i++)
             {
@@ -106,22 +116,26 @@ public class PuzzleBlockSelector : MonoBehaviour
                 {
                     pb.HighlightSecondary(currentHighlightWord);
                     pb.JustNowHighlightedSecondary(currentHighlightWord);
-                    otherPuzzleBlocks.Add(pb);
+                    allHighlightedPuzzleBlocks.Add(pb);
+                }
+                else if (pb.isLetterfilled)
+                {
+                    allHighlightedLetterPuzzleBlocks.Add(pb);
+                    pb.DimHighlight();
                 }
             }
-            for (int i = 0; i < otherPuzzleBlocks.Count; i++)
+            for (int i = 0; i < allHighlightedPuzzleBlocks.Count; i++)
             {
-                if (currentBlockSelected == otherPuzzleBlocks[i])
+                if (currentBlockSelected == allHighlightedPuzzleBlocks[i])
                 {
-                    otherPuzzleBlocks[i].Highlight();
-                    otherPuzzleBlocks[i].JustNowHighlightedMain(currentHighlightWord);
+                    allHighlightedPuzzleBlocks[i].Highlight();
+                    allHighlightedPuzzleBlocks[i].JustNowHighlightedMain(currentHighlightWord);
                     currentBlockIndex = i;
                 }
             }
-            if (currentBlockSelected.isLetterfilled && otherPuzzleBlocks.Count > 0)
+            if (currentBlockSelected.isLetterfilled && allHighlightedPuzzleBlocks.Count > 0)
             {
-                otherPuzzleBlocks[0].SelectThisWithWord(currentHighlightWord);
-
+                allHighlightedPuzzleBlocks[0].SelectThisWithWord(currentHighlightWord);
             }
         }
     }
@@ -162,7 +176,6 @@ public class PuzzleBlockSelector : MonoBehaviour
     {
         Debug.Log($"WORD {word} is FINISHED!");
         PuzzleLoader.Instance.SetWordAsFinished(word);
-        PuzzleLoader.Instance.HighlightNextWord();
         if (PuzzleLoader.Instance.AllWordsFinished())
         {
             selectorRect.gameObject.SetActive(false);
@@ -170,9 +183,7 @@ public class PuzzleBlockSelector : MonoBehaviour
     }
     void HighlightNextWord()
     {
-
         PuzzleLoader.Instance.HighlightNextWord();
-
     }
 
     public void BackspaceClicked()
