@@ -37,7 +37,9 @@ public class PuzzleLoader : MonoBehaviour
     List<Vector2Int> placedLocations = new List<Vector2Int>();
     private List<char> leftOverLetters = new List<char>();
     [SerializeField] string gameFilesFolderName;
-    List<string> unsolvedCrossWords = new List<string>();
+
+    [HideInInspector]
+    public List<string> unsolvedCrossWords = new List<string>();
 
     void Awake()
     {

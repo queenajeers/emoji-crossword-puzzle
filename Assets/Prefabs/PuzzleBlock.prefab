@@ -142,7 +142,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: Hello The World IS HERE!
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: dff2f7de1e95b48a08f56951b187a6b6, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 0970a19694dd84ea0a83739dd5f59112, type: 2}
   m_sharedMaterial: {fileID: -2337678152353950572, guid: dff2f7de1e95b48a08f56951b187a6b6, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -208,7 +208,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
+  m_hasFontAssetChanged: 1
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!1 &1673329147447576529
@@ -411,20 +411,20 @@ MonoBehaviour:
   FromRight: {fileID: 6706641512974285965}
   hintRoundedOutline: {fileID: 1628175667006601887}
   idleColor: {r: 0.8018868, g: 0.74266636, b: 0.73758453, a: 1}
-  hintBG: {r: 0.8306337, g: 0.8642415, b: 0.9622642, a: 1}
-  filledLetterBG: {r: 0.93333334, g: 0.9607843, b: 0.9843137, a: 1}
-  filledLetter: {r: 0.3018423, g: 0.34438562, b: 0.4811321, a: 1}
+  hintBG: {r: 0.8862745, g: 0.90588236, b: 0.95686275, a: 1}
+  filledLetterBG: {r: 0.92156863, g: 0.9529412, b: 0.8862745, a: 1}
+  filledLetter: {r: 0.3773585, g: 0.3773585, b: 0.3773585, a: 1}
   highlightColor: {r: 0.7971698, g: 1, b: 0.8012264, a: 1}
   blockLocation: {x: 0, y: 0}
-  correctColorBG: {r: 1, g: 0.94845015, b: 0.759434, a: 1}
-  correctColorText: {r: 0.33962262, g: 0.278397, b: 0.059273757, a: 1}
+  correctColorBG: {r: 0.8627451, g: 0.9098039, b: 0.8509804, a: 1}
+  correctColorText: {r: 0.37963688, g: 0.4056604, b: 0.373131, a: 1}
   isLetterfilled: 0
   isLetterfilledCorrectly: 0
   isHint: 0
   starEffect: {fileID: 8259704852942182139}
   rectTransform: {fileID: 0}
-  selectColor: {r: 1, g: 0.9415271, b: 0.36320752, a: 1}
-  selectSecondaryColor: {r: 1, g: 0.9744011, b: 0.6745283, a: 1}
+  selectColor: {r: 1, g: 0.9372549, b: 0.52156866, a: 1}
+  selectSecondaryColor: {r: 1, g: 0.97587377, b: 0.8160377, a: 1}
   normalColor: {r: 1, g: 1, b: 1, a: 1}
   wrongColor: {r: 1, g: 0.24056602, b: 0.24056602, a: 1}
   wrongColorBG: {r: 1, g: 0.9009434, b: 0.9009434, a: 1}
@@ -633,7 +633,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: L
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 2eb96c905a065482298248446844065c, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: dff2f7de1e95b48a08f56951b187a6b6, type: 2}
   m_sharedMaterial: {fileID: 8680096497444636285, guid: 2eb96c905a065482298248446844065c, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -699,7 +699,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
+  m_hasFontAssetChanged: 1
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!1 &3586204313407057966

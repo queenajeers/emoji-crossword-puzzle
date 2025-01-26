@@ -302,10 +302,28 @@ public class PuzzleBlock : MonoBehaviour, IPointerClickHandler
         clickIndex = partOfWords.IndexOf(word);
         BG.color = selectSecondaryColor;
     }
+
+
     public void Dim()
     {
         if (markedAsFinished) return;
         BG.color = normalColor;
+
+    }
+
+    public void JustNowHighlightedSecondary(string word)
+    {
+        clickIndex = partOfWords.IndexOf(word);
+        clickIndex--;
+        if (clickIndex < 0)
+        {
+            clickIndex = partOfWords.Count - 1;
+        }
+    }
+    public void JustNowHighlightedMain(string word)
+    {
+        clickIndex = partOfWords.IndexOf(word);
+
     }
 
     public void OnPointerClick(PointerEventData eventData)

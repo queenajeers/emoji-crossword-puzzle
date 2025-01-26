@@ -50,7 +50,7 @@ public class PuzzleBlockSelector : MonoBehaviour
     {
         if (currentBlockSelected != null)
         {
-            if (currentBlockSelected.isLetterfilled)
+            if (currentBlockSelected.isLetterfilledCorrectly)
             {
                 currentBlockSelected.SetFilledBG();
             }
@@ -105,6 +105,7 @@ public class PuzzleBlockSelector : MonoBehaviour
                 if (!pb.isLetterfilled && !pb.isHint)
                 {
                     pb.HighlightSecondary(currentHighlightWord);
+                    pb.JustNowHighlightedSecondary(currentHighlightWord);
                     otherPuzzleBlocks.Add(pb);
                 }
             }
@@ -113,12 +114,14 @@ public class PuzzleBlockSelector : MonoBehaviour
                 if (currentBlockSelected == otherPuzzleBlocks[i])
                 {
                     otherPuzzleBlocks[i].Highlight();
+                    otherPuzzleBlocks[i].JustNowHighlightedMain(currentHighlightWord);
                     currentBlockIndex = i;
                 }
             }
             if (currentBlockSelected.isLetterfilled && otherPuzzleBlocks.Count > 0)
             {
                 otherPuzzleBlocks[0].SelectThisWithWord(currentHighlightWord);
+
             }
         }
     }
@@ -135,10 +138,22 @@ public class PuzzleBlockSelector : MonoBehaviour
             {
                 allHighlightedPuzzleBlocks[(currentBlockIndex + 1) % allHighlightedPuzzleBlocks.Count].SelectThisWithWord(currentHighlightWord);
             }
-            else
+            ValidateBlocksForAllFilledWords();
+        }
+    }
+
+    void ValidateBlocksForAllFilledWords()
+    {
+        List<string> words = PuzzleLoader.Instance.unsolvedCrossWords;
+
+        foreach (string word in words)
+        {
+            var puzzleBlocks = PuzzleLoader.Instance.GetPuzzleBlocksLinkedForWord(word);
+            puzzleBlocks = puzzleBlocks.Skip(1).ToList();
+            var unFilledBlock = puzzleBlocks.Find(pb => (pb.isLetterfilled == false));
+            if (unFilledBlock == null)
             {
-                var currentWord = currentBlockSelected.CurrentHightWord();
-                ValidateBlocksForWord(currentWord);
+                ValidateBlocksForWord(word);
             }
         }
     }
@@ -211,7 +226,10 @@ public class PuzzleBlockSelector : MonoBehaviour
         }
         yield return new WaitUntil(GetStatusForWrongAnimationsDone);
         avoidTouch = false;
-        puzzleBlocks[0].SelectThisWithWord(word);
+        if (word == currentHighlightWord)
+        {
+            puzzleBlocks[0].SelectThisWithWord(word);
+        }
     }
 
     bool areWrongAnimationsDone = false;
