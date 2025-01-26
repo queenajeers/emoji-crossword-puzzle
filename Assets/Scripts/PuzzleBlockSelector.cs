@@ -59,6 +59,7 @@ public class PuzzleBlockSelector : MonoBehaviour
             {
                 currentBlockSelected.DimNormal();
             }
+
         }
         if (allHighlightedLetterPuzzleBlocks.Count > 0)
         {
@@ -68,12 +69,15 @@ public class PuzzleBlockSelector : MonoBehaviour
                 {
                     item.MakeBgWhite();
                 }
+
+
             }
         }
         if (allHighlightedPuzzleBlocks.Count > 0)
         {
             foreach (PuzzleBlock item in allHighlightedPuzzleBlocks)
             {
+
                 if (!item.isLetterfilled)
                 {
                     item.DimNormal();
