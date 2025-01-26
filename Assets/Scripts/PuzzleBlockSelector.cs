@@ -144,7 +144,7 @@ public class PuzzleBlockSelector : MonoBehaviour
 
     void ValidateBlocksForAllFilledWords()
     {
-        List<string> words = PuzzleLoader.Instance.unsolvedCrossWords;
+        List<string> words = new List<string>(PuzzleLoader.Instance.unsolvedCrossWords);
 
         foreach (string word in words)
         {
@@ -158,16 +158,21 @@ public class PuzzleBlockSelector : MonoBehaviour
         }
     }
 
-    void HighlightNextWord()
+    void CelebrateWord(string word)
     {
-        var finishedWord = currentBlockSelected.CurrentHightWord();
-        Debug.Log($"WORD {finishedWord} is FINISHED!");
-        PuzzleLoader.Instance.SetWordAsFinished(finishedWord);
+        Debug.Log($"WORD {word} is FINISHED!");
+        PuzzleLoader.Instance.SetWordAsFinished(word);
         PuzzleLoader.Instance.HighlightNextWord();
         if (PuzzleLoader.Instance.AllWordsFinished())
         {
             selectorRect.gameObject.SetActive(false);
         }
+    }
+    void HighlightNextWord()
+    {
+
+        PuzzleLoader.Instance.HighlightNextWord();
+
     }
 
     public void BackspaceClicked()
@@ -209,7 +214,12 @@ public class PuzzleBlockSelector : MonoBehaviour
         else
         {
             // Correct
-            HighlightNextWord();
+            CelebrateWord(word);
+            if (word == currentHighlightWord)
+            {
+                HighlightNextWord();
+            }
+
         }
     }
 
