@@ -68,7 +68,7 @@ public class PuzzleBlock : MonoBehaviour, IPointerClickHandler
 
     void Start()
     {
-        numberTextIndicator.fontSize = letter.fontSize / 3f;
+        numberTextIndicator.fontSize = letter.fontSize / 5f;
     }
 
     public void LoadAsHintBlock(Sprite sprite)

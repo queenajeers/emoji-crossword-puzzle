@@ -686,15 +686,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4640415162642794730, guid: a3d280f84f8f14c61bbcec901b0e9cf7, type: 3}
       propertyPath: puzzleName
-      value: Level_1
+      value: family_test
       objectReference: {fileID: 0}
     - target: {fileID: 4640415162642794730, guid: a3d280f84f8f14c61bbcec901b0e9cf7, type: 3}
       propertyPath: defaultGridSize.x
-      value: 5
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 4640415162642794730, guid: a3d280f84f8f14c61bbcec901b0e9cf7, type: 3}
       propertyPath: defaultGridSize.y
-      value: 5
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 4640415162642794730, guid: a3d280f84f8f14c61bbcec901b0e9cf7, type: 3}
       propertyPath: toolBarButtons.Array.size

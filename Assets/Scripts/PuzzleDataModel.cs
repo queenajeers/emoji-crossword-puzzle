@@ -8,6 +8,7 @@ using System.IO;
 public class EmojiCrossWord
 {
     public string puzzleName;
+    public string themeName;
     public Vector2Int gridSize;
     [SerializeReference] public List<DataBlock> dataBlocks = new List<DataBlock>();
     public List<string> crossWords = new List<string>();
