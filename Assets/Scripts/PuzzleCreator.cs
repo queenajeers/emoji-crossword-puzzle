@@ -113,7 +113,6 @@ public class PuzzleCreator : MonoBehaviour
 
     }
 
-
     void Update()
     {
         foreach (char c in Input.inputString)

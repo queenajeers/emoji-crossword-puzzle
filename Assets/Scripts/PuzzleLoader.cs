@@ -567,6 +567,15 @@ public class PuzzleLoader : MonoBehaviour
             Vector2Int hintLocation;
             switch (directionToSearch)
             {
+                case ArrowIndication.FromLeftQuarter:
+
+                    hintLocation = startLocation - new Vector2Int(0, 1);
+                    if (allPuzzleBlocks.ContainsKey(hintLocation))
+                    {
+                        targetPuzzleBlocks.Add(allPuzzleBlocks[hintLocation]);
+                    }
+                    break;
+
                 case ArrowIndication.FromLeft:
 
                     hintLocation = startLocation - new Vector2Int(0, 1);
