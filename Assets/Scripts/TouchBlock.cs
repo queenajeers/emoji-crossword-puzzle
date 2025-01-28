@@ -8,9 +8,10 @@ using UnityEngine.UI;
 public class TouchBlock : MonoBehaviour
 {
     public Vector2Int blockLocation;
-
     public TextMeshProUGUI attatchedLetter;
     public TextMeshProUGUI attatchedHintText;
+    public List<TextMeshProUGUI> attatchedHintTexts;
+    public List<Image> attatchedHintTextBGs;
 
     public Image hintImage;
 
@@ -26,6 +27,10 @@ public class TouchBlock : MonoBehaviour
     public GameObject FromBottom;
     public GameObject FromRight;
     public GameObject FromLeft;
+
+    public GameObject FromLeftQuarter;
+
+    public GameObject doubleHintBox;
 
 
     void Awake()
@@ -62,6 +67,61 @@ public class TouchBlock : MonoBehaviour
         attatchedHintText.text += text;
         MakeABox(GridLayer.Instance.GetCellBorderSize());
     }
+    public void InitialiseDoubleHint(int index)
+    {
+        ClearBox();
+        doubleHintBox.SetActive(true);
+        foreach (var item in attatchedHintTextBGs)
+        {
+            item.color = Color.white;
+        }
+        attatchedHintTextBGs[index % 2].color = Color.green;
+        MakeABox(GridLayer.Instance.GetCellBorderSize());
+
+    }
+    public void UpdateDoubleHintLocation(int index)
+    {
+
+        foreach (var item in attatchedHintTextBGs)
+        {
+            item.color = Color.white;
+        }
+        attatchedHintTextBGs[index % 2].color = Color.green;
+
+    }
+    public void CharacterTypedForDoubleHint(int index, char letter)
+    {
+        doubleHintBox.SetActive(true);
+        attatchedLetter.text = "";
+        attatchedHintText.text = "";
+        attatchedHintTexts[index].text += letter;
+        MakeABox(GridLayer.Instance.GetCellBorderSize());
+    }
+    public void SetTextForDoubleHint(int index, string text)
+    {
+        doubleHintBox.SetActive(true);
+        attatchedLetter.text = "";
+        attatchedHintText.text = "";
+        attatchedHintTexts[index].text = text;
+        MakeABox(GridLayer.Instance.GetCellBorderSize());
+    }
+    public string GetDoubleHintTextContent(int index)
+    {
+        return attatchedHintTexts[index].text;
+    }
+    public string BackSpaceClickedForDoubleHint(int index)
+    {
+        attatchedLetter.text = "";
+        var hintText = attatchedHintTexts[index].text;
+        if (hintText.Length > 0)
+        {
+            hintText = hintText.Substring(0, hintText.Length - 1);
+            attatchedHintTexts[index].text = hintText;
+        }
+        MakeABox(GridLayer.Instance.GetCellBorderSize());
+        return hintText;
+    }
+
     public string BackSpaceHintLetter()
     {
 
@@ -124,6 +184,7 @@ public class TouchBlock : MonoBehaviour
         attatchedLetter.text = ' '.ToString();
         attatchedHintText.text = "";
         hintImage.gameObject.SetActive(false);
+        doubleHintBox.SetActive(false);
         MakeAsNormalLetter();
         SetHintArrowIndication(null);
     }
@@ -140,6 +201,7 @@ public class TouchBlock : MonoBehaviour
         FromBottom.SetActive(false);
         FromLeft.SetActive(false);
         FromRight.SetActive(false);
+        FromLeftQuarter.SetActive(false);
         if (arrowIndications == null) return;
         foreach (ArrowIndication arrowIndication in arrowIndications)
         {
@@ -160,6 +222,11 @@ public class TouchBlock : MonoBehaviour
                 case ArrowIndication.FromRight:
 
                     FromRight.SetActive(true);
+                    break;
+
+                case ArrowIndication.FromLeftQuarter:
+
+                    FromLeftQuarter.SetActive(true);
                     break;
             }
         }

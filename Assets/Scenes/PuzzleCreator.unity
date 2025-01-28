@@ -544,6 +544,22 @@ PrefabInstance:
       propertyPath: m_SizeDelta.x
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 830020393103028325, guid: a3d280f84f8f14c61bbcec901b0e9cf7, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 830020393103028325, guid: a3d280f84f8f14c61bbcec901b0e9cf7, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 830020393103028325, guid: a3d280f84f8f14c61bbcec901b0e9cf7, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 830020393103028325, guid: a3d280f84f8f14c61bbcec901b0e9cf7, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1383289545095884668, guid: a3d280f84f8f14c61bbcec901b0e9cf7, type: 3}
       propertyPath: m_SizeDelta.x
       value: 0
@@ -648,10 +664,6 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3011330724656087717, guid: a3d280f84f8f14c61bbcec901b0e9cf7, type: 3}
-      propertyPath: brushType
-      value: 7
-      objectReference: {fileID: 0}
     - target: {fileID: 3254779367895709705, guid: a3d280f84f8f14c61bbcec901b0e9cf7, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -683,39 +695,15 @@ PrefabInstance:
     - target: {fileID: 4245903405935304977, guid: a3d280f84f8f14c61bbcec901b0e9cf7, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4640415162642794730, guid: a3d280f84f8f14c61bbcec901b0e9cf7, type: 3}
-      propertyPath: puzzleName
-      value: family_test_1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4640415162642794730, guid: a3d280f84f8f14c61bbcec901b0e9cf7, type: 3}
-      propertyPath: defaultGridSize.x
-      value: 8
-      objectReference: {fileID: 0}
-    - target: {fileID: 4640415162642794730, guid: a3d280f84f8f14c61bbcec901b0e9cf7, type: 3}
-      propertyPath: defaultGridSize.y
-      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 4640415162642794730, guid: a3d280f84f8f14c61bbcec901b0e9cf7, type: 3}
       propertyPath: toolBarButtons.Array.size
-      value: 7
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 4640415162642794730, guid: a3d280f84f8f14c61bbcec901b0e9cf7, type: 3}
-      propertyPath: 'toolBarButtons.Array.data[6]'
+      propertyPath: 'toolBarButtons.Array.data[7]'
       value: 
       objectReference: {fileID: 1584784214876110528}
-    - target: {fileID: 4706664877852999117, guid: a3d280f84f8f14c61bbcec901b0e9cf7, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4706664877852999117, guid: a3d280f84f8f14c61bbcec901b0e9cf7, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4706664877852999117, guid: a3d280f84f8f14c61bbcec901b0e9cf7, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 4862063686116717907, guid: a3d280f84f8f14c61bbcec901b0e9cf7, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -752,10 +740,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: PuzzleCreator
       objectReference: {fileID: 0}
-    - target: {fileID: 8455394788211769617, guid: a3d280f84f8f14c61bbcec901b0e9cf7, type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 21300000, guid: ffdba886f987744d9b65b264c7353c67, type: 3}
     - target: {fileID: 8734208032897188570, guid: a3d280f84f8f14c61bbcec901b0e9cf7, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -795,7 +779,7 @@ PrefabInstance:
   m_SourcePrefab: {fileID: 100100000, guid: a3d280f84f8f14c61bbcec901b0e9cf7, type: 3}
 --- !u!114 &1584784214876110528 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 3011330724656087717, guid: a3d280f84f8f14c61bbcec901b0e9cf7, type: 3}
+  m_CorrespondingSourceObject: {fileID: 8916738951533997145, guid: a3d280f84f8f14c61bbcec901b0e9cf7, type: 3}
   m_PrefabInstance: {fileID: 1584784214876110527}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}

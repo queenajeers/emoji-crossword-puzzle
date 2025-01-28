@@ -5,6 +5,7 @@ using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 
+
 public class PuzzleBlockSelector : MonoBehaviour
 {
     public static PuzzleBlockSelector Instance { get; private set; }
@@ -42,7 +43,7 @@ public class PuzzleBlockSelector : MonoBehaviour
         selectorRect.sizeDelta = new Vector2(size + (2 * borderSize), size + (2 * borderSize));
         selectorRect.GetComponent<Outline>().effectColor = borderColor;
 
-        selectorRect.GetComponent<Outline>().effectDistance = new Vector2(borderSize / 2f, -borderSize / 2f);
+        selectorRect.GetComponent<Outline>().effectDistance = new Vector2(borderSize, -borderSize);
         selectorRect.GetComponent<Image>().color = borderColor;
 
     }

@@ -93,6 +93,12 @@ public class TextHint : DataBlock
     public HintDirection hintDirection;
 
 }
+public class DoubleTextHint : DataBlock
+{
+    public List<string> contents = new List<string> { "", "" };
+    public HintDirection hintDirection;
+
+}
 
 public enum HintDirection
 {
@@ -109,7 +115,8 @@ public enum ArrowIndication
     FromTop,
     FromRight,
     FromBottom,
-    FromLeft
+    FromLeft,
+    FromLeftQuarter
 }
 
 

@@ -413,18 +413,18 @@ MonoBehaviour:
   idleColor: {r: 0.8018868, g: 0.74266636, b: 0.73758453, a: 1}
   hintBG: {r: 0.9411765, g: 0.9529412, b: 0.9764706, a: 1}
   filledLetterBG: {r: 0.80978274, g: 0.9339623, b: 0.7533375, a: 1}
-  filledLetter: {r: 0.2830189, g: 0.2830189, b: 0.2830189, a: 1}
+  filledLetter: {r: 0.2264151, g: 0.2264151, b: 0.2264151, a: 1}
   highlightColor: {r: 0.7971698, g: 1, b: 0.8012264, a: 1}
   blockLocation: {x: 0, y: 0}
   correctColorBG: {r: 0.8117647, g: 0.9372549, b: 0.75686276, a: 1}
-  correctColorText: {r: 0.28627452, g: 0.28627452, b: 0.28627452, a: 1}
+  correctColorText: {r: 0.22745098, g: 0.22745098, b: 0.22745098, a: 1}
   isLetterfilled: 0
   isLetterfilledCorrectly: 0
   isHint: 0
   starEffect: {fileID: 8259704852942182139}
   rectTransform: {fileID: 0}
-  selectColor: {r: 1, g: 0.92638415, b: 0.43867922, a: 1}
-  selectSecondaryColor: {r: 1, g: 0.9624628, b: 0.7028302, a: 1}
+  selectColor: {r: 0.64705884, g: 0.722647, b: 1, a: 1}
+  selectSecondaryColor: {r: 0.7971698, g: 0.8422432, b: 1, a: 1}
   normalColor: {r: 1, g: 1, b: 1, a: 1}
   wrongColor: {r: 1, g: 0.24056602, b: 0.24056602, a: 1}
   wrongColorBG: {r: 1, g: 0.9009434, b: 0.9009434, a: 1}
