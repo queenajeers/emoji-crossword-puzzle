@@ -206,6 +206,10 @@ public class PuzzleLoader : MonoBehaviour
                 {
                     puzzleBlockComp.LoadAsTextHintBlock(textHint.content);
                 }
+                else if (dataBlock is DoubleTextHint doubleTextHint)
+                {
+                    puzzleBlockComp.LoadAsDoubleTextHintBlock(doubleTextHint.contents, borderColor);
+                }
 
             }
 

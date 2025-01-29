@@ -13,12 +13,19 @@ public class PuzzleBlock : MonoBehaviour, IPointerClickHandler
     public char correctLetter;
     public TextMeshProUGUI letter;
     public TextMeshProUGUI hintText;
+    public List<TextMeshProUGUI> contentHintTexts;
+    public GameObject doubleHintTextObject;
+    public Image doubleHintLine;
+
     RectTransform letterRect;
     public TextMeshProUGUI numberTextIndicator;
-    public GameObject FromTop;
-    public GameObject FromBottom;
-    public GameObject FromLeft;
-    public GameObject FromRight;
+
+    public Image FromTop;
+    public Image FromBottom;
+    public Image FromLeft;
+    public Image FromLeftQuarter;
+
+    public Image FromRight;
 
     Outline outline;
     [SerializeField] Outline hintRoundedOutline;
@@ -92,6 +99,19 @@ public class PuzzleBlock : MonoBehaviour, IPointerClickHandler
         hintText.gameObject.SetActive(true);
         hintText.text = textHint;
 
+    }
+
+    public void LoadAsDoubleTextHintBlock(List<string> textHints, Color color)
+    {
+        isHint = true;
+        BG.color = hintBG;
+        // BG.enabled = false;
+        // outline.enabled = false;
+        //hintRoundedOutline.gameObject.SetActive(true);
+        doubleHintTextObject.SetActive(true);
+        contentHintTexts[0].text = textHints[0];
+        contentHintTexts[1].text = textHints[1];
+        doubleHintLine.color = color;
     }
 
     public void LoadAsNormalText(char letter)
@@ -194,14 +214,22 @@ public class PuzzleBlock : MonoBehaviour, IPointerClickHandler
         outline.effectColor = color;
         outline.effectDistance = new Vector2(distance, -distance);
         hintRoundedOutline.effectDistance = new Vector2(distance, -distance);
+
+        FromLeft.color = color;
+        FromRight.color = color;
+        FromTop.color = color;
+        FromBottom.color = color;
+        FromLeftQuarter.color = color;
+
     }
 
     public void SetHintArrowIndication(List<ArrowIndication> arrowIndications)
     {
-        FromTop.SetActive(false);
-        FromBottom.SetActive(false);
-        FromLeft.SetActive(false);
-        FromRight.SetActive(false);
+        FromTop.gameObject.SetActive(false);
+        FromBottom.gameObject.SetActive(false);
+        FromLeft.gameObject.SetActive(false);
+        FromRight.gameObject.SetActive(false);
+        FromLeftQuarter.gameObject.SetActive(false);
         if (arrowIndications == null) return;
         foreach (ArrowIndication arrowIndication in arrowIndications)
         {
@@ -209,19 +237,23 @@ public class PuzzleBlock : MonoBehaviour, IPointerClickHandler
             {
                 case ArrowIndication.FromTop:
 
-                    FromTop.SetActive(true);
+                    FromTop.gameObject.SetActive(true);
                     break;
                 case ArrowIndication.FromBottom:
 
-                    FromBottom.SetActive(true);
+                    FromBottom.gameObject.SetActive(true);
                     break;
                 case ArrowIndication.FromLeft:
 
-                    FromLeft.SetActive(true);
+                    FromLeft.gameObject.SetActive(true);
                     break;
                 case ArrowIndication.FromRight:
 
-                    FromRight.SetActive(true);
+                    FromRight.gameObject.SetActive(true);
+                    break;
+                case ArrowIndication.FromLeftQuarter:
+
+                    FromLeftQuarter.gameObject.SetActive(true);
                     break;
             }
         }
