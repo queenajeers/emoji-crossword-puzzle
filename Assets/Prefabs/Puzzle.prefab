@@ -106,6 +106,7 @@ GameObject:
   - component: {fileID: 4762868163451437369}
   - component: {fileID: 1512993702474877243}
   - component: {fileID: 1529725555653463863}
+  - component: {fileID: 3050251315369215319}
   m_Layer: 5
   m_Name: Puzzle
   m_TagString: Untagged
@@ -183,7 +184,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d1e8f9cdb183240cfad1cfbc4ddf9d0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  puzzleName: family_test
+  puzzleName: family_test_4
   puzzleDifficulty: 0
   puzzleBlockPrefab: {fileID: 1781791610517184905, guid: f5600f08e36024384b827ebdeaebe1bb, type: 3}
   puzzleParent: {fileID: 497177479066508836}
@@ -239,6 +240,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   selectorRect: {fileID: 6414050760229179592}
   avoidTouch: 0
+--- !u!114 &3050251315369215319
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2609661536131177781}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d00d51e276f4e43a6b4f04fc57f2ab46, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &3901534079844052330
 GameObject:
   m_ObjectHideFlags: 0

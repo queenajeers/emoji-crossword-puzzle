@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -170,6 +171,8 @@ public class PuzzleLoader : MonoBehaviour
 
                 var puzzleBlock = Instantiate(puzzleBlockPrefab, puzzleParent);
 
+                ScrollMoveManager.Instance.PuzzleBlockAdded(puzzleBlock);
+
                 var puzzleBlockRect = puzzleBlock.GetComponent<RectTransform>();
                 puzzleBlockRect.localPosition = GridLayer.Instance.GetPositionOfAGridBlock(blockLocation.x, blockLocation.y, transform);
                 puzzleBlockRect.sizeDelta = Vector2.one * GridLayer.Instance.GetCellSize();
@@ -275,7 +278,17 @@ public class PuzzleLoader : MonoBehaviour
             HighlightNextWord();
 
             //PuzzleBlocksCentrify.Instance.CenterRects();
+            RectTransform rectTransform = GetComponent<RectTransform>();
 
+            // Set the anchors to the center (both min and max)
+            rectTransform.anchorMin = new Vector2(0.5f, 0.5f);
+            rectTransform.anchorMax = new Vector2(0.5f, 0.5f);
+
+            // Set the pivot to the center
+            rectTransform.pivot = new Vector2(0.5f, 0.5f);
+
+            // Optionally, reset the anchoredPosition to (0,0) if you want it centered relative to its parent
+            rectTransform.anchoredPosition = Vector2.zero;
             yield return null;
         }
     }
@@ -429,22 +442,30 @@ public class PuzzleLoader : MonoBehaviour
     void HighlightFinishedWordsNoAnimation()
     {
         List<string> finished = new List<string>();
+
         foreach (var word in wordLinkedPuzzleBlocks.Keys)
         {
             if (!finishedWords.Contains(word))
             {
-                var emptyBlock = wordLinkedPuzzleBlocks[word].Find(pb => pb.isLetterfilled == false && !pb.isHint);
-                if (emptyBlock == null)
+                try
                 {
-                    MarkWordAsFinished(wordLinkedPuzzleBlocks[word], true);
-
-                    finished.Add(word);
-                    finishedWords.Add(word);
-                    unsolvedCrossWords.Remove(word);
-                    foreach (var item in wordLinkedPuzzleBlocks[word])
+                    var emptyBlock = wordLinkedPuzzleBlocks[word].Find(pb => pb.isLetterfilled == false && !pb.isHint);
+                    if (emptyBlock == null)
                     {
-                        item.partOfWords.Remove(word);
+                        MarkWordAsFinished(wordLinkedPuzzleBlocks[word], true);
+
+                        finished.Add(word);
+                        finishedWords.Add(word);
+                        unsolvedCrossWords.Remove(word);
+                        foreach (var item in wordLinkedPuzzleBlocks[word])
+                        {
+                            item.partOfWords.Remove(word);
+                        }
                     }
+                }
+                catch (Exception ex)
+                {
+                    Debug.Log(ex.Message);
                 }
             }
         }
