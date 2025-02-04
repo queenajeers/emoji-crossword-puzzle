@@ -446,5 +446,25 @@ public class PuzzleBlock : MonoBehaviour, IPointerClickHandler
         //rectTransform.DOKill();
         rectTransform.DOLocalMove(pos, 0.3f).SetEase(Ease.InOutSine);
     }
+    public Vector2 GetPosition(RectTransform relativeTransform)
+    {
+        return GetAnchoredPositionRelativeTo(rectTransform, relativeTransform);
+    }
+    public Vector2 GetAnchoredPositionRelativeTo(RectTransform target, RectTransform reference)
+    {
+        Vector3 worldPosition = target.position; // Get the world position of the target
+        Vector3 localPosition = reference.InverseTransformPoint(worldPosition); // Convert to reference's local space
+
+        return new Vector2(localPosition.x, localPosition.y);
+    }
+
+    public float GetHeightOfRect()
+    {
+        return rectTransform.rect.height;
+    }
+    public float GetBorderSize()
+    {
+        return Mathf.Abs(outline.effectDistance.x);
+    }
 
 }

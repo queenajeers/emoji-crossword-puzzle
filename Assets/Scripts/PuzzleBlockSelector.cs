@@ -102,6 +102,7 @@ public class PuzzleBlockSelector : MonoBehaviour
         currentHighlightWord = currentBlockSelected.CurrentHightWord();
         selectorRect.localPosition = puzzleBlock.rectTransform.localPosition;
         HighlightOtherBlocks();
+        ScrollMoveManager.Instance.MovePuzzleBoardRelativeTo(currentBlockSelected);
     }
 
     void HighlightOtherBlocks()
@@ -112,6 +113,7 @@ public class PuzzleBlockSelector : MonoBehaviour
             allHighlightedPuzzleBlocks = new List<PuzzleBlock>();
             var puzzleBlocks = PuzzleLoader.Instance.GetPuzzleBlocksLinkedForWord(currentBlockSelected.CurrentHightWord());
             puzzleBlocks = puzzleBlocks.Skip(1).ToList();
+
             allHighlightedLetterPuzzleBlocks.Clear();
 
             for (int i = 0; i < puzzleBlocks.Count; i++)

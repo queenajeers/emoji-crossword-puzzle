@@ -275,8 +275,6 @@ public class PuzzleLoader : MonoBehaviour
             draggableLettersParent.SetAsLastSibling();
 
 
-            HighlightNextWord();
-
             //PuzzleBlocksCentrify.Instance.CenterRects();
             RectTransform rectTransform = GetComponent<RectTransform>();
 
@@ -289,6 +287,8 @@ public class PuzzleLoader : MonoBehaviour
 
             // Optionally, reset the anchoredPosition to (0,0) if you want it centered relative to its parent
             rectTransform.anchoredPosition = Vector2.zero;
+
+            HighlightNextWord();
             yield return null;
         }
     }
