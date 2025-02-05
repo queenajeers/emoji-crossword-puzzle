@@ -119,16 +119,20 @@ public class PuzzleBlockSelector : MonoBehaviour
             for (int i = 0; i < puzzleBlocks.Count; i++)
             {
                 var pb = puzzleBlocks[i];
-                if (!pb.isLetterfilled && !pb.isHint)
+                //!pb.isLetterfilled && 
+                if (!pb.isHint && !pb.isLetterfilledCorrectly)
                 {
                     pb.HighlightSecondary(currentHighlightWord);
                     pb.JustNowHighlightedSecondary(currentHighlightWord);
                     allHighlightedPuzzleBlocks.Add(pb);
                 }
-                else if (pb.isLetterfilled)
+                if (pb.isLetterfilled)
                 {
                     allHighlightedLetterPuzzleBlocks.Add(pb);
-                    pb.DimHighlight();
+                    if (!pb.isLetterfilledCorrectly)
+                    {
+                        pb.DimHighlight();
+                    }
                 }
             }
             for (int i = 0; i < allHighlightedPuzzleBlocks.Count; i++)
@@ -160,10 +164,12 @@ public class PuzzleBlockSelector : MonoBehaviour
         {
             currentBlockSelected.OnLetterTyped(letter);
             var nextBlock = allHighlightedPuzzleBlocks[(currentBlockIndex + 1) % allHighlightedPuzzleBlocks.Count];
-            if (!nextBlock.isLetterfilled)
-            {
-                allHighlightedPuzzleBlocks[(currentBlockIndex + 1) % allHighlightedPuzzleBlocks.Count].SelectThisWithWord(currentHighlightWord);
-            }
+            // if (!nextBlock.isLetterfilled)
+            // {
+            //     allHighlightedPuzzleBlocks[(currentBlockIndex + 1) % allHighlightedPuzzleBlocks.Count].SelectThisWithWord(currentHighlightWord);
+            // }
+            allHighlightedPuzzleBlocks[(currentBlockIndex + 1) % allHighlightedPuzzleBlocks.Count].SelectThisWithWord(currentHighlightWord);
+
             ValidateBlocksForAllFilledWords();
         }
     }

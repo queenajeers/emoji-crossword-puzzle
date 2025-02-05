@@ -23,10 +23,10 @@ public class PuzzleBlocksCentrify : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.C))
-        {
-            CenterRects();
-        }
+        // if (Input.GetKeyDown(KeyCode.C))
+        // {
+        //     CenterRects();
+        // }
     }
 
     public void LoadChildPuzzleBlocks()
