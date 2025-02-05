@@ -171,8 +171,6 @@ public class PuzzleLoader : MonoBehaviour
 
                 var puzzleBlock = Instantiate(puzzleBlockPrefab, puzzleParent);
 
-                ScrollMoveManager.Instance.PuzzleBlockAdded(puzzleBlock);
-
                 var puzzleBlockRect = puzzleBlock.GetComponent<RectTransform>();
                 puzzleBlockRect.localPosition = GridLayer.Instance.GetPositionOfAGridBlock(blockLocation.x, blockLocation.y, transform);
                 puzzleBlockRect.sizeDelta = Vector2.one * GridLayer.Instance.GetCellSize();
@@ -287,7 +285,7 @@ public class PuzzleLoader : MonoBehaviour
 
             // Optionally, reset the anchoredPosition to (0,0) if you want it centered relative to its parent
             rectTransform.anchoredPosition = Vector2.zero;
-
+            ScrollMoveManager.Instance.AssignTopBottomYs();
             HighlightNextWord();
             yield return null;
         }

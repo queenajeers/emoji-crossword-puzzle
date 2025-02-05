@@ -3,9 +3,10 @@ using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
 using System;
+using UnityEngine.EventSystems;
 
 
-public class ScrollMoveManager : MonoBehaviour
+public class ScrollMoveManager : MonoBehaviour, IDragHandler, IBeginDragHandler
 {
     public static ScrollMoveManager Instance { get; private set; }
     public RectTransform referenceAreaRect;
@@ -13,17 +14,17 @@ public class ScrollMoveManager : MonoBehaviour
     Outline outline;
     private Tween moveTween;
 
+    private Vector2 lastMousePosition;
+
+    float topY;
+    float bottomY;
+
     void Awake()
     {
         Instance = this;
         outline = GetComponent<Outline>();
     }
 
-    public void PuzzleBlockAdded(GameObject puzzleBlock)
-    {
-        var smi = puzzleBlock.AddComponent<ScrollMoveItem>();
-        smi.AssignScrollManager(this);
-    }
 
     public float GetReferenceAreaRectHeight()
     {
@@ -42,6 +43,27 @@ public class ScrollMoveManager : MonoBehaviour
         }
     }
 
+    public void AssignTopBottomYs()
+    {
+        AssignPuzzleTop();
+        AssignPuzzleBottom();
+    }
+
+    void AssignPuzzleTop()
+    {
+        float difference = GetPuzzleAreaRectHeight() - (GetReferenceAreaRectHeight() - 10f);
+        float borderSize = Mathf.Abs(outline.effectDistance.y);
+
+        topY = (difference / 2f) + borderSize;
+
+    }
+    void AssignPuzzleBottom()
+    {
+        float difference = GetPuzzleAreaRectHeight() - (GetReferenceAreaRectHeight() - 10f);
+        float borderSize = Mathf.Abs(outline.effectDistance.y);
+        bottomY = -(difference / 2f) - borderSize;
+    }
+
     void ArrangePuzzleToTop()
     {
         float difference = GetPuzzleAreaRectHeight() - (GetReferenceAreaRectHeight() - 10f);
@@ -49,6 +71,15 @@ public class ScrollMoveManager : MonoBehaviour
         if (difference > 0)
         {
             MoveYBy((-difference / 2f) - borderSize);
+        }
+    }
+    void ArrangePuzzleToBottom()
+    {
+        float difference = GetPuzzleAreaRectHeight() - (GetReferenceAreaRectHeight() - 10f);
+        float borderSize = Mathf.Abs(outline.effectDistance.y);
+        if (difference > 0)
+        {
+            MoveYBy((difference / 2f) + borderSize);
         }
     }
 
@@ -61,7 +92,7 @@ public class ScrollMoveManager : MonoBehaviour
         }
 
         // Create a new tween animation
-        moveTween = puzzleRect.DOAnchorPosY(puzzleRect.anchoredPosition.y + delta, 0.3f)
+        moveTween = puzzleRect.DOAnchorPosY(delta, 0.3f)
             .SetEase(Ease.OutQuad); // Adjust duration and easing as needed
     }
 
@@ -85,15 +116,17 @@ public class ScrollMoveManager : MonoBehaviour
         //puzzleBlockPos.y < bottomPointY
         if (IsBoxOverlappingLine(puzzleBlockPos.y, heighOfPuzzleBlock, bottomPointY) || IsBoxBelowLine(puzzleBlockPos.y, heighOfPuzzleBlock, bottomPointY))
         {
-            float difference = Math.Abs(bottomPointY - puzzleBlockPos.y);
-            MoveYBy(difference + (heighOfPuzzleBlock / 2f) + borderSizeOfPuzzleBlock);
+            // float difference = Math.Abs(bottomPointY - puzzleBlockPos.y);
+            // MoveYBy(difference + (heighOfPuzzleBlock / 2f) + borderSizeOfPuzzleBlock);
+            ArrangePuzzleToBottom();
         }
         // IS TOP
         //puzzleBlockPos.y > topPointY
         else if (IsBoxOverlappingLine(puzzleBlockPos.y, heighOfPuzzleBlock, topPointY) || IsBoxAboveLine(puzzleBlockPos.y, heighOfPuzzleBlock, topPointY))
         {
-            float difference = puzzleBlockPos.y - topPointY;
-            MoveYBy(-(difference + (heighOfPuzzleBlock / 2f) + borderSizeOfPuzzleBlock));
+            // float difference = puzzleBlockPos.y - topPointY;
+            // MoveYBy(-(difference + (heighOfPuzzleBlock / 2f) + borderSizeOfPuzzleBlock));
+            ArrangePuzzleToTop();
         }
     }
 
@@ -114,5 +147,20 @@ public class ScrollMoveManager : MonoBehaviour
     {
         float boxBottom = boxY - (boxHeight / 2);
         return boxBottom > lineY;
+    }
+
+    public void OnDrag(PointerEventData eventData)
+    {
+        Vector2 delta = eventData.position - lastMousePosition;
+        delta.x = 0;
+        var pos = puzzleRect.anchoredPosition + delta;
+        pos.y = Mathf.Clamp(pos.y, bottomY, topY);
+        puzzleRect.anchoredPosition = pos; // Move panel
+        lastMousePosition = eventData.position;
+    }
+
+    public void OnBeginDrag(PointerEventData eventData)
+    {
+        lastMousePosition = eventData.position;
     }
 }
