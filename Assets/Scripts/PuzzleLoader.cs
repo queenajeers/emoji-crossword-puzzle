@@ -286,6 +286,7 @@ public class PuzzleLoader : MonoBehaviour
             // Optionally, reset the anchoredPosition to (0,0) if you want it centered relative to its parent
             rectTransform.anchoredPosition = Vector2.zero;
             ScrollMoveManager.Instance.AssignTopBottomYs();
+            ScrollMoveManager.Instance.CheckIfAllPuzzleBlocksAreInsideRefHeight(allPuzzleBlocks.Values.ToList());
             HighlightNextWord();
             yield return null;
         }

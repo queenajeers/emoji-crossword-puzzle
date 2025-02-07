@@ -4,6 +4,7 @@ using UnityEngine.UI;
 using DG.Tweening;
 using System;
 using UnityEngine.EventSystems;
+using System.Collections.Generic;
 
 
 public class ScrollMoveManager : MonoBehaviour, IDragHandler, IBeginDragHandler
@@ -18,6 +19,8 @@ public class ScrollMoveManager : MonoBehaviour, IDragHandler, IBeginDragHandler
 
     float topY;
     float bottomY;
+
+    bool disableScroll;
 
     void Awake()
     {
@@ -47,7 +50,10 @@ public class ScrollMoveManager : MonoBehaviour, IDragHandler, IBeginDragHandler
     {
         AssignPuzzleTop();
         AssignPuzzleBottom();
+
     }
+
+
 
     void AssignPuzzleTop()
     {
@@ -151,6 +157,7 @@ public class ScrollMoveManager : MonoBehaviour, IDragHandler, IBeginDragHandler
 
     public void OnDrag(PointerEventData eventData)
     {
+        if (disableScroll) return;
         Vector2 delta = eventData.position - lastMousePosition;
         delta.x = 0;
         var pos = puzzleRect.anchoredPosition + delta;
@@ -161,6 +168,22 @@ public class ScrollMoveManager : MonoBehaviour, IDragHandler, IBeginDragHandler
 
     public void OnBeginDrag(PointerEventData eventData)
     {
+        if (disableScroll) return;
         lastMousePosition = eventData.position;
+    }
+
+    public void CheckIfAllPuzzleBlocksAreInsideRefHeight(List<PuzzleBlock> puzzleBlocks)
+    {
+        disableScroll = true;
+        foreach (var item in puzzleBlocks)
+        {
+            var YPos = item.GetPosition(referenceAreaRect);
+            var boxHeight = item.GetHeightOfRect();
+            if (!IsBoxAboveLine(YPos.y, boxHeight, bottomY) || !IsBoxBelowLine(YPos.y, boxHeight, topY))
+            {
+                disableScroll = false;
+                break;
+            }
+        }
     }
 }
