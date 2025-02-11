@@ -6521,7 +6521,7 @@ PrefabInstance:
       objectReference: {fileID: 1292270332}
     - target: {fileID: 5209431174319645550, guid: f3a7d01edc1b9421cae0b1ae4442ac6e, type: 3}
       propertyPath: puzzleName
-      value: family_test_2
+      value: family_test_4
       objectReference: {fileID: 0}
     - target: {fileID: 5209431174319645550, guid: f3a7d01edc1b9421cae0b1ae4442ac6e, type: 3}
       propertyPath: gridSizeMultiplier
